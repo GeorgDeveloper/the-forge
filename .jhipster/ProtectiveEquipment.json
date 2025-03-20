@@ -1,0 +1,36 @@
+{
+  "annotations": {
+    "changelogDate": "20250320113040"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "equipmentName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "quantity",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "issuanceFrequency",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "ProtectiveEquipment",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "profession",
+      "otherEntityRelationshipName": "protectiveEquipment",
+      "relationshipName": "profession",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

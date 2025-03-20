@@ -1,0 +1,140 @@
+<div>
+  <h2 id="page-heading" data-cy="ProtectiveEquipmentHeading">
+    <span jhiTranslate="theForgeApp.protectiveEquipment.home.title">Protective Equipments</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="theForgeApp.protectiveEquipment.home.refreshListLabel">Обновить список</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-protective-equipment"
+        [routerLink]="['/protective-equipment/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="theForgeApp.protectiveEquipment.home.createLabel">Создать новый Protective Equipment</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (protectiveEquipments().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="theForgeApp.protectiveEquipment.home.notFound">Protective Equipments не найдено</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="equipmentName">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.protectiveEquipment.equipmentName">Equipment Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="quantity">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.protectiveEquipment.quantity">Quantity</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="issuanceFrequency">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.protectiveEquipment.issuanceFrequency">Issuance Frequency</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="profession.id">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.protectiveEquipment.profession">Profession</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (protectiveEquipment of protectiveEquipments(); track trackId(protectiveEquipment)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/protective-equipment', protectiveEquipment.id, 'view']">{{ protectiveEquipment.id }}</a>
+              </td>
+              <td>{{ protectiveEquipment.equipmentName }}</td>
+              <td>{{ protectiveEquipment.quantity }}</td>
+              <td>{{ protectiveEquipment.issuanceFrequency }}</td>
+              <td>
+                @if (protectiveEquipment.profession) {
+                  <div>
+                    <a [routerLink]="['/profession', protectiveEquipment.profession.id, 'view']">{{ protectiveEquipment.profession.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/protective-equipment', protectiveEquipment.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Просмотр</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/protective-equipment', protectiveEquipment.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Изменить</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(protectiveEquipment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Удалить</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (protectiveEquipments().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

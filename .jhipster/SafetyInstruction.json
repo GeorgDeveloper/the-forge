@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20250320113042"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "instructionName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "introductionDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "SafetyInstruction",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "profession",
+      "otherEntityRelationshipName": "safetyInstruction",
+      "relationshipName": "profession",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "position",
+      "otherEntityRelationshipName": "safetyInstruction",
+      "relationshipName": "position",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

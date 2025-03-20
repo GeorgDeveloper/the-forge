@@ -1,0 +1,28 @@
+{
+  "theForgeApp": {
+    "additionalTraining": {
+      "home": {
+        "title": "Additional Trainings",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Additional Training",
+        "createOrEditLabel": "Создать или отредактировать Additional Training",
+        "notFound": "Additional Trainings не найдено"
+      },
+      "created": "Новый Additional Training создан с идентификатором {{ param }}",
+      "updated": "Additional Training обновлен с идентификатором {{ param }}",
+      "deleted": "Additional Training удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Additional Training {{ id }}?"
+      },
+      "detail": {
+        "title": "Additional Training"
+      },
+      "id": "ID",
+      "trainingName": "Training Name",
+      "trainingDate": "Training Date",
+      "validityPeriod": "Validity Period",
+      "nextTrainingDate": "Next Training Date",
+      "profession": "Profession"
+    }
+  }
+}

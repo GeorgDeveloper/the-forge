@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (safetyInstruction(); as safetyInstructionRef) {
+      <div>
+        <h2 data-cy="safetyInstructionDetailsHeading">
+          <span jhiTranslate="theForgeApp.safetyInstruction.detail.title">Safety Instruction</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ safetyInstructionRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.safetyInstruction.instructionName">Instruction Name</span></dt>
+          <dd>
+            <span>{{ safetyInstructionRef.instructionName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.safetyInstruction.introductionDate">Introduction Date</span></dt>
+          <dd>
+            <span>{{ safetyInstructionRef.introductionDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.safetyInstruction.profession">Profession</span></dt>
+          <dd>
+            @if (safetyInstruction()!.profession) {
+              <div>
+                <a [routerLink]="['/profession', safetyInstruction()!.profession?.id, 'view']">{{ safetyInstructionRef.profession?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.safetyInstruction.position">Position</span></dt>
+          <dd>
+            @if (safetyInstruction()!.position) {
+              <div>
+                <a [routerLink]="['/position', safetyInstruction()!.position?.id, 'view']">{{ safetyInstructionRef.position?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/safety-instruction', safetyInstructionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

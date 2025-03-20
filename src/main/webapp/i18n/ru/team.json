@@ -1,0 +1,25 @@
+{
+  "theForgeApp": {
+    "team": {
+      "home": {
+        "title": "Teams",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Team",
+        "createOrEditLabel": "Создать или отредактировать Team",
+        "notFound": "Teams не найдено"
+      },
+      "created": "Новый Team создан с идентификатором {{ param }}",
+      "updated": "Team обновлен с идентификатором {{ param }}",
+      "deleted": "Team удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Team {{ id }}?"
+      },
+      "detail": {
+        "title": "Team"
+      },
+      "id": "ID",
+      "teamName": "Team Name",
+      "employee": "Employee"
+    }
+  }
+}

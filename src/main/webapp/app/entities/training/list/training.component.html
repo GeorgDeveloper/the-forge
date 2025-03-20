@@ -1,0 +1,140 @@
+<div>
+  <h2 id="page-heading" data-cy="TrainingHeading">
+    <span jhiTranslate="theForgeApp.training.home.title">Trainings</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="theForgeApp.training.home.refreshListLabel">Обновить список</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-training"
+        [routerLink]="['/training/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="theForgeApp.training.home.createLabel">Создать новый Training</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (trainings().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="theForgeApp.training.home.notFound">Trainings не найдено</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="trainingName">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.training.trainingName">Training Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastTrainingDate">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.training.lastTrainingDate">Last Training Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="validityPeriod">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.training.validityPeriod">Validity Period</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nextTrainingDate">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.training.nextTrainingDate">Next Training Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="employee.id">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.training.employee">Employee</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (training of trainings(); track trackId(training)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/training', training.id, 'view']">{{ training.id }}</a>
+              </td>
+              <td>{{ training.trainingName }}</td>
+              <td>{{ training.lastTrainingDate | formatMediumDate }}</td>
+              <td>{{ training.validityPeriod }}</td>
+              <td>{{ training.nextTrainingDate | formatMediumDate }}</td>
+              <td>
+                @if (training.employee) {
+                  <div>
+                    <a [routerLink]="['/employee', training.employee.id, 'view']">{{ training.employee.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/training', training.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Просмотр</span>
+                  </a>
+
+                  <a [routerLink]="['/training', training.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Изменить</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(training)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Удалить</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (trainings().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

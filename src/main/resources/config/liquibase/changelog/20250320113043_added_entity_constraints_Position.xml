@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Position.
+    -->
+    <changeSet id="20250320113043-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="job_description_id"
+                                 baseTableName="position"
+                                 constraintName="fk_position__job_description_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_description"
+                                 />
+    </changeSet>
+</databaseChangeLog>

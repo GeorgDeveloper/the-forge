@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20250320113037"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "trainingName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "lastTrainingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "validityPeriod",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "nextTrainingDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "name": "Training",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "training",
+      "relationshipName": "employee",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,30 @@
+{
+  "annotations": {
+    "changelogDate": "20250320113044"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "descriptionName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "approvalDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "JobDescription",
+  "relationships": [
+    {
+      "otherEntityName": "position",
+      "otherEntityRelationshipName": "jobDescription",
+      "relationshipName": "position",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

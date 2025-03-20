@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Employee.
+    -->
+    <changeSet id="20250320113036-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="position_id"
+                                 baseTableName="employee"
+                                 constraintName="fk_employee__position_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="position"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="employee_id"
+                                 baseTableName="rel_employee__profession"
+                                 constraintName="fk_rel_employee__profession__employee_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="employee"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="profession_id"
+                                 baseTableName="rel_employee__profession"
+                                 constraintName="fk_rel_employee__profession__profession_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="profession"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="team_id"
+                                 baseTableName="employee"
+                                 constraintName="fk_employee__team_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="team"
+                                 />
+    </changeSet>
+</databaseChangeLog>

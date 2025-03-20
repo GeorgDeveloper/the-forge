@@ -1,0 +1,157 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-additional-training-heading"
+        data-cy="AdditionalTrainingCreateUpdateHeading"
+        jhiTranslate="theForgeApp.additionalTraining.home.createOrEditLabel"
+      >
+        Создать или отредактировать Additional Training
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="theForgeApp.additionalTraining.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let trainingNameRef = editForm.get('trainingName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_trainingName" jhiTranslate="theForgeApp.additionalTraining.trainingName"
+            >Training Name</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="trainingName"
+            id="field_trainingName"
+            data-cy="trainingName"
+            formControlName="trainingName"
+          />
+          @if (trainingNameRef.invalid && (trainingNameRef.dirty || trainingNameRef.touched)) {
+            <div>
+              @if (editForm.get('trainingName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let trainingDateRef = editForm.get('trainingDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_trainingDate" jhiTranslate="theForgeApp.additionalTraining.trainingDate"
+            >Training Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_trainingDate"
+              data-cy="trainingDate"
+              type="text"
+              class="form-control"
+              name="trainingDate"
+              ngbDatepicker
+              #trainingDateDp="ngbDatepicker"
+              formControlName="trainingDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="trainingDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (trainingDateRef.invalid && (trainingDateRef.dirty || trainingDateRef.touched)) {
+            <div>
+              @if (editForm.get('trainingDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let validityPeriodRef = editForm.get('validityPeriod')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_validityPeriod" jhiTranslate="theForgeApp.additionalTraining.validityPeriod"
+            >Validity Period</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="validityPeriod"
+            id="field_validityPeriod"
+            data-cy="validityPeriod"
+            formControlName="validityPeriod"
+          />
+          @if (validityPeriodRef.invalid && (validityPeriodRef.dirty || validityPeriodRef.touched)) {
+            <div>
+              @if (editForm.get('validityPeriod')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('validityPeriod')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Это поле должно быть число.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_nextTrainingDate" jhiTranslate="theForgeApp.additionalTraining.nextTrainingDate"
+            >Next Training Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_nextTrainingDate"
+              data-cy="nextTrainingDate"
+              type="text"
+              class="form-control"
+              name="nextTrainingDate"
+              ngbDatepicker
+              #nextTrainingDateDp="ngbDatepicker"
+              formControlName="nextTrainingDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="nextTrainingDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_profession" jhiTranslate="theForgeApp.additionalTraining.profession">Profession</label>
+          <select
+            class="form-control"
+            id="field_profession"
+            data-cy="profession"
+            name="profession"
+            formControlName="profession"
+            [compareWith]="compareProfession"
+          >
+            <option [ngValue]="null"></option>
+            @for (professionOption of professionsSharedCollection; track $index) {
+              <option [ngValue]="professionOption">{{ professionOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Отмена</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Сохранить</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

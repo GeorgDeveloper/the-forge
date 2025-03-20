@@ -1,0 +1,47 @@
+{
+  "annotations": {
+    "changelogDate": "20250320113039"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "professionName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Profession",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityName": "protectiveEquipment",
+      "otherEntityRelationshipName": "profession",
+      "relationshipName": "protectiveEquipment",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "additionalTraining",
+      "otherEntityRelationshipName": "profession",
+      "relationshipName": "additionalTraining",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "safetyInstruction",
+      "otherEntityRelationshipName": "profession",
+      "relationshipName": "safetyInstruction",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "profession",
+      "relationshipName": "employee",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
