@@ -1,0 +1,3 @@
+org.springframework.test.context.ContextCustomizerFactory = \
+    ru.georgdeveloper.myapp.config.\
+    SqlTestContainersSpringContextCustomizerFactory
