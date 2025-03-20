@@ -1,104 +1,104 @@
-# theForge
+# myTeamsJhipster
 
-This application was generated using JHipster 8.9.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.9.0](https://www.jhipster.tech/documentation-archive/v8.9.0).
+Это приложение было создано с использованием JHipster 8.9.0. Документацию и помощь можно найти по адресу [https://www.jhipster.tech/documentation-archive/v8.9.0](https://www.jhipster.tech/documentation-archive/v8.9.0).
 
-## Project Structure
+## Структура проекта
 
-Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
+Для генерации проекта требуется Node, а также он рекомендуется для разработки. Файл `package.json` всегда создается для улучшения опыта разработки с использованием prettier, хуков для коммитов, скриптов и т.д.
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
+В корне проекта JHipster генерирует конфигурационные файлы для таких инструментов, как git, prettier, eslint, husky и других, которые хорошо известны, и вы можете найти ссылки на них в интернете.
 
-`/src/*` structure follows default Java structure.
+Структура `/src/*` соответствует стандартной структуре Java.
 
-- `.yo-rc.json` - Yeoman configuration file
-  JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
-- `.yo-resolve` (optional) - Yeoman conflict resolver
-  Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if omitted) or force. Lines starting with `#` are considered comments and are ignored.
-- `.jhipster/*.json` - JHipster entity configuration files
+- `.yo-rc.json` - Конфигурационный файл Yeoman  
+  Конфигурация JHipster хранится в этом файле по ключу `generator-jhipster`. Вы можете найти `generator-jhipster-*` для конфигурации специфичных blueprints.
+- `.yo-resolve` (опционально) - Решатель конфликтов Yeoman  
+  Позволяет использовать определенное действие при обнаружении конфликтов, пропуская запросы для файлов, соответствующих шаблону. Каждая строка должна соответствовать шаблону `[pattern] [action]`, где pattern — это [Minimatch](https://github.com/isaacs/minimatch#minimatch) шаблон, а action — одно из значений: skip (по умолчанию, если опущено) или force. Строки, начинающиеся с `#`, считаются комментариями и игнорируются.
+- `.jhipster/*.json` - Конфигурационные файлы сущностей JHipster
 
-- `npmw` - wrapper to use locally installed npm.
-  JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+- `npmw` - обёртка для использования локально установленного npm.  
+  JHipster по умолчанию устанавливает Node и npm локально с использованием инструмента сборки. Эта обёртка гарантирует, что npm установлен локально и использует его, избегая различий, которые могут вызвать разные версии. Используя `./npmw` вместо традиционного `npm`, вы можете настроить среду без Node для разработки или тестирования вашего приложения.
+- `/src/main/docker` - Docker-конфигурации для приложения и сервисов, от которых зависит приложение.
 
-## Development
+## Разработка
 
-The build system will install automatically the recommended version of Node and npm.
+Система сборки автоматически установит рекомендуемую версию Node и npm.
 
-We provide a wrapper to launch npm.
-You will only need to run this command when dependencies change in [package.json](package.json).
+Мы предоставляем обертку для запуска npm.
+Вам нужно будет запускать эту команду только при изменении зависимостей в файле [package.json](package.json).
 
 ```
 ./npmw install
 ```
 
-We use npm scripts and [Angular CLI][] with [Webpack][] as our build system.
+Мы используем npm-скрипты и [Angular CLI][] вместе с [Webpack][] в качестве нашей системы сборки.
 
-Run the following commands in two separate terminals to create a blissful development experience where your browser
-auto-refreshes when files change on your hard drive.
+Запустите следующие команды в двух отдельных терминалах, чтобы создать комфортную среду разработки, где ваш браузер
+автоматически обновляется при изменении файлов на вашем жестком диске.
 
 ```
 ./gradlew -x webapp
 ./npmw start
 ```
 
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `./npmw update` and `./npmw install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `./npmw help update`.
+Npm также используется для управления зависимостями CSS и JavaScript, используемыми в этом приложении. Вы можете обновить зависимости, указав
+более новую версию в файле [package.json](package.json). Вы также можете запустить `./npmw update` и `./npmw install` для управления зависимостями.
+Добавьте флаг `help` к любой команде, чтобы увидеть, как ее можно использовать. Например, `./npmw help update`.
 
-The `./npmw run` command will list all the scripts available to run for this project.
+Команда `./npmw run` выведет список всех доступных скриптов для запуска в этом проекте.
 
-### PWA Support
+### Поддержка PWA
 
-JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
+JHipster предоставляет поддержку PWA (Progressive Web App), которая по умолчанию отключена. Одним из основных компонентов PWA является сервис-воркер.
 
-The service worker initialization code is disabled by default. To enable it, uncomment the following code in `src/main/webapp/app/app.config.ts`:
+Код инициализации сервис-воркера отключен по умолчанию. Чтобы включить его, раскомментируйте следующий код в файле `src/main/webapp/app/app.config.ts`:
 
 ```typescript
-ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
+ServiceWorkerModule.register('ngsw-worker.js', { enabled: false });
 ```
 
-### Managing dependencies
+### Управление зависимостями
 
-For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
+Например, чтобы добавить библиотеку [Leaflet][] как runtime-зависимость вашего приложения, выполните следующую команду:
 
 ```
 ./npmw install --save --save-exact leaflet
 ```
 
-To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
+Чтобы воспользоваться TypeScript-типами из репозитория [DefinitelyTyped][] в разработке, выполните следующую команду:
 
 ```
 ./npmw install --save-dev --save-exact @types/leaflet
 ```
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-Edit [src/main/webapp/app/app.config.ts](src/main/webapp/app/app.config.ts) file:
+Затем импортируйте JS и CSS файлы, указанные в инструкции по установке библиотеки, чтобы [Webpack][] знал о них:
+Отредактируйте файл [src/main/webapp/app/app.config.ts](src/main/webapp/app/app.config.ts):
 
 ```
 import 'leaflet/dist/leaflet.js';
 ```
 
-Edit [src/main/webapp/content/scss/vendor.scss](src/main/webapp/content/scss/vendor.scss) file:
+Отредактируйте файл [src/main/webapp/content/scss/vendor.scss](src/main/webapp/content/scss/vendor.scss):
 
 ```
 @import 'leaflet/dist/leaflet.css';
 ```
 
-Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
+Примечание: Есть еще несколько вещей, которые нужно сделать для Leaflet, но мы не будем их здесь детализировать.
 
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
+Для получения дополнительных инструкций по разработке с использованием JHipster, ознакомьтесь с [Using JHipster in development][].
 
-### Using Angular CLI
+### Использование Angular CLI
 
-You can also use [Angular CLI][] to generate some custom client code.
+Вы также можете использовать [Angular CLI][] для генерации пользовательского клиентского кода.
 
-For example, the following command:
+Например, следующая команда:
 
 ```
 ng generate component my-component
 ```
 
-will generate few files:
+создаст несколько файлов:
 
 ```
 create src/main/webapp/app/my-component/my-component.component.html
@@ -106,30 +106,30 @@ create src/main/webapp/app/my-component/my-component.component.ts
 update src/main/webapp/app/app.config.ts
 ```
 
-## Building for production
+## Сборка для production
 
-### Packaging as jar
+### Упаковка в jar
 
-To build the final jar and optimize the theForge application for production, run:
+Чтобы собрать финальный jar-файл и оптимизировать приложение myTeamsJhipster для production, выполните:
 
 ```
 ./gradlew -Pprod clean bootJar
 ```
 
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
-To ensure everything worked, run:
+Эта команда объединит и минифицирует CSS и JavaScript файлы клиентской части. Также она изменит `index.html`, чтобы он ссылался на эти новые файлы.
+Чтобы убедиться, что всё работает, выполните:
 
 ```
 java -jar build/libs/*.jar
 ```
 
-Then navigate to [http://localhost:8098](http://localhost:8098) in your browser.
+Затем перейдите в браузере по адресу [http://localhost:8098](http://localhost:8098).
 
-Refer to [Using JHipster in production][] for more details.
+Для получения дополнительной информации обратитесь к [Using JHipster in production][].
 
-### Packaging as war
+### Упаковка в war
 
-To package your application as a war in order to deploy it to an application server, run:
+Чтобы упаковать ваше приложение в war-файл для развертывания на сервере приложений, выполните:
 
 ```
 ./gradlew -Pprod -Pwar clean bootWar
@@ -137,110 +137,108 @@ To package your application as a war in order to deploy it to an application ser
 
 ### JHipster Control Center
 
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+JHipster Control Center помогает управлять и контролировать ваши приложения. Вы можете запустить локальный сервер Control Center (доступный по адресу http://localhost:7419) с помощью команды:
 
 ```
 docker compose -f src/main/docker/jhipster-control-center.yml up
 ```
 
-## Testing
+## Тестирование
 
-### Spring Boot tests
+### Тесты Spring Boot
 
-To launch your application's tests, run:
+Для запуска тестов вашего приложения выполните:
 
 ```
 ./gradlew test integrationTest jacocoTestReport
 ```
 
-### Client tests
+### Клиентские тесты
 
-Unit tests are run by [Jest][]. They're located near components and can be run with:
+Модульные тесты выполняются с помощью [Jest][]. Они находятся рядом с компонентами и могут быть запущены командой:
 
 ```
 ./npmw test
 ```
 
-## Others
+## Дополнительно
 
-### Code quality using Sonar
+### Анализ качества кода с помощью Sonar
 
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
+Sonar используется для анализа качества кода. Вы можете запустить локальный сервер Sonar (доступный по адресу http://localhost:9001) с помощью команды:
 
 ```
 docker compose -f src/main/docker/sonar.yml up -d
 ```
 
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+Примечание: мы отключили принудительную переадресацию аутентификации для UI в [src/main/docker/sonar.yml](src/main/docker/sonar.yml) для удобства использования SonarQube "из коробки". Для реальных сценариев использования рекомендуется включить её обратно.
 
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the gradle plugin.
+Вы можете выполнить анализ Sonar с помощью [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) или используя плагин Gradle.
 
-Then, run a Sonar analysis:
+Затем выполните анализ Sonar:
 
 ```
 ./gradlew -Pprod clean check jacocoTestReport sonarqube -Dsonar.login=admin -Dsonar.password=admin
 ```
 
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
+Кроме того, вместо передачи `sonar.password` и `sonar.login` через аргументы командной строки, эти параметры можно настроить в файле [sonar-project.properties](sonar-project.properties), как показано ниже:
 
 ```
 sonar.login=admin
 sonar.password=admin
 ```
 
-For more information, refer to the [Code quality page][].
+Для получения дополнительной информации обратитесь к [странице анализа качества кода][].
 
-### Docker Compose support
+### Поддержка Docker Compose
 
-JHipster generates a number of Docker Compose configuration files in the [src/main/docker/](src/main/docker/) folder to launch required third party services.
+JHipster генерирует несколько файлов конфигурации Docker Compose в папке [src/main/docker/](src/main/docker/) для запуска необходимых сторонних сервисов.
 
-For example, to start required services in Docker containers, run:
+Например, чтобы запустить необходимые сервисы в контейнерах Docker, выполните:
 
 ```
 docker compose -f src/main/docker/services.yml up -d
 ```
 
-To stop and remove the containers, run:
+Чтобы остановить и удалить контейнеры, выполните:
 
 ```
 docker compose -f src/main/docker/services.yml down
 ```
 
-[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enabled by default. It's possible to disable it in application.yml:
+[Интеграция Spring с Docker Compose](https://docs.spring.io/spring-boot/reference/features/dev-services.html) включена по умолчанию. Её можно отключить в файле application.yml:
 
 ```yaml
 spring:
-  ...
   docker:
     compose:
       enabled: false
 ```
 
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a Docker image of your app by running:
+Вы также можете полностью "докеризировать" ваше приложение и все зависящие от него сервисы.
+Для этого сначала создайте Docker-образ вашего приложения, выполнив:
 
 ```sh
 npm run java:docker
 ```
 
-Or build a arm64 Docker image when using an arm64 processor os like MacOS with M1 processor family running:
+Или создайте Docker-образ для архитектуры arm64, если используете процессор на базе arm64, например, MacOS с процессором семейства M1
 
 ```sh
 npm run java:docker:arm64
 ```
 
-Then run:
+Затем выполните:
 
 ```sh
 docker compose -f src/main/docker/app.yml up -d
 ```
 
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
+Для получения дополнительной информации обратитесь к [странице использования Docker и Docker-Compose][], где также содержится информация о суб-генераторе Docker Compose (jhipster docker-compose), который может генерировать конфигурации Docker для одного или нескольких JHipster-приложений.
 
-## Continuous Integration (optional)
+## Непрерывная интеграция (опционально)
 
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
-
+Чтобы настроить CI для вашего проекта, запустите суб-генератор ci-cd (`jhipster ci-cd`). Это позволит вам сгенерировать конфигурационные файлы для ряда систем непрерывной интеграции. Подробнее см. на странице [Настройка непрерывной интеграции][].
 [JHipster Homepage and latest documentation]: https://www.jhipster.tech
 [JHipster 8.9.0 archive]: https://www.jhipster.tech/documentation-archive/v8.9.0
 [Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v8.9.0/development/
