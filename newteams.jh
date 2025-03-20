@@ -1,0 +1,137 @@
+// Сущность Команда
+entity Team {
+    teamName String required // Название команды
+}
+
+// Сущность Сотрудник
+entity Employee {
+    firstName String required // Имя
+    lastName String required // Фамилия
+    birthDate LocalDate required // Дата рождения
+    employeeNumber String required unique // Табельный номер
+    hireDate LocalDate required // Дата поступления на работу
+}
+
+// Сущность Инструктаж
+entity Training {
+    trainingName String required // Название инструктажа
+    lastTrainingDate LocalDate required // Дата последнего проведения
+    validityPeriod Integer required // Срок действия (в месяцах)
+    nextTrainingDate LocalDate // Дата следующего инструктажа (вычисляется автоматически)
+}
+
+// Сущность Задача
+entity Task {
+    taskName String required // Название задачи
+    creationDate LocalDate required // Дата создания
+    plannedCompletionDate LocalDate required // Планируемая дата выполнения
+    status TaskStatus required // Статус задачи
+    priority TaskPriority required // Приоритет задачи
+    body String required // Тело задачи (описание задачи)
+}
+
+// Enum для статусов задачи
+enum TaskStatus {
+    TODO, IN_PROGRESS, DONE
+}
+
+// Enum для приоритетов задачи
+enum TaskPriority {
+    LOW, MEDIUM, HIGH, CRITICAL
+}
+
+// Сущность Профессия
+entity Profession {
+    professionName String required // Название профессии
+}
+
+// Сущность Норма выдачи СИЗ
+entity ProtectiveEquipment {
+    equipmentName String required // Название средства индивидуальной защиты
+    quantity Integer required // Количество
+    issuanceFrequency Integer required // Периодичность выдачи (в месяцах)
+}
+
+// Сущность Дополнительное обучение
+entity AdditionalTraining {
+    trainingName String required // Название обучения
+    trainingDate LocalDate required // Дата обучения
+    validityPeriod Integer required // Срок действия (в месяцах)
+    nextTrainingDate LocalDate // Дата следующего обучения (вычисляется автоматически)
+}
+
+// Сущность Инструкции по охране труда
+entity SafetyInstruction {
+    instructionName String required // Название инструкции
+    introductionDate LocalDate required // Дата введения
+}
+
+// Сущность Должность
+entity Position {
+    positionName String required // Название должности
+}
+
+// Сущность Должностная инструкция
+entity JobDescription {
+    descriptionName String required // Название инструкции
+    approvalDate LocalDate required // Дата утверждения
+}
+
+// Отношения
+
+// Команда и Сотрудник
+relationship OneToMany {
+    Team{employee} to Employee{team} // Одна команда может иметь много сотрудников, сотрудник может быть только в одной команде
+}
+
+// Сотрудник и Инструктаж
+relationship OneToMany {
+    Employee{training} to Training{employee} // У одного сотрудника может быть много инструктажей
+}
+
+// Сотрудник и Задача
+relationship OneToMany {
+    Employee{task} to Task{employee} // У одного сотрудника может быть много задач
+}
+
+// Профессия и Норма выдачи СИЗ
+relationship OneToMany {
+    Profession{protectiveEquipment} to ProtectiveEquipment{profession} // У одной профессии может быть много норм выдачи СИЗ
+}
+
+// Профессия и Дополнительное обучение
+relationship OneToMany {
+    Profession{additionalTraining} to AdditionalTraining{profession} // У одной профессии может быть много дополнительных обучений
+}
+
+// Профессия и Инструкции по охране труда
+relationship OneToMany {
+    Profession{safetyInstruction} to SafetyInstruction{profession} // У одной профессии может быть много инструкций по охране труда
+}
+
+// Должность и Должностная инструкция
+relationship OneToOne {
+    Position{jobDescription} to JobDescription{position} // У каждой должности может быть только одна должностная инструкция
+}
+
+// Должность и Инструкции по охране труда
+relationship OneToMany {
+    Position{safetyInstruction} to SafetyInstruction{position} // У каждой должности может быть много инструкций по охране труда
+}
+
+// Сотрудник и Должность
+relationship ManyToOne {
+    Employee{position} to Position{employee} // У каждого сотрудника может быть только одна должность
+}
+
+// Сотрудник и Профессия
+relationship ManyToMany {
+    Employee{profession} to Profession{employee} // У каждого сотрудника может быть много профессий, и у каждой профессии может быть много сотрудников
+}
+
+// Пагинация
+paginate Employee, Task, Training, ProtectiveEquipment, AdditionalTraining, SafetyInstruction with pagination
+paginate Team, Profession, Position with infinite-scroll
+
+// Сервисы
+service all with serviceImpl
