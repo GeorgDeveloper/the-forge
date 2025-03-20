@@ -1,0 +1,75 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (employee(); as employeeRef) {
+      <div>
+        <h2 data-cy="employeeDetailsHeading"><span jhiTranslate="theForgeApp.employee.detail.title">Employee</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ employeeRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.firstName">First Name</span></dt>
+          <dd>
+            <span>{{ employeeRef.firstName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.lastName">Last Name</span></dt>
+          <dd>
+            <span>{{ employeeRef.lastName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.birthDate">Birth Date</span></dt>
+          <dd>
+            <span>{{ employeeRef.birthDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.employeeNumber">Employee Number</span></dt>
+          <dd>
+            <span>{{ employeeRef.employeeNumber }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.hireDate">Hire Date</span></dt>
+          <dd>
+            <span>{{ employeeRef.hireDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.position">Position</span></dt>
+          <dd>
+            @if (employee()!.position) {
+              <div>
+                <a [routerLink]="['/position', employee()!.position?.id, 'view']">{{ employeeRef.position?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.profession">Profession</span></dt>
+          <dd>
+            @for (profession of employeeRef.professions; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/profession', profession.id, 'view']">{{ profession?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.team">Team</span></dt>
+          <dd>
+            @if (employee()!.team) {
+              <div>
+                <a [routerLink]="['/team', employee()!.team?.id, 'view']">{{ employeeRef.team?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/employee', employeeRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

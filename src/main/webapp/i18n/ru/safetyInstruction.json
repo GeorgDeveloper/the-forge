@@ -1,0 +1,27 @@
+{
+  "theForgeApp": {
+    "safetyInstruction": {
+      "home": {
+        "title": "Safety Instructions",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Safety Instruction",
+        "createOrEditLabel": "Создать или отредактировать Safety Instruction",
+        "notFound": "Safety Instructions не найдено"
+      },
+      "created": "Новый Safety Instruction создан с идентификатором {{ param }}",
+      "updated": "Safety Instruction обновлен с идентификатором {{ param }}",
+      "deleted": "Safety Instruction удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Safety Instruction {{ id }}?"
+      },
+      "detail": {
+        "title": "Safety Instruction"
+      },
+      "id": "ID",
+      "instructionName": "Instruction Name",
+      "introductionDate": "Introduction Date",
+      "profession": "Profession",
+      "position": "Position"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (training(); as trainingRef) {
+      <div>
+        <h2 data-cy="trainingDetailsHeading"><span jhiTranslate="theForgeApp.training.detail.title">Training</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ trainingRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.training.trainingName">Training Name</span></dt>
+          <dd>
+            <span>{{ trainingRef.trainingName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.training.lastTrainingDate">Last Training Date</span></dt>
+          <dd>
+            <span>{{ trainingRef.lastTrainingDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.training.validityPeriod">Validity Period</span></dt>
+          <dd>
+            <span>{{ trainingRef.validityPeriod }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.training.nextTrainingDate">Next Training Date</span></dt>
+          <dd>
+            <span>{{ trainingRef.nextTrainingDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.training.employee">Employee</span></dt>
+          <dd>
+            @if (training()!.employee) {
+              <div>
+                <a [routerLink]="['/employee', training()!.employee?.id, 'view']">{{ trainingRef.employee?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/training', trainingRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

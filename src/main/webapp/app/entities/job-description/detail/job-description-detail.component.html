@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (jobDescription(); as jobDescriptionRef) {
+      <div>
+        <h2 data-cy="jobDescriptionDetailsHeading"><span jhiTranslate="theForgeApp.jobDescription.detail.title">Job Description</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ jobDescriptionRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.jobDescription.descriptionName">Description Name</span></dt>
+          <dd>
+            <span>{{ jobDescriptionRef.descriptionName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.jobDescription.approvalDate">Approval Date</span></dt>
+          <dd>
+            <span>{{ jobDescriptionRef.approvalDate | formatMediumDate }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/job-description', jobDescriptionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

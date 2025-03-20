@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (profession(); as professionRef) {
+      <div>
+        <h2 data-cy="professionDetailsHeading"><span jhiTranslate="theForgeApp.profession.detail.title">Profession</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ professionRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.profession.professionName">Profession Name</span></dt>
+          <dd>
+            <span>{{ professionRef.professionName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.profession.employee">Employee</span></dt>
+          <dd>
+            @for (employee of professionRef.employees; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/employee', employee.id, 'view']">{{ employee?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/profession', professionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

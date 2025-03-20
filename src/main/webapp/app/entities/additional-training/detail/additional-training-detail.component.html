@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (additionalTraining(); as additionalTrainingRef) {
+      <div>
+        <h2 data-cy="additionalTrainingDetailsHeading">
+          <span jhiTranslate="theForgeApp.additionalTraining.detail.title">Additional Training</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ additionalTrainingRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.additionalTraining.trainingName">Training Name</span></dt>
+          <dd>
+            <span>{{ additionalTrainingRef.trainingName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.additionalTraining.trainingDate">Training Date</span></dt>
+          <dd>
+            <span>{{ additionalTrainingRef.trainingDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.additionalTraining.validityPeriod">Validity Period</span></dt>
+          <dd>
+            <span>{{ additionalTrainingRef.validityPeriod }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.additionalTraining.nextTrainingDate">Next Training Date</span></dt>
+          <dd>
+            <span>{{ additionalTrainingRef.nextTrainingDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.additionalTraining.profession">Profession</span></dt>
+          <dd>
+            @if (additionalTraining()!.profession) {
+              <div>
+                <a [routerLink]="['/profession', additionalTraining()!.profession?.id, 'view']">{{
+                  additionalTrainingRef.profession?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/additional-training', additionalTrainingRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

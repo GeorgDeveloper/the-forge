@@ -1,0 +1,126 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-protective-equipment-heading"
+        data-cy="ProtectiveEquipmentCreateUpdateHeading"
+        jhiTranslate="theForgeApp.protectiveEquipment.home.createOrEditLabel"
+      >
+        Создать или отредактировать Protective Equipment
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="theForgeApp.protectiveEquipment.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let equipmentNameRef = editForm.get('equipmentName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_equipmentName" jhiTranslate="theForgeApp.protectiveEquipment.equipmentName"
+            >Equipment Name</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="equipmentName"
+            id="field_equipmentName"
+            data-cy="equipmentName"
+            formControlName="equipmentName"
+          />
+          @if (equipmentNameRef.invalid && (equipmentNameRef.dirty || equipmentNameRef.touched)) {
+            <div>
+              @if (editForm.get('equipmentName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let quantityRef = editForm.get('quantity')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_quantity" jhiTranslate="theForgeApp.protectiveEquipment.quantity">Quantity</label>
+          <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity" />
+          @if (quantityRef.invalid && (quantityRef.dirty || quantityRef.touched)) {
+            <div>
+              @if (editForm.get('quantity')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('quantity')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Это поле должно быть число.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let issuanceFrequencyRef = editForm.get('issuanceFrequency')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_issuanceFrequency" jhiTranslate="theForgeApp.protectiveEquipment.issuanceFrequency"
+            >Issuance Frequency</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="issuanceFrequency"
+            id="field_issuanceFrequency"
+            data-cy="issuanceFrequency"
+            formControlName="issuanceFrequency"
+          />
+          @if (issuanceFrequencyRef.invalid && (issuanceFrequencyRef.dirty || issuanceFrequencyRef.touched)) {
+            <div>
+              @if (editForm.get('issuanceFrequency')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('issuanceFrequency')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Это поле должно быть число.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_profession" jhiTranslate="theForgeApp.protectiveEquipment.profession">Profession</label>
+          <select
+            class="form-control"
+            id="field_profession"
+            data-cy="profession"
+            name="profession"
+            formControlName="profession"
+            [compareWith]="compareProfession"
+          >
+            <option [ngValue]="null"></option>
+            @for (professionOption of professionsSharedCollection; track $index) {
+              <option [ngValue]="professionOption">{{ professionOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Отмена</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Сохранить</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+{
+  "theForgeApp": {
+    "position": {
+      "home": {
+        "title": "Positions",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Position",
+        "createOrEditLabel": "Создать или отредактировать Position",
+        "notFound": "Positions не найдено"
+      },
+      "created": "Новый Position создан с идентификатором {{ param }}",
+      "updated": "Position обновлен с идентификатором {{ param }}",
+      "deleted": "Position удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Position {{ id }}?"
+      },
+      "detail": {
+        "title": "Position"
+      },
+      "id": "ID",
+      "positionName": "Position Name",
+      "jobDescription": "Job Description",
+      "safetyInstruction": "Safety Instruction",
+      "employee": "Employee"
+    }
+  }
+}

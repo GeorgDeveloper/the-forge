@@ -1,0 +1,176 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-employee-heading" data-cy="EmployeeCreateUpdateHeading" jhiTranslate="theForgeApp.employee.home.createOrEditLabel">
+        Создать или отредактировать Employee
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="theForgeApp.employee.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let firstNameRef = editForm.get('firstName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_firstName" jhiTranslate="theForgeApp.employee.firstName">First Name</label>
+          <input type="text" class="form-control" name="firstName" id="field_firstName" data-cy="firstName" formControlName="firstName" />
+          @if (firstNameRef.invalid && (firstNameRef.dirty || firstNameRef.touched)) {
+            <div>
+              @if (editForm.get('firstName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let lastNameRef = editForm.get('lastName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_lastName" jhiTranslate="theForgeApp.employee.lastName">Last Name</label>
+          <input type="text" class="form-control" name="lastName" id="field_lastName" data-cy="lastName" formControlName="lastName" />
+          @if (lastNameRef.invalid && (lastNameRef.dirty || lastNameRef.touched)) {
+            <div>
+              @if (editForm.get('lastName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let birthDateRef = editForm.get('birthDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_birthDate" jhiTranslate="theForgeApp.employee.birthDate">Birth Date</label>
+          <div class="input-group">
+            <input
+              id="field_birthDate"
+              data-cy="birthDate"
+              type="text"
+              class="form-control"
+              name="birthDate"
+              ngbDatepicker
+              #birthDateDp="ngbDatepicker"
+              formControlName="birthDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="birthDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+          @if (birthDateRef.invalid && (birthDateRef.dirty || birthDateRef.touched)) {
+            <div>
+              @if (editForm.get('birthDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let employeeNumberRef = editForm.get('employeeNumber')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_employeeNumber" jhiTranslate="theForgeApp.employee.employeeNumber">Employee Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="employeeNumber"
+            id="field_employeeNumber"
+            data-cy="employeeNumber"
+            formControlName="employeeNumber"
+          />
+          @if (employeeNumberRef.invalid && (employeeNumberRef.dirty || employeeNumberRef.touched)) {
+            <div>
+              @if (editForm.get('employeeNumber')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let hireDateRef = editForm.get('hireDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_hireDate" jhiTranslate="theForgeApp.employee.hireDate">Hire Date</label>
+          <div class="input-group">
+            <input
+              id="field_hireDate"
+              data-cy="hireDate"
+              type="text"
+              class="form-control"
+              name="hireDate"
+              ngbDatepicker
+              #hireDateDp="ngbDatepicker"
+              formControlName="hireDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="hireDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+          @if (hireDateRef.invalid && (hireDateRef.dirty || hireDateRef.touched)) {
+            <div>
+              @if (editForm.get('hireDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_position" jhiTranslate="theForgeApp.employee.position">Position</label>
+          <select
+            class="form-control"
+            id="field_position"
+            data-cy="position"
+            name="position"
+            formControlName="position"
+            [compareWith]="comparePosition"
+          >
+            <option [ngValue]="null"></option>
+            @for (positionOption of positionsSharedCollection; track $index) {
+              <option [ngValue]="positionOption">{{ positionOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="field_professions" jhiTranslate="theForgeApp.employee.profession">Profession</label>
+          <select
+            class="form-control"
+            id="field_professions"
+            data-cy="profession"
+            multiple
+            name="professions"
+            formControlName="professions"
+            [compareWith]="compareProfession"
+          >
+            @for (professionOption of professionsSharedCollection; track $index) {
+              <option [ngValue]="professionOption">{{ professionOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_team" jhiTranslate="theForgeApp.employee.team">Team</label>
+          <select class="form-control" id="field_team" data-cy="team" name="team" formControlName="team" [compareWith]="compareTeam">
+            <option [ngValue]="null"></option>
+            @for (teamOption of teamsSharedCollection; track $index) {
+              <option [ngValue]="teamOption">{{ teamOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Отмена</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Сохранить</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

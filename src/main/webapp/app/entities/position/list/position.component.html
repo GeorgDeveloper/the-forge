@@ -1,0 +1,97 @@
+<div>
+  <h2 id="page-heading" data-cy="PositionHeading">
+    <span jhiTranslate="theForgeApp.position.home.title">Positions</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="theForgeApp.position.home.refreshListLabel">Обновить список</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-position"
+        [routerLink]="['/position/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="theForgeApp.position.home.createLabel">Создать новый Position</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (positions().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="theForgeApp.position.home.notFound">Positions не найдено</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="positionName">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.position.positionName">Position Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="jobDescription.id">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.position.jobDescription">Job Description</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0">
+          @for (position of positions(); track trackId(position)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/position', position.id, 'view']">{{ position.id }}</a>
+              </td>
+              <td>{{ position.positionName }}</td>
+              <td>
+                @if (position.jobDescription) {
+                  <div>
+                    <a [routerLink]="['/job-description', position.jobDescription.id, 'view']">{{ position.jobDescription.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/position', position.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Просмотр</span>
+                  </a>
+
+                  <a [routerLink]="['/position', position.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Изменить</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(position)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Удалить</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

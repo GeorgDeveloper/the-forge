@@ -1,0 +1,26 @@
+{
+  "theForgeApp": {
+    "jobDescription": {
+      "home": {
+        "title": "Job Descriptions",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Job Description",
+        "createOrEditLabel": "Создать или отредактировать Job Description",
+        "notFound": "Job Descriptions не найдено"
+      },
+      "created": "Новый Job Description создан с идентификатором {{ param }}",
+      "updated": "Job Description обновлен с идентификатором {{ param }}",
+      "deleted": "Job Description удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Job Description {{ id }}?"
+      },
+      "detail": {
+        "title": "Job Description"
+      },
+      "id": "ID",
+      "descriptionName": "Description Name",
+      "approvalDate": "Approval Date",
+      "position": "Position"
+    }
+  }
+}

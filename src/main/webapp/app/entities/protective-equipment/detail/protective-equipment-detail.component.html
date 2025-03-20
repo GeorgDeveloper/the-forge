@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (protectiveEquipment(); as protectiveEquipmentRef) {
+      <div>
+        <h2 data-cy="protectiveEquipmentDetailsHeading">
+          <span jhiTranslate="theForgeApp.protectiveEquipment.detail.title">Protective Equipment</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ protectiveEquipmentRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.protectiveEquipment.equipmentName">Equipment Name</span></dt>
+          <dd>
+            <span>{{ protectiveEquipmentRef.equipmentName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.protectiveEquipment.quantity">Quantity</span></dt>
+          <dd>
+            <span>{{ protectiveEquipmentRef.quantity }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.protectiveEquipment.issuanceFrequency">Issuance Frequency</span></dt>
+          <dd>
+            <span>{{ protectiveEquipmentRef.issuanceFrequency }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.protectiveEquipment.profession">Profession</span></dt>
+          <dd>
+            @if (protectiveEquipment()!.profession) {
+              <div>
+                <a [routerLink]="['/profession', protectiveEquipment()!.profession?.id, 'view']">{{
+                  protectiveEquipmentRef.profession?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/protective-equipment', protectiveEquipmentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

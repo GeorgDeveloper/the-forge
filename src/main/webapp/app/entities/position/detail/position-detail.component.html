@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (position(); as positionRef) {
+      <div>
+        <h2 data-cy="positionDetailsHeading"><span jhiTranslate="theForgeApp.position.detail.title">Position</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ positionRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.position.positionName">Position Name</span></dt>
+          <dd>
+            <span>{{ positionRef.positionName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.position.jobDescription">Job Description</span></dt>
+          <dd>
+            @if (position()!.jobDescription) {
+              <div>
+                <a [routerLink]="['/job-description', position()!.jobDescription?.id, 'view']">{{ positionRef.jobDescription?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/position', positionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,26 @@
+{
+  "annotations": {
+    "changelogDate": "20250320113035"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "teamName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Team",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "team",
+      "relationshipName": "employee",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

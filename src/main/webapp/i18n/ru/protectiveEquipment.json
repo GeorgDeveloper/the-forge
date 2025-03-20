@@ -1,0 +1,27 @@
+{
+  "theForgeApp": {
+    "protectiveEquipment": {
+      "home": {
+        "title": "Protective Equipments",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Protective Equipment",
+        "createOrEditLabel": "Создать или отредактировать Protective Equipment",
+        "notFound": "Protective Equipments не найдено"
+      },
+      "created": "Новый Protective Equipment создан с идентификатором {{ param }}",
+      "updated": "Protective Equipment обновлен с идентификатором {{ param }}",
+      "deleted": "Protective Equipment удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Protective Equipment {{ id }}?"
+      },
+      "detail": {
+        "title": "Protective Equipment"
+      },
+      "id": "ID",
+      "equipmentName": "Equipment Name",
+      "quantity": "Quantity",
+      "issuanceFrequency": "Issuance Frequency",
+      "profession": "Profession"
+    }
+  }
+}

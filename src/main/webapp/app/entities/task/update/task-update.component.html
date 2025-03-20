@@ -1,0 +1,171 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-task-heading" data-cy="TaskCreateUpdateHeading" jhiTranslate="theForgeApp.task.home.createOrEditLabel">
+        Создать или отредактировать Task
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="theForgeApp.task.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let taskNameRef = editForm.get('taskName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_taskName" jhiTranslate="theForgeApp.task.taskName">Task Name</label>
+          <input type="text" class="form-control" name="taskName" id="field_taskName" data-cy="taskName" formControlName="taskName" />
+          @if (taskNameRef.invalid && (taskNameRef.dirty || taskNameRef.touched)) {
+            <div>
+              @if (editForm.get('taskName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let creationDateRef = editForm.get('creationDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_creationDate" jhiTranslate="theForgeApp.task.creationDate">Creation Date</label>
+          <div class="input-group">
+            <input
+              id="field_creationDate"
+              data-cy="creationDate"
+              type="text"
+              class="form-control"
+              name="creationDate"
+              ngbDatepicker
+              #creationDateDp="ngbDatepicker"
+              formControlName="creationDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="creationDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (creationDateRef.invalid && (creationDateRef.dirty || creationDateRef.touched)) {
+            <div>
+              @if (editForm.get('creationDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let plannedCompletionDateRef = editForm.get('plannedCompletionDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_plannedCompletionDate" jhiTranslate="theForgeApp.task.plannedCompletionDate"
+            >Planned Completion Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_plannedCompletionDate"
+              data-cy="plannedCompletionDate"
+              type="text"
+              class="form-control"
+              name="plannedCompletionDate"
+              ngbDatepicker
+              #plannedCompletionDateDp="ngbDatepicker"
+              formControlName="plannedCompletionDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="plannedCompletionDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (plannedCompletionDateRef.invalid && (plannedCompletionDateRef.dirty || plannedCompletionDateRef.touched)) {
+            <div>
+              @if (editForm.get('plannedCompletionDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let statusRef = editForm.get('status')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_status" jhiTranslate="theForgeApp.task.status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null">{{ 'theForgeApp.TaskStatus.null' | translate }}</option>
+            @for (taskStatus of taskStatusValues; track $index) {
+              <option [value]="taskStatus">{{ 'theForgeApp.TaskStatus.' + taskStatus | translate }}</option>
+            }
+          </select>
+          @if (statusRef.invalid && (statusRef.dirty || statusRef.touched)) {
+            <div>
+              @if (editForm.get('status')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let priorityRef = editForm.get('priority')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_priority" jhiTranslate="theForgeApp.task.priority">Priority</label>
+          <select class="form-control" name="priority" formControlName="priority" id="field_priority" data-cy="priority">
+            <option [ngValue]="null">{{ 'theForgeApp.TaskPriority.null' | translate }}</option>
+            @for (taskPriority of taskPriorityValues; track $index) {
+              <option [value]="taskPriority">{{ 'theForgeApp.TaskPriority.' + taskPriority | translate }}</option>
+            }
+          </select>
+          @if (priorityRef.invalid && (priorityRef.dirty || priorityRef.touched)) {
+            <div>
+              @if (editForm.get('priority')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let bodyRef = editForm.get('body')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_body" jhiTranslate="theForgeApp.task.body">Body</label>
+          <input type="text" class="form-control" name="body" id="field_body" data-cy="body" formControlName="body" />
+          @if (bodyRef.invalid && (bodyRef.dirty || bodyRef.touched)) {
+            <div>
+              @if (editForm.get('body')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_employee" jhiTranslate="theForgeApp.task.employee">Employee</label>
+          <select
+            class="form-control"
+            id="field_employee"
+            data-cy="employee"
+            name="employee"
+            formControlName="employee"
+            [compareWith]="compareEmployee"
+          >
+            <option [ngValue]="null"></option>
+            @for (employeeOption of employeesSharedCollection; track $index) {
+              <option [ngValue]="employeeOption">{{ employeeOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Отмена</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Сохранить</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

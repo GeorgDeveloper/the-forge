@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20250320113043"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "positionName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Position",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityName": "jobDescription",
+      "otherEntityRelationshipName": "position",
+      "relationshipName": "jobDescription",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "safetyInstruction",
+      "otherEntityRelationshipName": "position",
+      "relationshipName": "safetyInstruction",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "position",
+      "relationshipName": "employee",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

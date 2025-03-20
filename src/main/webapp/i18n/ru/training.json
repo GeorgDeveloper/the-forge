@@ -1,0 +1,28 @@
+{
+  "theForgeApp": {
+    "training": {
+      "home": {
+        "title": "Trainings",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Training",
+        "createOrEditLabel": "Создать или отредактировать Training",
+        "notFound": "Trainings не найдено"
+      },
+      "created": "Новый Training создан с идентификатором {{ param }}",
+      "updated": "Training обновлен с идентификатором {{ param }}",
+      "deleted": "Training удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Training {{ id }}?"
+      },
+      "detail": {
+        "title": "Training"
+      },
+      "id": "ID",
+      "trainingName": "Training Name",
+      "lastTrainingDate": "Last Training Date",
+      "validityPeriod": "Validity Period",
+      "nextTrainingDate": "Next Training Date",
+      "employee": "Employee"
+    }
+  }
+}
