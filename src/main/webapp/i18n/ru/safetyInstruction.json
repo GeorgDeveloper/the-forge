@@ -2,26 +2,26 @@
   "theForgeApp": {
     "safetyInstruction": {
       "home": {
-        "title": "Safety Instructions",
+        "title": "Инструкции по ОТ",
         "refreshListLabel": "Обновить список",
-        "createLabel": "Создать новый Safety Instruction",
-        "createOrEditLabel": "Создать или отредактировать Safety Instruction",
-        "notFound": "Safety Instructions не найдено"
+        "createLabel": "Создать новую Инструкцию",
+        "createOrEditLabel": "Создать или отредактировать Инструкцию по ОТ",
+        "notFound": "Инструкции по ОТ не найдены"
       },
-      "created": "Новый Safety Instruction создан с идентификатором {{ param }}",
-      "updated": "Safety Instruction обновлен с идентификатором {{ param }}",
-      "deleted": "Safety Instruction удален с идентификатором {{ param }}",
+      "created": "Новая Инструкция по ОТ создана с идентификатором {{ param }}",
+      "updated": "Инструкция по ОТ обновлена с идентификатором {{ param }}",
+      "deleted": "Инструкция по ОТ удалена с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Safety Instruction {{ id }}?"
+        "question": "Вы уверены что хотите удалить Инструкцию по ОТ {{ id }}?"
       },
       "detail": {
-        "title": "Safety Instruction"
+        "title": "Инструкция по ОТ"
       },
       "id": "ID",
-      "instructionName": "Instruction Name",
-      "introductionDate": "Introduction Date",
-      "profession": "Profession",
-      "position": "Position"
+      "instructionName": "Наименование",
+      "introductionDate": "Дата создания",
+      "profession": "Профессия",
+      "position": "Должность"
     }
   }
 }

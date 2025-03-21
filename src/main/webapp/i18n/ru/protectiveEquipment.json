@@ -2,26 +2,26 @@
   "theForgeApp": {
     "protectiveEquipment": {
       "home": {
-        "title": "Protective Equipments",
+        "title": "Нормы выдачи СИЗ",
         "refreshListLabel": "Обновить список",
-        "createLabel": "Создать новый Protective Equipment",
-        "createOrEditLabel": "Создать или отредактировать Protective Equipment",
-        "notFound": "Protective Equipments не найдено"
+        "createLabel": "Создать новую Норму",
+        "createOrEditLabel": "Создать или отредактировать Норму",
+        "notFound": "Нормы выдачи СИЗ не найдены"
       },
-      "created": "Новый Protective Equipment создан с идентификатором {{ param }}",
-      "updated": "Protective Equipment обновлен с идентификатором {{ param }}",
-      "deleted": "Protective Equipment удален с идентификатором {{ param }}",
+      "created": "Новая Норма выдачи СИЗ создана с идентификатором {{ param }}",
+      "updated": "Норма обновлена с идентификатором {{ param }}",
+      "deleted": "Норма удалена с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Protective Equipment {{ id }}?"
+        "question": "Вы уверены что хотите удалить Норму выдачи СИЗ {{ id }}?"
       },
       "detail": {
-        "title": "Protective Equipment"
+        "title": "Норма выдачи СИЗ"
       },
       "id": "ID",
-      "equipmentName": "Equipment Name",
-      "quantity": "Quantity",
-      "issuanceFrequency": "Issuance Frequency",
-      "profession": "Profession"
+      "equipmentName": "Наименование",
+      "quantity": "Количество",
+      "issuanceFrequency": "Периодичность",
+      "profession": "Профессия"
     }
   }
 }

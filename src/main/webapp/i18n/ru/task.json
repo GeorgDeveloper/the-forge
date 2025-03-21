@@ -2,29 +2,29 @@
   "theForgeApp": {
     "task": {
       "home": {
-        "title": "Tasks",
+        "title": "Задачи",
         "refreshListLabel": "Обновить список",
-        "createLabel": "Создать новый Task",
-        "createOrEditLabel": "Создать или отредактировать Task",
-        "notFound": "Tasks не найдено"
+        "createLabel": "Создать новую Задачу",
+        "createOrEditLabel": "Создать или отредактировать Задачу",
+        "notFound": "Задачи не найдены"
       },
-      "created": "Новый Task создан с идентификатором {{ param }}",
-      "updated": "Task обновлен с идентификатором {{ param }}",
-      "deleted": "Task удален с идентификатором {{ param }}",
+      "created": "Новая Задача создана с идентификатором {{ param }}",
+      "updated": "Задача обновлена с идентификатором {{ param }}",
+      "deleted": "задача удалена с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Task {{ id }}?"
+        "question": "Вы уверены что хотите удалить Задачу {{ id }}?"
       },
       "detail": {
-        "title": "Task"
+        "title": "Задача"
       },
       "id": "ID",
-      "taskName": "Task Name",
-      "creationDate": "Creation Date",
-      "plannedCompletionDate": "Planned Completion Date",
-      "status": "Status",
-      "priority": "Priority",
-      "body": "Body",
-      "employee": "Employee"
+      "taskName": "Наименование",
+      "creationDate": "Дата создания",
+      "plannedCompletionDate": "Заданная дата выполнения",
+      "status": "Статус",
+      "priority": "Приоритет",
+      "body": "Содержание",
+      "employee": "Сотрудники"
     }
   }
 }

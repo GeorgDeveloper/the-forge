@@ -2,27 +2,27 @@
   "theForgeApp": {
     "training": {
       "home": {
-        "title": "Trainings",
+        "title": "Инструктажи",
         "refreshListLabel": "Обновить список",
-        "createLabel": "Создать новый Training",
-        "createOrEditLabel": "Создать или отредактировать Training",
-        "notFound": "Trainings не найдено"
+        "createLabel": "Создать новый Инструктаж",
+        "createOrEditLabel": "Создать или отредактировать Инструктаж",
+        "notFound": "Инструктажи не найдены"
       },
-      "created": "Новый Training создан с идентификатором {{ param }}",
-      "updated": "Training обновлен с идентификатором {{ param }}",
-      "deleted": "Training удален с идентификатором {{ param }}",
+      "created": "Новый Инструктаж создан с идентификатором {{ param }}",
+      "updated": "Инструктаж обновлен с идентификатором {{ param }}",
+      "deleted": "Инструктаж удален с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Training {{ id }}?"
+        "question": "Вы уверены что хотите удалить Инструктаж {{ id }}?"
       },
       "detail": {
-        "title": "Training"
+        "title": "Инструктаж"
       },
       "id": "ID",
-      "trainingName": "Training Name",
-      "lastTrainingDate": "Last Training Date",
-      "validityPeriod": "Validity Period",
-      "nextTrainingDate": "Next Training Date",
-      "employee": "Employee"
+      "trainingName": "Наименование",
+      "lastTrainingDate": "Дата последнего инструктажа",
+      "validityPeriod": "Периодичность",
+      "nextTrainingDate": "Дата следующего инструктажа",
+      "employee": "Сотрудники"
     }
   }
 }

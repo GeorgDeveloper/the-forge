@@ -2,24 +2,24 @@
   "theForgeApp": {
     "team": {
       "home": {
-        "title": "Teams",
+        "title": "Команды",
         "refreshListLabel": "Обновить список",
-        "createLabel": "Создать новый Team",
-        "createOrEditLabel": "Создать или отредактировать Team",
-        "notFound": "Teams не найдено"
+        "createLabel": "Создать новую Команду",
+        "createOrEditLabel": "Создать или отредактировать Команду",
+        "notFound": "Команды не найдено"
       },
-      "created": "Новый Team создан с идентификатором {{ param }}",
-      "updated": "Team обновлен с идентификатором {{ param }}",
-      "deleted": "Team удален с идентификатором {{ param }}",
+      "created": "Новая Команда создана с идентификатором {{ param }}",
+      "updated": "Команда обновлена с идентификатором {{ param }}",
+      "deleted": "Команда удалена с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Team {{ id }}?"
+        "question": "Вы уверены что хотите удалить Команду {{ id }}?"
       },
       "detail": {
-        "title": "Team"
+        "title": "Команда"
       },
       "id": "ID",
-      "teamName": "Team Name",
-      "employee": "Employee"
+      "teamName": "Наименование",
+      "employee": "Сотрудники"
     }
   }
 }
