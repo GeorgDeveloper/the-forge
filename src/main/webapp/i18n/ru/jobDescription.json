@@ -2,25 +2,25 @@
   "theForgeApp": {
     "jobDescription": {
       "home": {
-        "title": "Job Descriptions",
+        "title": "Должностные инструкции",
         "refreshListLabel": "Обновить список",
-        "createLabel": "Создать новый Job Description",
-        "createOrEditLabel": "Создать или отредактировать Job Description",
-        "notFound": "Job Descriptions не найдено"
+        "createLabel": "Создать новую должностную инструкцию",
+        "createOrEditLabel": "Создать или отредактировать должностную инструкцию",
+        "notFound": "Должностная инструкция не найдена"
       },
-      "created": "Новый Job Description создан с идентификатором {{ param }}",
-      "updated": "Job Description обновлен с идентификатором {{ param }}",
-      "deleted": "Job Description удален с идентификатором {{ param }}",
+      "created": "Новая должностная инструкция создана с идентификатором {{ param }}",
+      "updated": "Должностная инструкция обновлена с идентификатором {{ param }}",
+      "deleted": "Должностная инструкция удалена с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Job Description {{ id }}?"
+        "question": "Вы уверены что хотите удалить должностную инструкцию {{ id }}?"
       },
       "detail": {
-        "title": "Job Description"
+        "title": "Должностная инструкция"
       },
       "id": "ID",
-      "descriptionName": "Description Name",
-      "approvalDate": "Approval Date",
-      "position": "Position"
+      "descriptionName": "Наименование",
+      "approvalDate": "Дата создания",
+      "position": "Должность"
     }
   }
 }

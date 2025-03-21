@@ -2,26 +2,26 @@
   "theForgeApp": {
     "position": {
       "home": {
-        "title": "Positions",
+        "title": "Должности",
         "refreshListLabel": "Обновить список",
-        "createLabel": "Создать новый Position",
-        "createOrEditLabel": "Создать или отредактировать Position",
+        "createLabel": "Создать новую должность",
+        "createOrEditLabel": "Создать или отредактировать должность",
         "notFound": "Positions не найдено"
       },
-      "created": "Новый Position создан с идентификатором {{ param }}",
-      "updated": "Position обновлен с идентификатором {{ param }}",
-      "deleted": "Position удален с идентификатором {{ param }}",
+      "created": "Новая должность создана с идентификатором {{ param }}",
+      "updated": "Должность обновлена с идентификатором {{ param }}",
+      "deleted": "Должность удалена с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Position {{ id }}?"
+        "question": "Вы уверены что хотите удалить должность {{ id }}?"
       },
       "detail": {
-        "title": "Position"
+        "title": "Должность"
       },
       "id": "ID",
-      "positionName": "Position Name",
-      "jobDescription": "Job Description",
-      "safetyInstruction": "Safety Instruction",
-      "employee": "Employee"
+      "positionName": "Наименование",
+      "jobDescription": "Должностная инструкция",
+      "safetyInstruction": "Инструкции по ОТ",
+      "employee": "Сотрудники"
     }
   }
 }

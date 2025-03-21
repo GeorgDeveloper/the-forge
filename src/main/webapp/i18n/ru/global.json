@@ -8,16 +8,16 @@
       "entities": {
         "main": "Сущности",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "team": "Team",
-        "employee": "Employee",
-        "training": "Training",
-        "task": "Task",
-        "profession": "Profession",
-        "protectiveEquipment": "Protective Equipment",
-        "additionalTraining": "Additional Training",
-        "safetyInstruction": "Safety Instruction",
-        "position": "Position",
-        "jobDescription": "Job Description"
+        "team": "Команда",
+        "employee": "Сотрудники",
+        "training": "Инструктажи",
+        "task": "Задачи",
+        "profession": "Профессии",
+        "protectiveEquipment": "Нормы выдачи СИЗ",
+        "additionalTraining": "Дополнительное обучение",
+        "safetyInstruction": "Инструкции по ОТ",
+        "position": "Должности",
+        "jobDescription": "Должностные инструкции"
       },
       "account": {
         "main": "Профиль",

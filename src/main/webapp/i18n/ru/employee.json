@@ -2,32 +2,32 @@
   "theForgeApp": {
     "employee": {
       "home": {
-        "title": "Employees",
+        "title": "Сотрудник",
         "refreshListLabel": "Обновить список",
-        "createLabel": "Создать новый Employee",
-        "createOrEditLabel": "Создать или отредактировать Employee",
-        "notFound": "Employees не найдено"
+        "createLabel": "Добавить сотрудника",
+        "createOrEditLabel": "Создать или отредактировать профиль сотрудника",
+        "notFound": "Сотрудник не найден"
       },
-      "created": "Новый Employee создан с идентификатором {{ param }}",
-      "updated": "Employee обновлен с идентификатором {{ param }}",
-      "deleted": "Employee удален с идентификатором {{ param }}",
+      "created": "Новый профиль сотрудника создан с идентификатором {{ param }}",
+      "updated": "Профиль сотрудника обновлен с идентификатором {{ param }}",
+      "deleted": "Профиль сотрудника удален с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Employee {{ id }}?"
+        "question": "Вы уверены что хотите удалить профиль сотрудника {{ id }}?"
       },
       "detail": {
-        "title": "Employee"
+        "title": "Сотрудник"
       },
       "id": "ID",
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "birthDate": "Birth Date",
-      "employeeNumber": "Employee Number",
-      "hireDate": "Hire Date",
-      "training": "Training",
-      "task": "Task",
-      "position": "Position",
-      "profession": "Profession",
-      "team": "Team"
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "birthDate": "День рождения",
+      "employeeNumber": "Таб. номер",
+      "hireDate": "Дата приема",
+      "training": "Обучение",
+      "task": "Задачи",
+      "position": "Должность",
+      "profession": "Профессия",
+      "team": "Команда"
     }
   }
 }
