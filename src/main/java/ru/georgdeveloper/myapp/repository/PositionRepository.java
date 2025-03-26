@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.georgdeveloper.myapp.domain.Position;
 
 /**
- * Spring Data JPA repository for the Position entity.
+ * Репозиторий Spring Data JPA для объекта Position.
  */
 @SuppressWarnings("unused")
 @Repository

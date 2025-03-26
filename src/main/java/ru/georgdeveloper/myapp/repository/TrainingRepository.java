@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.georgdeveloper.myapp.domain.Training;
 
 /**
- * Spring Data JPA repository for the Training entity.
+ * Репозиторий Spring Data JPA для обучающего объекта.
  */
 @SuppressWarnings("unused")
 @Repository

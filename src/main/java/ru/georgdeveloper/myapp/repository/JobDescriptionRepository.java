@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.georgdeveloper.myapp.domain.JobDescription;
 
 /**
- * Spring Data JPA repository for the JobDescription entity.
+ * Репозиторий Spring Data JPA для объекта JobDescription.
  */
 @SuppressWarnings("unused")
 @Repository

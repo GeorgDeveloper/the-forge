@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.georgdeveloper.myapp.domain.SafetyInstruction;
 
 /**
- * Spring Data JPA repository for the SafetyInstruction entity.
+ * Репозиторий Spring Data JPA для объекта SafetyInstruction.
  */
 @SuppressWarnings("unused")
 @Repository

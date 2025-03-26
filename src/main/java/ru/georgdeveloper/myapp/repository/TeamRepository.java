@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.georgdeveloper.myapp.domain.Team;
 
 /**
- * Spring Data JPA repository for the Team entity.
+ * Репозиторий Spring Data JPA для объекта Team.
  */
 @SuppressWarnings("unused")
 @Repository

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.georgdeveloper.myapp.domain.Task;
 
 /**
- * Spring Data JPA repository for the Task entity.
+ * Репозиторий Spring Data JPA для объекта Task entity.
  */
 @SuppressWarnings("unused")
 @Repository

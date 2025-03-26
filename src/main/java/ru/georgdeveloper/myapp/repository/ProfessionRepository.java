@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.georgdeveloper.myapp.domain.Profession;
 
 /**
- * Spring Data JPA repository for the Profession entity.
+ * Репозиторий Spring Data JPA для профессиональной организации.
  */
 @SuppressWarnings("unused")
 @Repository
