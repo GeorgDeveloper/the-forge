@@ -3,10 +3,10 @@ package ru.georgdeveloper.myapp.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Properties specific to The Forge.
+ * Свойства, специфичные для приложения The Forge.
  * <p>
- * Properties are configured in the {@code application.yml} file.
- * See {@link tech.jhipster.config.JHipsterProperties} for a good example.
+ * Свойства настраиваются в файле {@code application.yml}.
+ * Смотрите {@link tech.jhipster.config.JHipsterProperties} как хороший пример.
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {

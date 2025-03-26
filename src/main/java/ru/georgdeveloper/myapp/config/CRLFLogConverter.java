@@ -14,11 +14,11 @@ import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.boot.ansi.AnsiStyle;
 
 /**
- * Log filter to prevent attackers from forging log entries by submitting input containing CRLF characters.
- * CRLF characters are replaced with a red colored _ character.
+ * Лог-фильтр для предотвращения подделки записей логов злоумышленниками путем отправки ввода, содержащего символы CRLF.
+ * Символы CRLF заменяются символом "_" красного цвета.
  *
- * @see <a href="https://owasp.org/www-community/attacks/Log_Injection">Log Forging Description</a>
- * @see <a href="https://github.com/jhipster/generator-jhipster/issues/14949">JHipster issue</a>
+ * @see <a href="https://owasp.org/www-community/attacks/Log_Injection">Описание атаки Log Forging</a>
+ * @see <a href="https://github.com/jhipster/generator-jhipster/issues/14949">Проблема JHipster</a>
  */
 public class CRLFLogConverter extends CompositeConverter<ILoggingEvent> {
 

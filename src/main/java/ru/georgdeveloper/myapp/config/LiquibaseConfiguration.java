@@ -21,14 +21,27 @@ import tech.jhipster.config.liquibase.SpringLiquibaseUtil;
 @Configuration
 public class LiquibaseConfiguration {
 
+    // Логгер для записи событий конфигурации
     private static final Logger LOG = LoggerFactory.getLogger(LiquibaseConfiguration.class);
 
-    private final Environment env;
+    private final Environment env; // Окружение Spring для доступа к профилям и свойствам
 
+    // Конструктор с внедрением зависимости Environment
     public LiquibaseConfiguration(Environment env) {
         this.env = env;
     }
 
+    /**
+     * Создает и настраивает бин SpringLiquibase для управления миграциями базы данных.
+     *
+     * @param executor Executor для асинхронного запуска Liquibase (если требуется)
+     * @param liquibaseProperties Свойства конфигурации Liquibase
+     * @param liquibaseDataSource Провайдер источника данных для Liquibase
+     * @param dataSource Провайдер основного источника данных
+     * @param applicationProperties Свойства приложения
+     * @param dataSourceProperties Свойства источника данных
+     * @return настроенный бин SpringLiquibase
+     */
     @Bean
     public SpringLiquibase liquibase(
         @Qualifier("taskExecutor") Executor executor,
@@ -39,7 +52,10 @@ public class LiquibaseConfiguration {
         DataSourceProperties dataSourceProperties
     ) {
         SpringLiquibase liquibase;
+
+        // Выбор между синхронным и асинхронным запуском Liquibase
         if (Boolean.TRUE.equals(applicationProperties.getLiquibase().getAsyncStart())) {
+            // Асинхронная инициализация Liquibase (для ускорения старта приложения)
             liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
                 this.env,
                 executor,
@@ -49,6 +65,7 @@ public class LiquibaseConfiguration {
                 dataSourceProperties
             );
         } else {
+            // Синхронная инициализация Liquibase
             liquibase = SpringLiquibaseUtil.createSpringLiquibase(
                 liquibaseDataSource.getIfAvailable(),
                 liquibaseProperties,
@@ -56,28 +73,45 @@ public class LiquibaseConfiguration {
                 dataSourceProperties
             );
         }
-        liquibase.setChangeLog("classpath:config/liquibase/master.xml");
+
+        // Основные настройки Liquibase
+        liquibase.setChangeLog("classpath:config/liquibase/master.xml"); // Путь к главному файлу изменений
+
+        // Настройка контекстов выполнения миграций
         if (!CollectionUtils.isEmpty(liquibaseProperties.getContexts())) {
             liquibase.setContexts(StringUtils.collectionToCommaDelimitedString(liquibaseProperties.getContexts()));
         }
+
+        // Настройка схемы и табличного пространства
         liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
         liquibase.setLiquibaseSchema(liquibaseProperties.getLiquibaseSchema());
         liquibase.setLiquibaseTablespace(liquibaseProperties.getLiquibaseTablespace());
+
+        // Настройка имен таблиц для журналирования изменений
         liquibase.setDatabaseChangeLogLockTable(liquibaseProperties.getDatabaseChangeLogLockTable());
         liquibase.setDatabaseChangeLogTable(liquibaseProperties.getDatabaseChangeLogTable());
-        liquibase.setDropFirst(liquibaseProperties.isDropFirst());
+
+        // Настройка поведения при запуске
+        liquibase.setDropFirst(liquibaseProperties.isDropFirst()); // Удалять ли схему перед применением изменений
+
+        // Настройка фильтрации по меткам
         if (!CollectionUtils.isEmpty(liquibaseProperties.getLabelFilter())) {
             liquibase.setLabelFilter(StringUtils.collectionToCommaDelimitedString(liquibaseProperties.getLabelFilter()));
         }
+
+        // Дополнительные параметры
         liquibase.setChangeLogParameters(liquibaseProperties.getParameters());
         liquibase.setRollbackFile(liquibaseProperties.getRollbackFile());
         liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());
+
+        // Проверка профиля для отключения Liquibase
         if (env.matchesProfiles(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE)) {
-            liquibase.setShouldRun(false);
+            liquibase.setShouldRun(false); // Отключить выполнение Liquibase
         } else {
-            liquibase.setShouldRun(liquibaseProperties.isEnabled());
-            LOG.debug("Configuring Liquibase");
+            liquibase.setShouldRun(liquibaseProperties.isEnabled()); // Включить/отключить в зависимости от настроек
+            LOG.debug("Configuring Liquibase"); // Логирование факта конфигурации
         }
+
         return liquibase;
     }
 }

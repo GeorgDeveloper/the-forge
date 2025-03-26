@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonConfiguration {
 
     /**
-     * Support for Java date and time API.
-     * @return the corresponding Jackson module.
+     * Поддержка Java date and time API.
+     * @return соответствующий Jackson модуль.
      */
     @Bean
     public JavaTimeModule javaTimeModule() {
@@ -40,7 +40,7 @@ public class JacksonConfiguration {
     }
 
     /*
-     * Support for Hibernate types in Jackson.
+     * Поддержка типов Hibernate в Jackson.
      */
     @Bean
     public Hibernate6Module hibernate6Module() {

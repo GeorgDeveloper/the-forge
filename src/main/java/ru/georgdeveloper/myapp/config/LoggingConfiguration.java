@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import tech.jhipster.config.JHipsterProperties;
 
 /*
- * Configures the console and Logstash log appenders from the app properties
+ * Настраивает консольные и Logstash лог-аппендеры из свойств приложения
  */
 @Configuration
 public class LoggingConfiguration {

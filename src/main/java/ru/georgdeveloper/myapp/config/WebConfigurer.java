@@ -21,53 +21,61 @@ import org.springframework.web.filter.CorsFilter;
 import tech.jhipster.config.JHipsterProperties;
 
 /**
- * Configuration of web application with Servlet 3.0 APIs.
+ * Конфигурация веб-приложения с использованием Servlet 3.0 API.
+ * Настраивает:
+ * - Инициализацию ServletContext
+ * - Кастомизацию веб-сервера
+ * - CORS фильтр
  */
 @Configuration
 public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory> {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebConfigurer.class);
 
-    private final Environment env;
-
-    private final JHipsterProperties jHipsterProperties;
+    private final Environment env; // Доступ к окружению Spring
+    private final JHipsterProperties jHipsterProperties; // Настройки JHipster
 
     public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
     }
 
+    /**
+     * Инициализация ServletContext при запуске приложения
+     */
     @Override
     public void onStartup(ServletContext servletContext) {
         if (env.getActiveProfiles().length != 0) {
             LOG.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
-
         LOG.info("Web application fully configured");
     }
 
     /**
-     * Customize the Servlet engine: Mime types, the document root, the cache.
+     * Кастомизация веб-сервера: MIME-типы, корневая директория, кэш
      */
     @Override
     public void customize(WebServerFactory server) {
-        // When running in an IDE or with ./gradlew bootRun, set location of the static web assets.
+        // Установка расположения статических ресурсов при запуске в IDE или через bootRun
         setLocationForStaticAssets(server);
     }
 
+    /**
+     * Устанавливает расположение статических ресурсов для веб-сервера
+     */
     private void setLocationForStaticAssets(WebServerFactory server) {
         if (server instanceof ConfigurableServletWebServerFactory servletWebServer) {
             File root;
             String prefixPath = resolvePathPrefix();
             root = Path.of(prefixPath + "build/resources/main/static/").toFile();
             if (root.exists() && root.isDirectory()) {
-                servletWebServer.setDocumentRoot(root);
+                servletWebServer.setDocumentRoot(root); // Устанавливаем корневую директорию
             }
         }
     }
 
     /**
-     * Resolve path prefix to static resources.
+     * Определяет префикс пути к статическим ресурсам
      */
     private String resolvePathPrefix() {
         String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
@@ -80,12 +88,18 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         return extractedPath.substring(0, extractionEndIndex);
     }
 
+    /**
+     * Создает и настраивает CORS фильтр
+     */
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = jHipsterProperties.getCors();
+        CorsConfiguration config = jHipsterProperties.getCors(); // Получаем CORS настройки из JHipster
+
+        // Регистрируем CORS только если есть разрешенные origins
         if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || !CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
             LOG.debug("Registering CORS filter");
+            // Применяем CORS для API, management endpoints и Swagger
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/management/**", config);
             source.registerCorsConfiguration("/v3/api-docs", config);

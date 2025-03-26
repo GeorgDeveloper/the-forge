@@ -14,9 +14,9 @@ import org.springframework.core.env.Profiles;
 import tech.jhipster.config.JHipsterConstants;
 
 /**
- * Aspect for logging execution of service and repository Spring components.
+ * Аспект для логирования выполнения сервисных и репозиторных Spring компонентов.
  *
- * By default, it only runs with the "dev" profile.
+ * По умолчанию, работает только с профилем "dev".
  */
 @Aspect
 public class LoggingAspect {
@@ -28,7 +28,7 @@ public class LoggingAspect {
     }
 
     /**
-     * Pointcut that matches all repositories, services and Web REST endpoints.
+     *  Точка среза, которая соответствует всем репозиториям, сервисам и Web REST endpoints.
      */
     @Pointcut(
         "within(@org.springframework.stereotype.Repository *)" +
@@ -36,11 +36,11 @@ public class LoggingAspect {
         " || within(@org.springframework.web.bind.annotation.RestController *)"
     )
     public void springBeanPointcut() {
-        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+        // Метод пустой, так как это просто точка среза, реализации находятся в advice-ах.
     }
 
     /**
-     * Pointcut that matches all Spring beans in the application's main packages.
+     * Точка среза, которая соответствует всем Spring бинам в основных пакетах приложения.
      */
     @Pointcut(
         "within(ru.georgdeveloper.myapp.repository..*)" +
@@ -48,30 +48,30 @@ public class LoggingAspect {
         " || within(ru.georgdeveloper.myapp.web.rest..*)"
     )
     public void applicationPackagePointcut() {
-        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+        // Метод пустой, так как это просто точка среза, реализации находятся в advice-ах.
     }
 
     /**
-     * Retrieves the {@link Logger} associated to the given {@link JoinPoint}.
+     * Возвращает {@link Logger}, связанный с данной {@link JoinPoint}.
      *
-     * @param joinPoint join point we want the logger for.
-     * @return {@link Logger} associated to the given {@link JoinPoint}.
+     * @param joinPoint точка соединения, для которой нужен логгер.
+     * @return {@link Logger}, связанный с данной {@link JoinPoint}.
      */
     private Logger logger(JoinPoint joinPoint) {
         return LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
     }
 
     /**
-     * Advice that logs methods throwing exceptions.
+     * Advice, который логирует методы, выбрасывающие исключения.
      *
-     * @param joinPoint join point for advice.
-     * @param e exception.
+     * @param joinPoint точка соединения для advice.
+     * @param e исключение.
      */
     @AfterThrowing(pointcut = "applicationPackagePointcut() && springBeanPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             logger(joinPoint).error(
-                "Exception in {}() with cause = '{}' and exception = '{}'",
+                "Исключение в {}() с причиной = '{}' и исключением = '{}'",
                 joinPoint.getSignature().getName(),
                 e.getCause() != null ? e.getCause() : "NULL",
                 e.getMessage(),
@@ -79,7 +79,7 @@ public class LoggingAspect {
             );
         } else {
             logger(joinPoint).error(
-                "Exception in {}() with cause = {}",
+                "Исключение в {}() с причиной = {}",
                 joinPoint.getSignature().getName(),
                 e.getCause() != null ? String.valueOf(e.getCause()) : "NULL"
             );
@@ -87,26 +87,26 @@ public class LoggingAspect {
     }
 
     /**
-     * Advice that logs when a method is entered and exited.
+     * Advice, который логирует вход и выход из метода.
      *
-     * @param joinPoint join point for advice.
-     * @return result.
-     * @throws Throwable throws {@link IllegalArgumentException}.
+     * @param joinPoint точка соединения для advice.
+     * @return результат.
+     * @throws Throwable выбрасывает {@link IllegalArgumentException}.
      */
     @Around("applicationPackagePointcut() && springBeanPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger log = logger(joinPoint);
         if (log.isDebugEnabled()) {
-            log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+            log.debug("Вход: {}() с аргументом[ами] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
         try {
             Object result = joinPoint.proceed();
             if (log.isDebugEnabled()) {
-                log.debug("Exit: {}() with result = {}", joinPoint.getSignature().getName(), result);
+                log.debug("Выход: {}() с результатом = {}", joinPoint.getSignature().getName(), result);
             }
             return result;
         } catch (IllegalArgumentException e) {
-            log.error("Illegal argument: {} in {}()", Arrays.toString(joinPoint.getArgs()), joinPoint.getSignature().getName());
+            log.error("Недопустимый аргумент: {} в {}()", Arrays.toString(joinPoint.getArgs()), joinPoint.getSignature().getName());
             throw e;
         }
     }
