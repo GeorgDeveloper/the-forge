@@ -8,42 +8,49 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A Profession.
+ * Сущность "Профессия".
+ * Содержит информацию о профессиях и их связи с оборудованием, обучением и сотрудниками.
  */
 @Entity
 @Table(name = "profession")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Profession implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор для сериализации
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private Long id;
+    private Long id; // Уникальный идентификатор профессии
 
     @NotNull
     @Column(name = "profession_name", nullable = false)
-    private String professionName;
+    private String professionName; // Название профессии
 
+    // Связи с другими сущностями:
+
+    // Один-ко-многим: Средства индивидуальной защиты
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profession")
     @JsonIgnoreProperties(value = { "profession" }, allowSetters = true)
     private Set<ProtectiveEquipment> protectiveEquipments = new HashSet<>();
 
+    // Один-ко-многим: Дополнительное обучение
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profession")
     @JsonIgnoreProperties(value = { "profession" }, allowSetters = true)
     private Set<AdditionalTraining> additionalTrainings = new HashSet<>();
 
+    // Один-ко-многим: Инструкции по безопасности
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profession")
     @JsonIgnoreProperties(value = { "profession", "position" }, allowSetters = true)
     private Set<SafetyInstruction> safetyInstructions = new HashSet<>();
 
+    // Многие-ко-многим: Сотрудники
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "professions")
     @JsonIgnoreProperties(value = { "trainings", "tasks", "position", "professions", "team" }, allowSetters = true)
     private Set<Employee> employees = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    // Методы доступа и управления связями:
 
     public Long getId() {
         return this.id;
@@ -71,11 +78,13 @@ public class Profession implements Serializable {
         this.professionName = professionName;
     }
 
+    // Методы для управления связью с ProtectiveEquipment
     public Set<ProtectiveEquipment> getProtectiveEquipments() {
         return this.protectiveEquipments;
     }
 
     public void setProtectiveEquipments(Set<ProtectiveEquipment> protectiveEquipments) {
+        // Поддержание целостности связей
         if (this.protectiveEquipments != null) {
             this.protectiveEquipments.forEach(i -> i.setProfession(null));
         }
@@ -164,6 +173,7 @@ public class Profession implements Serializable {
         return this;
     }
 
+    // Методы для управления связью многие-ко-многим с Employee
     public Set<Employee> getEmployees() {
         return this.employees;
     }
@@ -217,9 +227,9 @@ public class Profession implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "Profession{" +
+        return "Профессия{" +
             "id=" + getId() +
-            ", professionName='" + getProfessionName() + "'" +
+            ", наименование='" + getProfessionName() + "'" +
             "}";
     }
 }

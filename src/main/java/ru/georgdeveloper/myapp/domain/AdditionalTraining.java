@@ -7,42 +7,47 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * A AdditionalTraining.
+ * Сущность "Дополнительное обучение".
+ * Хранит информацию о дополнительных тренингах/обучениях сотрудников.
  */
 @Entity
-@Table(name = "additional_training")
-@SuppressWarnings("common-java:DuplicatedBlocks")
+@Table(name = "additional_training") // Связывает с таблицей в БД
+@SuppressWarnings("common-java:DuplicatedBlocks") // Игнорирует предупреждения о дублировании блоков
 public class AdditionalTraining implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор для сериализации
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
+    @Id // Поле является первичным ключом
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator") // Стратегия генерации ID
+    @SequenceGenerator(name = "sequenceGenerator") // Используемый генератор последовательностей
+    @Column(name = "id") // Связь с колонкой в таблице
     private Long id;
 
-    @NotNull
+    @NotNull // Валидация - поле не может быть null
     @Column(name = "training_name", nullable = false)
-    private String trainingName;
+    private String trainingName; // Название тренинга
 
     @NotNull
     @Column(name = "training_date", nullable = false)
-    private LocalDate trainingDate;
+    private LocalDate trainingDate; // Дата прохождения тренинга
 
     @NotNull
     @Column(name = "validity_period", nullable = false)
-    private Integer validityPeriod;
+    private Integer validityPeriod; // Срок действия тренинга (в месяцах)
 
     @Column(name = "next_training_date")
-    private LocalDate nextTrainingDate;
+    private LocalDate nextTrainingDate; // Дата следующего тренинга (вычисляемое поле)
 
+    // Связь многие-к-одному с сущностью Profession
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "protectiveEquipments", "additionalTrainings", "safetyInstructions", "employees" }, allowSetters = true)
-    private Profession profession;
+    @JsonIgnoreProperties(
+        value = { "protectiveEquipments", "additionalTrainings", "safetyInstructions", "employees" },
+        allowSetters = true
+        // "инструкции по технике безопасности", "сотрудники") при JSON сериализации // Игнорирует указанные поля ("средства защиты", "дополнительные тренинги",
+    )
+    private Profession profession; // Профессия, для которой требуется тренинг
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Методы доступа (getters/setters) с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -121,8 +126,7 @@ public class AdditionalTraining implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
+    // Переопределенные методы equals и hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -136,19 +140,29 @@ public class AdditionalTraining implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // Рекомендуемая реализация для JPA сущностей
         return getClass().hashCode();
     }
 
-    // prettier-ignore
+    // Переопределенный метод toString()
     @Override
     public String toString() {
-        return "AdditionalTraining{" +
-            "id=" + getId() +
-            ", trainingName='" + getTrainingName() + "'" +
-            ", trainingDate='" + getTrainingDate() + "'" +
-            ", validityPeriod=" + getValidityPeriod() +
-            ", nextTrainingDate='" + getNextTrainingDate() + "'" +
-            "}";
+        return (
+            "Дополнительное обучение{" +
+            "id=" +
+            getId() +
+            ", Наименование='" +
+            getTrainingName() +
+            "'" +
+            ", дата обучения='" +
+            getTrainingDate() +
+            "'" +
+            ", срок действия=" +
+            getValidityPeriod() +
+            ", дата следующего обучения='" +
+            getNextTrainingDate() +
+            "'" +
+            "}"
+        );
     }
 }

@@ -9,53 +9,57 @@ import ru.georgdeveloper.myapp.domain.enumeration.TaskPriority;
 import ru.georgdeveloper.myapp.domain.enumeration.TaskStatus;
 
 /**
- * A Task.
+ * Сущность "Задача".
+ * Представляет рабочую задачу, назначенную сотруднику, с указанием статуса, приоритета и сроков выполнения.
  */
 @Entity
 @Table(name = "task")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Task implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор версии для сериализации
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private Long id;
+    private Long id; // Уникальный идентификатор задачи
 
     @NotNull
     @Column(name = "task_name", nullable = false)
-    private String taskName;
+    private String taskName; // Название задачи
 
     @NotNull
     @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
+    private LocalDate creationDate; // Дата создания задачи
 
     @NotNull
     @Column(name = "planned_completion_date", nullable = false)
-    private LocalDate plannedCompletionDate;
+    private LocalDate plannedCompletionDate; // Планируемая дата завершения
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // Хранение enum как строки в БД
     @Column(name = "status", nullable = false)
-    private TaskStatus status;
+    private TaskStatus status; // Текущий статус задачи
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false)
-    private TaskPriority priority;
+    private TaskPriority priority; // Приоритет задачи
 
     @NotNull
     @Column(name = "body", nullable = false)
-    private String body;
+    private String body; // Подробное описание задачи
 
+    // Связь многие-к-одному с Employee (исполнитель задачи)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "trainings", "tasks", "position", "professions", "team" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "trainings", "tasks", "position", "professions", "team" },
+        allowSetters = true // Игнорирование циклических ссылок при сериализации
+    )
     private Employee employee;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Методы доступа с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -160,36 +164,44 @@ public class Task implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
+    // equals и hashCode для корректной работы с коллекциями
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Task)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
         return getId() != null && getId().equals(((Task) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
+        return getClass().hashCode(); // Рекомендуемый подход для JPA
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "Task{" +
-            "id=" + getId() +
-            ", taskName='" + getTaskName() + "'" +
-            ", creationDate='" + getCreationDate() + "'" +
-            ", plannedCompletionDate='" + getPlannedCompletionDate() + "'" +
-            ", status='" + getStatus() + "'" +
-            ", priority='" + getPriority() + "'" +
-            ", body='" + getBody() + "'" +
-            "}";
+        return (
+            "Задача{" +
+            "id=" +
+            getId() +
+            ", наименование='" +
+            getTaskName() +
+            "'" +
+            ", дата создания='" +
+            getCreationDate() +
+            "'" +
+            ", запланированная дата выполнения='" +
+            getPlannedCompletionDate() +
+            "'" +
+            ", статус='" +
+            getStatus() +
+            "'" +
+            ", приоритет='" +
+            getPriority() +
+            "'" +
+            ", содержание='" +
+            getBody() +
+            "'" +
+            "}"
+        );
     }
 }

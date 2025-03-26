@@ -7,35 +7,36 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * A JobDescription.
+ * Сущность "Должностная инструкция".
+ * Содержит описание должностных обязанностей и связана с конкретной должностью (Position).
  */
 @Entity
 @Table(name = "job_description")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class JobDescription implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор версии для сериализации
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private Long id;
+    private Long id; // Уникальный идентификатор
 
     @NotNull
     @Column(name = "description_name", nullable = false)
-    private String descriptionName;
+    private String descriptionName; // Наименование должностной инструкции
 
     @NotNull
     @Column(name = "approval_date", nullable = false)
-    private LocalDate approvalDate;
+    private LocalDate approvalDate; // Дата утверждения инструкции
 
+    // Однонаправленная связь один-к-одному с сущностью Position
     @JsonIgnoreProperties(value = { "jobDescription", "safetyInstructions", "employees" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "jobDescription")
-    private Position position;
+    private Position position; // Должность, для которой предназначена инструкция
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Стандартные getter'ы и setter'ы с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -75,14 +76,19 @@ public class JobDescription implements Serializable {
         this.approvalDate = approvalDate;
     }
 
+    /**
+     * Управление связью с Position с поддержанием целостности
+     */
     public Position getPosition() {
         return this.position;
     }
 
     public void setPosition(Position position) {
+        // Очищаем предыдущую связь
         if (this.position != null) {
             this.position.setJobDescription(null);
         }
+        // Устанавливаем новую связь
         if (position != null) {
             position.setJobDescription(this);
         }
@@ -94,32 +100,32 @@ public class JobDescription implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
+    // equals, hashCode и toString
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof JobDescription)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof JobDescription)) return false;
         return getId() != null && getId().equals(((JobDescription) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
+        return getClass().hashCode(); // Рекомендуемый подход для JPA сущностей
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "JobDescription{" +
-            "id=" + getId() +
-            ", descriptionName='" + getDescriptionName() + "'" +
-            ", approvalDate='" + getApprovalDate() + "'" +
-            "}";
+        return (
+            "Должностная инструкция{" +
+            "id=" +
+            getId() +
+            ", наименование='" +
+            getDescriptionName() +
+            "'" +
+            ", дата создания='" +
+            getApprovalDate() +
+            "'" +
+            "}"
+        );
     }
 }

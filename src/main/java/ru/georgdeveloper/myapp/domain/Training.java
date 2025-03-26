@@ -7,42 +7,47 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * A Training.
+ * Сущность "Инструктаж".
+ * Содержит информацию о пройденных инструктажах, их периодичности
+ * и планируемых датах следующего проведения инструктажа.
  */
 @Entity
 @Table(name = "training")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Training implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор для сериализации
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private Long id;
+    private Long id; // Уникальный идентификатор записи об инструктаже
 
     @NotNull
     @Column(name = "training_name", nullable = false)
-    private String trainingName;
+    private String trainingName; // Наименование инструктажа
 
     @NotNull
     @Column(name = "last_training_date", nullable = false)
-    private LocalDate lastTrainingDate;
+    private LocalDate lastTrainingDate; // Дата последнего прохождения инструктажа
 
     @NotNull
     @Column(name = "validity_period", nullable = false)
-    private Integer validityPeriod;
+    private Integer validityPeriod; // Срок действия инструктажа (в месяцах)
 
     @Column(name = "next_training_date")
-    private LocalDate nextTrainingDate;
+    private LocalDate nextTrainingDate; // Планируемая дата следующего инструктажа
 
+    // Связь многие-к-одному с Employee (сотрудник)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "trainings", "tasks", "position", "professions", "team" }, allowSetters = true)
-    private Employee employee;
+    @JsonIgnoreProperties(
+        value = { "trainings", "tasks", "position", "professions", "team" },
+        allowSetters = true // Игнорирование циклических ссылок при сериализации
+    )
+    private Employee employee; // Сотрудник, прошедший инструктаж
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Методы доступа с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -80,6 +85,10 @@ public class Training implements Serializable {
 
     public void setLastTrainingDate(LocalDate lastTrainingDate) {
         this.lastTrainingDate = lastTrainingDate;
+        // Можно автоматически рассчитывать nextTrainingDate при обновлении
+        if (this.validityPeriod != null) {
+            this.nextTrainingDate = lastTrainingDate.plusMonths(this.validityPeriod);
+        }
     }
 
     public Integer getValidityPeriod() {
@@ -93,6 +102,10 @@ public class Training implements Serializable {
 
     public void setValidityPeriod(Integer validityPeriod) {
         this.validityPeriod = validityPeriod;
+        // Автоматический пересчет даты следующего обучения
+        if (this.lastTrainingDate != null) {
+            this.nextTrainingDate = this.lastTrainingDate.plusMonths(validityPeriod);
+        }
     }
 
     public LocalDate getNextTrainingDate() {
@@ -121,34 +134,37 @@ public class Training implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
+    // equals и hashCode для корректной работы с коллекциями
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Training)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Training)) return false;
         return getId() != null && getId().equals(((Training) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
+        return getClass().hashCode(); // Рекомендуемый подход для JPA сущностей
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "Training{" +
-            "id=" + getId() +
-            ", trainingName='" + getTrainingName() + "'" +
-            ", lastTrainingDate='" + getLastTrainingDate() + "'" +
-            ", validityPeriod=" + getValidityPeriod() +
-            ", nextTrainingDate='" + getNextTrainingDate() + "'" +
-            "}";
+        return (
+            "Инструктаж{" +
+            "id=" +
+            getId() +
+            ", наименование='" +
+            getTrainingName() +
+            "'" +
+            ", дата последнего инструктажа='" +
+            getLastTrainingDate() +
+            "'" +
+            ", период действия=" +
+            getValidityPeriod() +
+            ", дата следующего инструктажа='" +
+            getNextTrainingDate() +
+            "'" +
+            "}"
+        );
     }
 }

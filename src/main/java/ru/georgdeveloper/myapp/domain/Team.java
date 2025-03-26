@@ -8,31 +8,35 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A Team.
+ * Сущность "Команда/Отдел".
+ * Представляет группу сотрудников, работающих вместе над общими задачами.
  */
 @Entity
 @Table(name = "team")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Team implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор для сериализации
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private Long id;
+    private Long id; // Уникальный идентификатор команды
 
     @NotNull
     @Column(name = "team_name", nullable = false)
-    private String teamName;
+    private String teamName; // Название команды/отдела
 
+    // Связь один-ко-многим с Employee (сотрудники в команде)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
-    @JsonIgnoreProperties(value = { "trainings", "tasks", "position", "professions", "team" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "trainings", "tasks", "position", "professions", "team" },
+        allowSetters = true // Игнорирование циклических ссылок при сериализации
+    )
     private Set<Employee> employees = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Методы доступа с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -59,16 +63,22 @@ public class Team implements Serializable {
         this.teamName = teamName;
     }
 
+    /**
+     * Управление связью с сотрудниками команды.
+     * Поддерживает целостность двусторонней связи.
+     */
     public Set<Employee> getEmployees() {
         return this.employees;
     }
 
     public void setEmployees(Set<Employee> employees) {
+        // Очищаем предыдущие связи
         if (this.employees != null) {
-            this.employees.forEach(i -> i.setTeam(null));
+            this.employees.forEach(emp -> emp.setTeam(null));
         }
+        // Устанавливаем новые связи
         if (employees != null) {
-            employees.forEach(i -> i.setTeam(this));
+            employees.forEach(emp -> emp.setTeam(this));
         }
         this.employees = employees;
     }
@@ -78,43 +88,39 @@ public class Team implements Serializable {
         return this;
     }
 
+    /**
+     * Добавляет сотрудника в команду с обновлением двусторонней связи.
+     */
     public Team addEmployee(Employee employee) {
         this.employees.add(employee);
         employee.setTeam(this);
         return this;
     }
 
+    /**
+     * Удаляет сотрудника из команды с обновлением двусторонней связи.
+     */
     public Team removeEmployee(Employee employee) {
         this.employees.remove(employee);
         employee.setTeam(null);
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
+    // equals и hashCode для корректной работы с коллекциями
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Team)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Team)) return false;
         return getId() != null && getId().equals(((Team) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
+        return getClass().hashCode(); // Рекомендуемый подход для JPA сущностей
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "Team{" +
-            "id=" + getId() +
-            ", teamName='" + getTeamName() + "'" +
-            "}";
+        return "Команда{" + "id=" + getId() + ", наименование='" + getTeamName() + "'" + "}";
     }
 }

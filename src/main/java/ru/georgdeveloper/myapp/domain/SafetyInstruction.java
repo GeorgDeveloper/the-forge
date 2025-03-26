@@ -7,39 +7,45 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * A SafetyInstruction.
+ * Сущность "Инструкция по технике безопасности (охране труда)".
+ * Содержит информацию о правилах безопасности, их дате введения
+ * и связях с профессиями и должностями.
  */
-@Entity
-@Table(name = "safety_instruction")
-@SuppressWarnings("common-java:DuplicatedBlocks")
+@Entity // Указывает, что это JPA сущность
+@Table(name = "safety_instruction") // Связывает с таблицей в БД
+@SuppressWarnings("common-java:DuplicatedBlocks") // Игнорирует предупреждения о дублировании блоков
 public class SafetyInstruction implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор для сериализации
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
-    private Long id;
+    @Id // Поле является первичным ключом
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator") // Стратегия генерации ID
+    @SequenceGenerator(name = "sequenceGenerator") // Используемый генератор последовательностей
+    @Column(name = "id") // Связь с колонкой в таблице
+    private Long id; // Уникальный идентификатор инструкции
 
-    @NotNull
-    @Column(name = "instruction_name", nullable = false)
-    private String instructionName;
+    @NotNull // Валидация - поле не может быть null
+    @Column(name = "instruction_name", nullable = false) // Настройки колонки в БД
+    private String instructionName; // Наименование инструкции
 
     @NotNull
     @Column(name = "introduction_date", nullable = false)
-    private LocalDate introductionDate;
+    private LocalDate introductionDate; // Дата введения инструкции
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "protectiveEquipments", "additionalTrainings", "safetyInstructions", "employees" }, allowSetters = true)
-    private Profession profession;
+    // Связь многие-к-одному с Profession (профессия)
+    @ManyToOne(fetch = FetchType.LAZY) // Ленивая загрузка
+    @JsonIgnoreProperties(
+        value = { "protectiveEquipments", "additionalTrainings", "safetyInstructions", "employees" },
+        allowSetters = true // Игнорирует указанные поля при JSON сериализации
+    )
+    private Profession profession; // Профессия, для которой предназначена инструкция
 
+    // Связь многие-к-одному с Position (должность)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "jobDescription", "safetyInstructions", "employees" }, allowSetters = true)
-    private Position position;
+    private Position position; // Должность, для которой предназначена инструкция
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Методы доступа (getters/setters) с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -79,6 +85,9 @@ public class SafetyInstruction implements Serializable {
         this.introductionDate = introductionDate;
     }
 
+    /**
+     * Управление связью с Profession.
+     */
     public Profession getProfession() {
         return this.profession;
     }
@@ -92,6 +101,9 @@ public class SafetyInstruction implements Serializable {
         return this;
     }
 
+    /**
+     * Управление связью с Position.
+     */
     public Position getPosition() {
         return this.position;
     }
@@ -105,32 +117,33 @@ public class SafetyInstruction implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
+    // equals, hashCode и toString
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof SafetyInstruction)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof SafetyInstruction)) return false;
         return getId() != null && getId().equals(((SafetyInstruction) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // Рекомендуемая реализация для JPA сущностей
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "SafetyInstruction{" +
-            "id=" + getId() +
-            ", instructionName='" + getInstructionName() + "'" +
-            ", introductionDate='" + getIntroductionDate() + "'" +
-            "}";
+        return (
+            "Инструкция по ОТ{" +
+            "id=" +
+            getId() +
+            ", наименование='" +
+            getInstructionName() +
+            "'" +
+            ", дата введения инструкции='" +
+            getIntroductionDate() +
+            "'" +
+            "}"
+        );
     }
 }

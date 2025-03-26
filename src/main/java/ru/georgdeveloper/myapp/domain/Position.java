@@ -8,40 +8,43 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A Position.
+ * Сущность "Должность".
+ * Содержит информацию о должностях в организации и их связях с другими сущностями.
  */
 @Entity
 @Table(name = "position")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Position implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор для сериализации
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private Long id;
+    private Long id; // Уникальный идентификатор должности
 
     @NotNull
     @Column(name = "position_name", nullable = false)
-    private String positionName;
+    private String positionName; // Название должности
 
+    // Связь один-к-одному с JobDescription (должностная инструкция)
     @JsonIgnoreProperties(value = { "position" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
+    @JoinColumn(unique = true) // Уникальное соединение
     private JobDescription jobDescription;
 
+    // Связь один-ко-многим с SafetyInstruction (инструкции по безопасности)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "position")
     @JsonIgnoreProperties(value = { "profession", "position" }, allowSetters = true)
     private Set<SafetyInstruction> safetyInstructions = new HashSet<>();
 
+    // Связь один-ко-многим с Employee (сотрудники)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "position")
     @JsonIgnoreProperties(value = { "trainings", "tasks", "position", "professions", "team" }, allowSetters = true)
     private Set<Employee> employees = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Методы доступа (getters/setters) с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -68,6 +71,7 @@ public class Position implements Serializable {
         this.positionName = positionName;
     }
 
+    // Управление связью с JobDescription
     public JobDescription getJobDescription() {
         return this.jobDescription;
     }
@@ -81,11 +85,13 @@ public class Position implements Serializable {
         return this;
     }
 
+    // Управление связью с SafetyInstruction
     public Set<SafetyInstruction> getSafetyInstructions() {
         return this.safetyInstructions;
     }
 
     public void setSafetyInstructions(Set<SafetyInstruction> safetyInstructions) {
+        // Поддержание целостности связей
         if (this.safetyInstructions != null) {
             this.safetyInstructions.forEach(i -> i.setPosition(null));
         }
@@ -93,11 +99,6 @@ public class Position implements Serializable {
             safetyInstructions.forEach(i -> i.setPosition(this));
         }
         this.safetyInstructions = safetyInstructions;
-    }
-
-    public Position safetyInstructions(Set<SafetyInstruction> safetyInstructions) {
-        this.setSafetyInstructions(safetyInstructions);
-        return this;
     }
 
     public Position addSafetyInstruction(SafetyInstruction safetyInstruction) {
@@ -165,9 +166,9 @@ public class Position implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "Position{" +
+        return "Должность{" +
             "id=" + getId() +
-            ", positionName='" + getPositionName() + "'" +
+            ", наименование='" + getPositionName() + "'" +
             "}";
     }
 }

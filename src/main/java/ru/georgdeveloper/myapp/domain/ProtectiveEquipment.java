@@ -6,39 +6,44 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 
 /**
- * A ProtectiveEquipment.
+ * Сущность "Средства индивидуальной защиты".
+ * Содержит информацию о средствах индивидуальной защиты, его количестве и частоте выдачи,
+ * а также связь с профессией, для которой оно предназначено.
  */
-@Entity
-@Table(name = "protective_equipment")
-@SuppressWarnings("common-java:DuplicatedBlocks")
+@Entity // Указывает, что это JPA сущность
+@Table(name = "protective_equipment") // Связывает с таблицей в БД
+@SuppressWarnings("common-java:DuplicatedBlocks") // Игнорирует предупреждения о дублировании блоков
 public class ProtectiveEquipment implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор для сериализации
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
-    private Long id;
+    @Id // Поле является первичным ключом
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator") // Стратегия генерации ID
+    @SequenceGenerator(name = "sequenceGenerator") // Используемый генератор последовательностей
+    @Column(name = "id") // Связь с колонкой в таблице
+    private Long id; // Уникальный идентификатор
 
-    @NotNull
-    @Column(name = "equipment_name", nullable = false)
-    private String equipmentName;
+    @NotNull // Валидация - поле не может быть null
+    @Column(name = "equipment_name", nullable = false) // Настройки колонки в БД
+    private String equipmentName; // Наименование средства защиты
 
     @NotNull
     @Column(name = "quantity", nullable = false)
-    private Integer quantity;
+    private Integer quantity; // Количество доступных единиц
 
     @NotNull
     @Column(name = "issuance_frequency", nullable = false)
-    private Integer issuanceFrequency;
+    private Integer issuanceFrequency; // Частота выдачи (в месяцах)
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "protectiveEquipments", "additionalTrainings", "safetyInstructions", "employees" }, allowSetters = true)
-    private Profession profession;
+    // Связь многие-к-одному с Profession (профессия)
+    @ManyToOne(fetch = FetchType.LAZY) // Ленивая загрузка
+    @JsonIgnoreProperties(
+        value = { "protectiveEquipments", "additionalTrainings", "safetyInstructions", "employees" },
+        allowSetters = true // Игнорирует указанные поля при JSON сериализации
+    )
+    private Profession profession; // Профессия, для которой предназначено средство защиты
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Методы доступа (getters/setters) с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -91,6 +96,9 @@ public class ProtectiveEquipment implements Serializable {
         this.issuanceFrequency = issuanceFrequency;
     }
 
+    /**
+     * Управление связью с Profession.
+     */
     public Profession getProfession() {
         return this.profession;
     }
@@ -104,33 +112,34 @@ public class ProtectiveEquipment implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
+    // equals, hashCode и toString
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ProtectiveEquipment)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof ProtectiveEquipment)) return false;
         return getId() != null && getId().equals(((ProtectiveEquipment) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // Рекомендуемая реализация для JPA сущностей
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "ProtectiveEquipment{" +
-            "id=" + getId() +
-            ", equipmentName='" + getEquipmentName() + "'" +
-            ", quantity=" + getQuantity() +
-            ", issuanceFrequency=" + getIssuanceFrequency() +
-            "}";
+        return (
+            "Норма выдачи СИЗ{" +
+            "id=" +
+            getId() +
+            ", наименование='" +
+            getEquipmentName() +
+            "'" +
+            ", количество=" +
+            getQuantity() +
+            ", частота выдачи=" +
+            getIssuanceFrequency() +
+            "}"
+        );
     }
 }

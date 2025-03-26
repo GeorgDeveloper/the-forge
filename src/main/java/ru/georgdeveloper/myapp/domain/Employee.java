@@ -9,68 +9,73 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A Employee.
+ * Сущность "Сотрудник".
+ * Содержит основную информацию о сотруднике и его связях с другими сущностями.
  */
 @Entity
 @Table(name = "employee")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Employee implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Идентификатор для сериализации
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private Long id;
+    private Long id; // Уникальный идентификатор
 
     @NotNull
     @Column(name = "first_name", nullable = false)
-    private String firstName;
+    private String firstName; // Имя сотрудника
 
     @NotNull
     @Column(name = "last_name", nullable = false)
-    private String lastName;
+    private String lastName; // Фамилия сотрудника
 
     @NotNull
     @Column(name = "birth_date", nullable = false)
-    private LocalDate birthDate;
+    private LocalDate birthDate; // Дата рождения
 
     @NotNull
     @Column(name = "employee_number", nullable = false, unique = true)
-    private String employeeNumber;
+    private String employeeNumber; // Уникальный табельный номер
 
     @NotNull
     @Column(name = "hire_date", nullable = false)
-    private LocalDate hireDate;
+    private LocalDate hireDate; // Дата приема на работу
 
+    // Связь один-ко-многим с Training (обучения сотрудника)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
     @JsonIgnoreProperties(value = { "employee" }, allowSetters = true)
     private Set<Training> trainings = new HashSet<>();
 
+    // Связь один-ко-многим с Task (задачи сотрудника)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
     @JsonIgnoreProperties(value = { "employee" }, allowSetters = true)
     private Set<Task> tasks = new HashSet<>();
 
+    // Связь многие-к-одному с Position (должность)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "jobDescription", "safetyInstructions", "employees" }, allowSetters = true)
     private Position position;
 
+    // Связь многие-ко-многим с Profession (профессии)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "rel_employee__profession",
-        joinColumns = @JoinColumn(name = "employee_id"),
-        inverseJoinColumns = @JoinColumn(name = "profession_id")
+        name = "rel_employee__profession", // Название таблицы связи
+        joinColumns = @JoinColumn(name = "employee_id"), // Колонка для текущей сущности
+        inverseJoinColumns = @JoinColumn(name = "profession_id") // Колонка для связанной сущности
     )
     @JsonIgnoreProperties(value = { "protectiveEquipments", "additionalTrainings", "safetyInstructions", "employees" }, allowSetters = true)
     private Set<Profession> professions = new HashSet<>();
 
+    // Связь многие-к-одному с Team (команда/отдел)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "employees" }, allowSetters = true)
     private Team team;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
+    // Методы доступа (getters/setters) с fluent-интерфейсом
     public Long getId() {
         return this.id;
     }
@@ -153,12 +158,13 @@ public class Employee implements Serializable {
         return this.trainings;
     }
 
+    // Специальные методы для управления связями
     public void setTrainings(Set<Training> trainings) {
         if (this.trainings != null) {
-            this.trainings.forEach(i -> i.setEmployee(null));
+            this.trainings.forEach(i -> i.setEmployee(null)); // Очищаем обратные ссылки
         }
         if (trainings != null) {
-            trainings.forEach(i -> i.setEmployee(this));
+            trainings.forEach(i -> i.setEmployee(this)); // Устанавливаем обратные ссылки
         }
         this.trainings = trainings;
     }
@@ -239,6 +245,7 @@ public class Employee implements Serializable {
 
     public Employee addProfession(Profession profession) {
         this.professions.add(profession);
+        profession.addEmployee(this);
         return this;
     }
 
@@ -282,13 +289,13 @@ public class Employee implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "Employee{" +
+        return "Сотрудник{" +
             "id=" + getId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", lastName='" + getLastName() + "'" +
-            ", birthDate='" + getBirthDate() + "'" +
-            ", employeeNumber='" + getEmployeeNumber() + "'" +
-            ", hireDate='" + getHireDate() + "'" +
+            ", Имя='" + getFirstName() + "'" +
+            ", Фамилия='" + getLastName() + "'" +
+            ", дата рождения='" + getBirthDate() + "'" +
+            ", таб номер='" + getEmployeeNumber() + "'" +
+            ", дата приема на работу='" + getHireDate() + "'" +
             "}";
     }
 }
