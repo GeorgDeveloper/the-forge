@@ -6,53 +6,53 @@ import org.springframework.data.domain.Pageable;
 import ru.georgdeveloper.myapp.domain.Training;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.Training}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.Training}.
  */
 public interface TrainingService {
     /**
-     * Save a training.
+     * Сохранить инструктаж.
      *
-     * @param training the entity to save.
-     * @return the persisted entity.
+     * @param training сохраняемый объект инструктаж.
+     * @return сохраненный объект инструктаж.
      */
     Training save(Training training);
 
     /**
-     * Updates a training.
+     * Обновить инструктаж.
      *
-     * @param training the entity to update.
-     * @return the persisted entity.
+     * @param training обновляемый объект инструктаж.
+     * @return обновленный объект инструктаж.
      */
     Training update(Training training);
 
     /**
-     * Partially updates a training.
+     * Частично обновить инструктаж.
      *
-     * @param training the entity to update partially.
-     * @return the persisted entity.
+     * @param training объект для частичного обновления.
+     * @return частично обновленный объект инструктаж.
      */
     Optional<Training> partialUpdate(Training training);
 
     /**
-     * Get all the trainings.
+     * Получить все инструктажи.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable параметры разбиения на страницы.
+     * @return страница с перечнем инструктажей.
      */
     Page<Training> findAll(Pageable pageable);
 
     /**
-     * Get the "id" training.
+     * Получить инструктаж по ID.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id уникальный идентификатор инструктажа.
+     * @return найденный объект инструктажа.
      */
     Optional<Training> findOne(Long id);
 
     /**
-     * Delete the "id" training.
+     * Удалить инструктаж.
      *
-     * @param id the id of the entity.
+     * @param id идентификатор удаляемого инструктажа.
      */
     void delete(Long id);
 }

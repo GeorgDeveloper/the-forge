@@ -24,7 +24,7 @@ import ru.georgdeveloper.myapp.service.dto.UserDTO;
 import tech.jhipster.security.RandomUtil;
 
 /**
- * Service class for managing users.
+ * Сервисный класс для управления пользователями.
  */
 @Service
 @Transactional
@@ -38,12 +38,25 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    /**
+     * Конструктор сервиса пользователей.
+     *
+     * @param userRepository репозиторий пользователей
+     * @param passwordEncoder кодировщик паролей
+     * @param authorityRepository репозиторий ролей
+     */
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
     }
 
+    /**
+     * Активирует регистрацию пользователя по ключу активации.
+     *
+     * @param key ключ активации
+     * @return пользователь, если активация прошла успешно
+     */
     public Optional<User> activateRegistration(String key) {
         LOG.debug("Activating user for activation key {}", key);
         return userRepository
@@ -57,6 +70,13 @@ public class UserService {
             });
     }
 
+    /**
+     * Завершает сброс пароля пользователя.
+     *
+     * @param newPassword новый пароль
+     * @param key ключ сброса
+     * @return пользователь, если сброс прошел успешно
+     */
     public Optional<User> completePasswordReset(String newPassword, String key) {
         LOG.debug("Reset user password for reset key {}", key);
         return userRepository
@@ -70,6 +90,12 @@ public class UserService {
             });
     }
 
+    /**
+     * Запрашивает сброс пароля для пользователя с указанной почтой.
+     *
+     * @param mail электронная почта пользователя
+     * @return пользователь, если запрос прошел успешно
+     */
     public Optional<User> requestPasswordReset(String mail) {
         return userRepository
             .findOneByEmailIgnoreCase(mail)
@@ -81,6 +107,15 @@ public class UserService {
             });
     }
 
+    /**
+     * Регистрирует нового пользователя.
+     *
+     * @param userDTO данные пользователя
+     * @param password пароль пользователя
+     * @return зарегистрированный пользователь
+     * @throws UsernameAlreadyUsedException если логин уже используется
+     * @throws EmailAlreadyUsedException если email уже используется
+     */
     public User registerUser(AdminUserDTO userDTO, String password) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
@@ -122,6 +157,12 @@ public class UserService {
         return newUser;
     }
 
+    /**
+     * Удаляет неактивированного пользователя.
+     *
+     * @param existingUser существующий пользователь
+     * @return true, если пользователь был удален
+     */
     private boolean removeNonActivatedUser(User existingUser) {
         if (existingUser.isActivated()) {
             return false;
@@ -131,6 +172,12 @@ public class UserService {
         return true;
     }
 
+    /**
+     * Создает нового пользователя.
+     *
+     * @param userDTO данные пользователя
+     * @return созданный пользователь
+     */
     public User createUser(AdminUserDTO userDTO) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
@@ -166,10 +213,10 @@ public class UserService {
     }
 
     /**
-     * Update all information for a specific user, and return the modified user.
+     * Обновляет всю информацию о пользователе.
      *
-     * @param userDTO user to update.
-     * @return updated user.
+     * @param userDTO данные пользователя для обновления
+     * @return обновленный пользователь
      */
     public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
         return Optional.of(userRepository.findById(userDTO.getId()))
@@ -201,6 +248,11 @@ public class UserService {
             .map(AdminUserDTO::new);
     }
 
+    /**
+     * Удаляет пользователя по логину.
+     *
+     * @param login логин пользователя
+     */
     public void deleteUser(String login) {
         userRepository
             .findOneByLogin(login)
@@ -211,13 +263,13 @@ public class UserService {
     }
 
     /**
-     * Update basic information (first name, last name, email, language) for the current user.
+     * Обновляет базовую информацию о текущем пользователе.
      *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
+     * @param firstName имя
+     * @param lastName фамилия
+     * @param email электронная почта
+     * @param langKey языковой ключ
+     * @param imageUrl URL изображения
      */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
@@ -235,6 +287,13 @@ public class UserService {
             });
     }
 
+    /**
+     * Изменяет пароль текущего пользователя.
+     *
+     * @param currentClearTextPassword текущий пароль в открытом виде
+     * @param newPassword новый пароль
+     * @throws InvalidPasswordException если текущий пароль неверен
+     */
     @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
@@ -250,30 +309,52 @@ public class UserService {
             });
     }
 
+    /**
+     * Получает всех управляемых пользователей с пагинацией.
+     *
+     * @param pageable параметры пагинации
+     * @return страница с пользователями
+     */
     @Transactional(readOnly = true)
     public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAll(pageable).map(AdminUserDTO::new);
     }
 
+    /**
+     * Получает всех публичных пользователей с пагинацией.
+     *
+     * @param pageable параметры пагинации
+     * @return страница с пользователями
+     */
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllPublicUsers(Pageable pageable) {
         return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(UserDTO::new);
     }
 
+    /**
+     * Получает пользователя с ролями по логину.
+     *
+     * @param login логин пользователя
+     * @return пользователь с ролями
+     */
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
     }
 
+    /**
+     * Получает текущего аутентифицированного пользователя с ролями.
+     *
+     * @return текущий пользователь с ролями
+     */
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
     /**
-     * Not activated users should be automatically deleted after 3 days.
-     * <p>
-     * This is scheduled to get fired every day, at 01:00 (am).
+     * Удаляет неактивированных пользователей (активируется ежедневно в 01:00).
+     * Неактивированные пользователи удаляются через 3 дня после создания.
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
@@ -286,8 +367,9 @@ public class UserService {
     }
 
     /**
-     * Gets a list of all the authorities.
-     * @return a list of all the authorities.
+     * Получает список всех доступных ролей.
+     *
+     * @return список названий ролей
      */
     @Transactional(readOnly = true)
     public List<String> getAuthorities() {

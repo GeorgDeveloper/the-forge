@@ -6,53 +6,53 @@ import org.springframework.data.domain.Pageable;
 import ru.georgdeveloper.myapp.domain.Position;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.Position}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.Position}.
  */
 public interface PositionService {
     /**
-     * Save a position.
+     * Сохранить должность.
      *
-     * @param position the entity to save.
-     * @return the persisted entity.
+     * @param position сущность для сохранения.
+     * @return сохраненная сущность.
      */
     Position save(Position position);
 
     /**
-     * Updates a position.
+     * Обновить должность.
      *
-     * @param position the entity to update.
-     * @return the persisted entity.
+     * @param position сущность для обновления.
+     * @return обновленная сущность.
      */
     Position update(Position position);
 
     /**
-     * Partially updates a position.
+     * Частично обновить должность.
      *
-     * @param position the entity to update partially.
-     * @return the persisted entity.
+     * @param position сущность для частичного обновления.
+     * @return обновленная сущность.
      */
     Optional<Position> partialUpdate(Position position);
 
     /**
-     * Get all the positions.
+     * Получить все должности.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable информация о пагинации.
+     * @return список сущностей.
      */
     Page<Position> findAll(Pageable pageable);
 
     /**
-     * Get the "id" position.
+     * Получить должность по "id".
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id идентификатор сущности.
+     * @return сущность.
      */
     Optional<Position> findOne(Long id);
 
     /**
-     * Delete the "id" position.
+     * Удалить должность по "id".
      *
-     * @param id the id of the entity.
+     * @param id идентификатор сущности.
      */
     void delete(Long id);
 }

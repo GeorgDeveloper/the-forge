@@ -5,59 +5,59 @@ import java.util.Optional;
 import ru.georgdeveloper.myapp.domain.JobDescription;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.JobDescription}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.JobDescription}.
  */
 public interface JobDescriptionService {
     /**
-     * Save a jobDescription.
+     * Сохранить описание должности.
      *
-     * @param jobDescription the entity to save.
-     * @return the persisted entity.
+     * @param jobDescription сущность для сохранения.
+     * @return сохранённая сущность.
      */
     JobDescription save(JobDescription jobDescription);
 
     /**
-     * Updates a jobDescription.
+     * Обновить описание должности.
      *
-     * @param jobDescription the entity to update.
-     * @return the persisted entity.
+     * @param jobDescription сущность для обновления.
+     * @return обновлённая сущность.
      */
     JobDescription update(JobDescription jobDescription);
 
     /**
-     * Partially updates a jobDescription.
+     * Частично обновить описание должности.
      *
-     * @param jobDescription the entity to update partially.
-     * @return the persisted entity.
+     * @param jobDescription сущность для частичного обновления.
+     * @return обновлённая сущность.
      */
     Optional<JobDescription> partialUpdate(JobDescription jobDescription);
 
     /**
-     * Get all the jobDescriptions.
+     * Получить все описания должностей.
      *
-     * @return the list of entities.
+     * @return список сущностей.
      */
     List<JobDescription> findAll();
 
     /**
-     * Get all the JobDescription where Position is {@code null}.
+     * Получить все описания должностей, где Position (Должность) равна {@code null}.
      *
-     * @return the {@link List} of entities.
+     * @return {@link List} сущностей.
      */
     List<JobDescription> findAllWherePositionIsNull();
 
     /**
-     * Get the "id" jobDescription.
+     * Получить описание должности по "id".
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id идентификатор сущности.
+     * @return сущность.
      */
     Optional<JobDescription> findOne(Long id);
 
     /**
-     * Delete the "id" jobDescription.
+     * Удалить описание должности по "id".
      *
-     * @param id the id of the entity.
+     * @param id идентификатор сущности.
      */
     void delete(Long id);
 }

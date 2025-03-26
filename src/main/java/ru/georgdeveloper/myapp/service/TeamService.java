@@ -6,53 +6,53 @@ import org.springframework.data.domain.Pageable;
 import ru.georgdeveloper.myapp.domain.Team;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.Team}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.Team}.
  */
 public interface TeamService {
     /**
-     * Save a team.
+     * Сохранить команду.
      *
-     * @param team the entity to save.
-     * @return the persisted entity.
+     * @param team сохраняемая команда.
+     * @return сохраненная команда.
      */
     Team save(Team team);
 
     /**
-     * Updates a team.
+     * Обновить команду.
      *
-     * @param team the entity to update.
-     * @return the persisted entity.
+     * @param team обновляемая команда.
+     * @return обновленная команда.
      */
     Team update(Team team);
 
     /**
-     * Partially updates a team.
+     * Частично обновить команду.
      *
-     * @param team the entity to update partially.
-     * @return the persisted entity.
+     * @param team команда для частичного обновления.
+     * @return обновленная команда.
      */
     Optional<Team> partialUpdate(Team team);
 
     /**
-     * Get all the teams.
+     * Получить все команды.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable параметры постраничного вывода.
+     * @return список команд.
      */
     Page<Team> findAll(Pageable pageable);
 
     /**
-     * Get the "id" team.
+     * Получить команду по идентификатору.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id идентификатор команды.
+     * @return найденная команда.
      */
     Optional<Team> findOne(Long id);
 
     /**
-     * Delete the "id" team.
+     * Удалить команду.
      *
-     * @param id the id of the entity.
+     * @param id идентификатор удаляемой команды.
      */
     void delete(Long id);
 }

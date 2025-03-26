@@ -6,53 +6,53 @@ import org.springframework.data.domain.Pageable;
 import ru.georgdeveloper.myapp.domain.Profession;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.Profession}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.Profession}.
  */
 public interface ProfessionService {
     /**
-     * Save a profession.
+     * Сохранить профессию.
      *
-     * @param profession the entity to save.
-     * @return the persisted entity.
+     * @param profession сущность для сохранения.
+     * @return сохраненная сущность.
      */
     Profession save(Profession profession);
 
     /**
-     * Updates a profession.
+     * Обновить профессию.
      *
-     * @param profession the entity to update.
-     * @return the persisted entity.
+     * @param profession сущность для обновления.
+     * @return обновленная сущность.
      */
     Profession update(Profession profession);
 
     /**
-     * Partially updates a profession.
+     * Частично обновить профессию.
      *
-     * @param profession the entity to update partially.
-     * @return the persisted entity.
+     * @param profession сущность для частичного обновления.
+     * @return обновленная сущность.
      */
     Optional<Profession> partialUpdate(Profession profession);
 
     /**
-     * Get all the professions.
+     * Получить все профессии.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable параметры пагинации.
+     * @return список сущностей.
      */
     Page<Profession> findAll(Pageable pageable);
 
     /**
-     * Get the "id" profession.
+     * Получить профессию по идентификатору.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id идентификатор сущности.
+     * @return сущность.
      */
     Optional<Profession> findOne(Long id);
 
     /**
-     * Delete the "id" profession.
+     * Удалить профессию по идентификатору.
      *
-     * @param id the id of the entity.
+     * @param id идентификатор сущности.
      */
     void delete(Long id);
 }

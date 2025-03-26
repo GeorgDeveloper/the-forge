@@ -6,61 +6,61 @@ import org.springframework.data.domain.Pageable;
 import ru.georgdeveloper.myapp.domain.Employee;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.Employee}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.Employee}.
  */
 public interface EmployeeService {
     /**
-     * Save a employee.
+     * Сохранить сотрудника.
      *
-     * @param employee the entity to save.
-     * @return the persisted entity.
+     * @param employee сущность для сохранения.
+     * @return сохраненная сущность.
      */
     Employee save(Employee employee);
 
     /**
-     * Updates a employee.
+     * Обновить сотрудника.
      *
-     * @param employee the entity to update.
-     * @return the persisted entity.
+     * @param employee сущность для обновления.
+     * @return обновленная сущность.
      */
     Employee update(Employee employee);
 
     /**
-     * Partially updates a employee.
+     * Частично обновить сотрудника.
      *
-     * @param employee the entity to update partially.
-     * @return the persisted entity.
+     * @param employee сущность для частичного обновления.
+     * @return обновленная сущность.
      */
     Optional<Employee> partialUpdate(Employee employee);
 
     /**
-     * Get all the employees.
+     * Получить всех сотрудников.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable информация о пагинации.
+     * @return список сущностей.
      */
     Page<Employee> findAll(Pageable pageable);
 
     /**
-     * Get all the employees with eager load of many-to-many relationships.
+     * Получить всех сотрудников с жадной загрузкой many-to-many отношений.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable информация о пагинации.
+     * @return список сущностей.
      */
     Page<Employee> findAllWithEagerRelationships(Pageable pageable);
 
     /**
-     * Get the "id" employee.
+     * Получить сотрудника по "id".
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id идентификатор сущности.
+     * @return сущность.
      */
     Optional<Employee> findOne(Long id);
 
     /**
-     * Delete the "id" employee.
+     * Удалить сотрудника по "id".
      *
-     * @param id the id of the entity.
+     * @param id идентификатор сущности.
      */
     void delete(Long id);
 }

@@ -6,53 +6,53 @@ import org.springframework.data.domain.Pageable;
 import ru.georgdeveloper.myapp.domain.SafetyInstruction;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.SafetyInstruction}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.SafetyInstruction}.
  */
 public interface SafetyInstructionService {
     /**
-     * Save a safetyInstruction.
+     * Сохранить инструкцию по технике безопасности.
      *
-     * @param safetyInstruction the entity to save.
-     * @return the persisted entity.
+     * @param safetyInstruction сохраняемая сущность.
+     * @return сохраненная сущность.
      */
     SafetyInstruction save(SafetyInstruction safetyInstruction);
 
     /**
-     * Updates a safetyInstruction.
+     * Обновить инструкцию по технике безопасности.
      *
-     * @param safetyInstruction the entity to update.
-     * @return the persisted entity.
+     * @param safetyInstruction обновляемая сущность.
+     * @return обновленная сущность.
      */
     SafetyInstruction update(SafetyInstruction safetyInstruction);
 
     /**
-     * Partially updates a safetyInstruction.
+     * Частично обновить инструкцию по технике безопасности.
      *
-     * @param safetyInstruction the entity to update partially.
-     * @return the persisted entity.
+     * @param safetyInstruction сущность для частичного обновления.
+     * @return обновленная сущность.
      */
     Optional<SafetyInstruction> partialUpdate(SafetyInstruction safetyInstruction);
 
     /**
-     * Get all the safetyInstructions.
+     * Получить все инструкции по технике безопасности.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable параметры постраничного вывода.
+     * @return список сущностей.
      */
     Page<SafetyInstruction> findAll(Pageable pageable);
 
     /**
-     * Get the "id" safetyInstruction.
+     * Получить инструкцию по технике безопасности по идентификатору.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id идентификатор сущности.
+     * @return найденная сущность.
      */
     Optional<SafetyInstruction> findOne(Long id);
 
     /**
-     * Delete the "id" safetyInstruction.
+     * Удалить инструкцию по технике безопасности.
      *
-     * @param id the id of the entity.
+     * @param id идентификатор удаляемой сущности.
      */
     void delete(Long id);
 }

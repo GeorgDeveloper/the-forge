@@ -6,53 +6,53 @@ import org.springframework.data.domain.Pageable;
 import ru.georgdeveloper.myapp.domain.ProtectiveEquipment;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.ProtectiveEquipment}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.ProtectiveEquipment}.
  */
 public interface ProtectiveEquipmentService {
     /**
-     * Save a protectiveEquipment.
+     * Сохранить средство защиты.
      *
-     * @param protectiveEquipment the entity to save.
-     * @return the persisted entity.
+     * @param protectiveEquipment сущность для сохранения.
+     * @return сохраненная сущность.
      */
     ProtectiveEquipment save(ProtectiveEquipment protectiveEquipment);
 
     /**
-     * Updates a protectiveEquipment.
+     * Обновить средство защиты.
      *
-     * @param protectiveEquipment the entity to update.
-     * @return the persisted entity.
+     * @param protectiveEquipment сущность для обновления.
+     * @return обновленная сущность.
      */
     ProtectiveEquipment update(ProtectiveEquipment protectiveEquipment);
 
     /**
-     * Partially updates a protectiveEquipment.
+     * Частично обновить средство защиты.
      *
-     * @param protectiveEquipment the entity to update partially.
-     * @return the persisted entity.
+     * @param protectiveEquipment сущность для частичного обновления.
+     * @return обновленная сущность.
      */
     Optional<ProtectiveEquipment> partialUpdate(ProtectiveEquipment protectiveEquipment);
 
     /**
-     * Get all the protectiveEquipments.
+     * Получить все средства защиты.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable параметры пагинации.
+     * @return список сущностей.
      */
     Page<ProtectiveEquipment> findAll(Pageable pageable);
 
     /**
-     * Get the "id" protectiveEquipment.
+     * Получить средство защиты по идентификатору.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id идентификатор сущности.
+     * @return сущность.
      */
     Optional<ProtectiveEquipment> findOne(Long id);
 
     /**
-     * Delete the "id" protectiveEquipment.
+     * Удалить средство защиты по идентификатору.
      *
-     * @param id the id of the entity.
+     * @param id идентификатор сущности.
      */
     void delete(Long id);
 }

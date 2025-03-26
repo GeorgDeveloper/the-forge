@@ -6,53 +6,53 @@ import org.springframework.data.domain.Pageable;
 import ru.georgdeveloper.myapp.domain.Task;
 
 /**
- * Service Interface for managing {@link ru.georgdeveloper.myapp.domain.Task}.
+ * Интерфейс сервиса для управления {@link ru.georgdeveloper.myapp.domain.Task}.
  */
 public interface TaskService {
     /**
-     * Save a task.
+     * Сохранить задачу.
      *
-     * @param task the entity to save.
-     * @return the persisted entity.
+     * @param task сохраняемая задача.
+     * @return сохраненная задача.
      */
     Task save(Task task);
 
     /**
-     * Updates a task.
+     * Обновить задачу.
      *
-     * @param task the entity to update.
-     * @return the persisted entity.
+     * @param task обновляемая задача.
+     * @return обновленная задача.
      */
     Task update(Task task);
 
     /**
-     * Partially updates a task.
+     * Частично обновить задачу.
      *
-     * @param task the entity to update partially.
-     * @return the persisted entity.
+     * @param task задача для частичного обновления.
+     * @return обновленная задача.
      */
     Optional<Task> partialUpdate(Task task);
 
     /**
-     * Get all the tasks.
+     * Получить все задачи.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param pageable параметры пагинации.
+     * @return список задач.
      */
     Page<Task> findAll(Pageable pageable);
 
     /**
-     * Get the "id" task.
+     * Получить задачу по идентификатору.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id идентификатор задачи.
+     * @return найденная задача.
      */
     Optional<Task> findOne(Long id);
 
     /**
-     * Delete the "id" task.
+     * Удалить задачу.
      *
-     * @param id the id of the entity.
+     * @param id идентификатор удаляемой задачи.
      */
     void delete(Long id);
 }

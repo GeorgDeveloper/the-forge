@@ -5,8 +5,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import tech.jhipster.config.DefaultProfileUtil;
 
 /**
- * This is a helper Java class that provides an alternative to creating a {@code web.xml}.
- * This will be invoked only when the application is deployed to a Servlet container like Tomcat, JBoss etc.
+ * Это вспомогательный Java-класс, который предоставляет альтернативу созданию {@code web.xml}.
+ * Он будет вызываться только при развертывании приложения в контейнере сервлетов, таком как Tomcat, JBoss и т.д.
  */
 public class ApplicationWebXml extends SpringBootServletInitializer {
 
