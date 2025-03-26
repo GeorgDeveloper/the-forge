@@ -1,7 +1,7 @@
 package ru.georgdeveloper.myapp.security;
 
 /**
- * Constants for Spring Security authorities.
+ * Роли пользователей.
  */
 public final class AuthoritiesConstants {
 

@@ -12,26 +12,36 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 /**
- * Utility class for Spring Security.
+ * Утилитарный класс для работы с Spring Security.
+ * Предоставляет методы для получения информации о текущем пользователе и проверки прав доступа.
  */
 public final class SecurityUtils {
 
+    // Алгоритм подписи JWT токенов
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
 
+    // Ключ для хранения authorities в JWT токене
     public static final String AUTHORITIES_KEY = "auth";
 
+    // Приватный конструктор для запрета создания экземпляров утилитного класса
     private SecurityUtils() {}
 
     /**
-     * Get the login of the current user.
-     *
-     * @return the login of the current user.
+     * Получает логин текущего аутентифицированного пользователя.
+     * @return Optional с логином пользователя, если аутентифицирован
      */
     public static Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
     }
 
+    /**
+     * Извлекает principal из объекта аутентификации.
+     * Поддерживает разные типы principal:
+     * - UserDetails (стандартный объект Spring Security)
+     * - Jwt (OAuth 2.0 JWT токен)
+     * - String (простое имя пользователя)
+     */
     private static String extractPrincipal(Authentication authentication) {
         if (authentication == null) {
             return null;
@@ -46,9 +56,8 @@ public final class SecurityUtils {
     }
 
     /**
-     * Get the JWT of the current user.
-     *
-     * @return the JWT of the current user.
+     * Получает JWT токен текущего аутентифицированного пользователя.
+     * @return Optional с JWT токеном, если пользователь аутентифицирован через JWT
      */
     public static Optional<String> getCurrentUserJWT() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -58,9 +67,8 @@ public final class SecurityUtils {
     }
 
     /**
-     * Check if a user is authenticated.
-     *
-     * @return true if the user is authenticated, false otherwise.
+     * Проверяет, аутентифицирован ли текущий пользователь.
+     * @return true если пользователь аутентифицирован и не анонимный
      */
     public static boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,10 +76,9 @@ public final class SecurityUtils {
     }
 
     /**
-     * Checks if the current user has any of the authorities.
-     *
-     * @param authorities the authorities to check.
-     * @return true if the current user has any of the authorities, false otherwise.
+     * Проверяет, есть ли у текущего пользователя хотя бы одно из указанных прав.
+     * @param authorities список прав для проверки
+     * @return true если есть хотя бы одно из прав
      */
     public static boolean hasCurrentUserAnyOfAuthorities(String... authorities) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -81,25 +88,26 @@ public final class SecurityUtils {
     }
 
     /**
-     * Checks if the current user has none of the authorities.
-     *
-     * @param authorities the authorities to check.
-     * @return true if the current user has none of the authorities, false otherwise.
+     * Проверяет, что у текущего пользователя нет ни одного из указанных прав.
+     * @param authorities список прав для проверки
+     * @return true если нет ни одного из прав
      */
     public static boolean hasCurrentUserNoneOfAuthorities(String... authorities) {
         return !hasCurrentUserAnyOfAuthorities(authorities);
     }
 
     /**
-     * Checks if the current user has a specific authority.
-     *
-     * @param authority the authority to check.
-     * @return true if the current user has the authority, false otherwise.
+     * Проверяет, есть ли у текущего пользователя конкретное право.
+     * @param authority право для проверки
+     * @return true если право есть
      */
     public static boolean hasCurrentUserThisAuthority(String authority) {
         return hasCurrentUserAnyOfAuthorities(authority);
     }
 
+    /**
+     * Преобразует authorities из Authentication в поток строк.
+     */
     private static Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority);
     }
