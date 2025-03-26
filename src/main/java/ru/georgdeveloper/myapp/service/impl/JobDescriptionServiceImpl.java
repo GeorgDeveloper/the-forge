@@ -12,7 +12,8 @@ import ru.georgdeveloper.myapp.repository.JobDescriptionRepository;
 import ru.georgdeveloper.myapp.service.JobDescriptionService;
 
 /**
- * Service Implementation for managing {@link ru.georgdeveloper.myapp.domain.JobDescription}.
+ * Реализация сервиса для управления должностными инструкциями ({@link JobDescription}).
+ * Обеспечивает CRUD операции и бизнес-логику работы с должностными инструкциями.
  */
 @Service
 @Transactional
@@ -22,29 +23,49 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
 
     private final JobDescriptionRepository jobDescriptionRepository;
 
+    /**
+     * Конструктор с внедрением зависимости репозитория.
+     * @param jobDescriptionRepository репозиторий для работы с должностными инструкциями
+     */
     public JobDescriptionServiceImpl(JobDescriptionRepository jobDescriptionRepository) {
         this.jobDescriptionRepository = jobDescriptionRepository;
     }
 
+    /**
+     * Сохраняет новую должностную инструкцию.
+     * @param jobDescription сущность для сохранения
+     * @return сохраненная должностная инструкция
+     */
     @Override
     public JobDescription save(JobDescription jobDescription) {
-        LOG.debug("Request to save JobDescription : {}", jobDescription);
+        LOG.debug("Запрос на сохранение должностной инструкции: {}", jobDescription);
         return jobDescriptionRepository.save(jobDescription);
     }
 
+    /**
+     * Обновляет существующую должностную инструкцию.
+     * @param jobDescription сущность с обновленными данными
+     * @return обновленная должностная инструкция
+     */
     @Override
     public JobDescription update(JobDescription jobDescription) {
-        LOG.debug("Request to update JobDescription : {}", jobDescription);
+        LOG.debug("Запрос на обновление должностной инструкции: {}", jobDescription);
         return jobDescriptionRepository.save(jobDescription);
     }
 
+    /**
+     * Частично обновляет данные должностной инструкции.
+     * @param jobDescription сущность с обновляемыми полями
+     * @return Optional с обновленной инструкцией, если она существует
+     */
     @Override
     public Optional<JobDescription> partialUpdate(JobDescription jobDescription) {
-        LOG.debug("Request to partially update JobDescription : {}", jobDescription);
+        LOG.debug("Запрос на частичное обновление должностной инструкции: {}", jobDescription);
 
         return jobDescriptionRepository
             .findById(jobDescription.getId())
             .map(existingJobDescription -> {
+                // Обновляем только не-null поля
                 if (jobDescription.getDescriptionName() != null) {
                     existingJobDescription.setDescriptionName(jobDescription.getDescriptionName());
                 }
@@ -57,35 +78,48 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
             .map(jobDescriptionRepository::save);
     }
 
+    /**
+     * Получает все должностные инструкции.
+     * @return список всех должностных инструкций
+     */
     @Override
     @Transactional(readOnly = true)
     public List<JobDescription> findAll() {
-        LOG.debug("Request to get all JobDescriptions");
+        LOG.debug("Запрос на получение всех должностных инструкций");
         return jobDescriptionRepository.findAll();
     }
 
     /**
-     *  Get all the jobDescriptions where Position is {@code null}.
-     *  @return the list of entities.
+     * Получает все должностные инструкции, не связанные с позицией.
+     * @return список несвязанных должностных инструкций
      */
     @Transactional(readOnly = true)
     public List<JobDescription> findAllWherePositionIsNull() {
-        LOG.debug("Request to get all jobDescriptions where Position is null");
+        LOG.debug("Запрос на получение должностных инструкций без привязки к позиции");
         return StreamSupport.stream(jobDescriptionRepository.findAll().spliterator(), false)
             .filter(jobDescription -> jobDescription.getPosition() == null)
             .toList();
     }
 
+    /**
+     * Находит должностную инструкцию по ID.
+     * @param id идентификатор инструкции
+     * @return Optional с найденной инструкцией
+     */
     @Override
     @Transactional(readOnly = true)
     public Optional<JobDescription> findOne(Long id) {
-        LOG.debug("Request to get JobDescription : {}", id);
+        LOG.debug("Запрос на получение должностной инструкции с ID: {}", id);
         return jobDescriptionRepository.findById(id);
     }
 
+    /**
+     * Удаляет должностную инструкцию по ID.
+     * @param id идентификатор инструкции для удаления
+     */
     @Override
     public void delete(Long id) {
-        LOG.debug("Request to delete JobDescription : {}", id);
+        LOG.debug("Запрос на удаление должностной инструкции с ID: {}", id);
         jobDescriptionRepository.deleteById(id);
     }
 }
