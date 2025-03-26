@@ -1,10 +1,20 @@
 package ru.georgdeveloper.myapp.domain.enumeration;
 
 /**
- * The TaskStatus enumeration.
+ * Перечисления статусов для Задач
  */
 public enum TaskStatus {
-    TODO,
-    IN_PROGRESS,
-    DONE,
+    TODO("СОЗДАНА"),
+    IN_PROGRESS("В ПРОЦЕССЕ"),
+    DONE("ЗАВЕРШЕНО");
+
+    private String title;
+
+    TaskStatus(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }
