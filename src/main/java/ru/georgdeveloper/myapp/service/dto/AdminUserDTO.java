@@ -10,51 +10,72 @@ import ru.georgdeveloper.myapp.domain.Authority;
 import ru.georgdeveloper.myapp.domain.User;
 
 /**
- * A DTO representing a user, with his authorities.
+ * DTO для представления пользователя с его правами (authorities).
+ * Используется для административных операций с пользователями.
  */
 public class AdminUserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    // ID пользователя
     private Long id;
 
+    // Логин с валидацией
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     private String login;
 
+    // Имя
     @Size(max = 50)
     private String firstName;
 
+    // Фамилия
     @Size(max = 50)
     private String lastName;
 
+    // Email с валидацией
     @Email
     @Size(min = 5, max = 254)
     private String email;
 
+    // Ссылка на аватар
     @Size(max = 256)
     private String imageUrl;
 
+    // Флаг активации аккаунта
     private boolean activated = false;
 
+    // Языковой ключ
     @Size(min = 2, max = 10)
     private String langKey;
 
+    // Аудит: кто создал
     private String createdBy;
 
+    // Аудит: когда создан
     private Instant createdDate;
 
+    // Аудит: кто изменил
     private String lastModifiedBy;
 
+    // Аудит: когда изменен
     private Instant lastModifiedDate;
 
+    // Набор прав пользователя
     private Set<String> authorities;
 
+    /**
+     * Пустой конструктор для Jackson.
+     */
     public AdminUserDTO() {
-        // Empty constructor needed for Jackson.
+        // Необходим для десериализации
     }
 
+    /**
+     * Конструктор для преобразования User в AdminUserDTO.
+     * @param user сущность пользователя
+     */
     public AdminUserDTO(User user) {
         this.id = user.getId();
         this.login = user.getLogin();
