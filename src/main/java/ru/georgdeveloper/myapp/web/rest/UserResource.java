@@ -32,33 +32,34 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing users.
+ * REST контроллер для управления пользователями.
  * <p>
- * This class accesses the {@link ru.georgdeveloper.myapp.domain.User} entity, and needs to fetch its collection of authorities.
+ * Этот класс работает с сущностью {@link ru.georgdeveloper.myapp.domain.User} и получает связанные с ней authorities (роли).
  * <p>
- * For a normal use-case, it would be better to have an eager relationship between User and Authority,
- * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join
- * which would be good for performance.
+ * В обычном сценарии лучше было бы использовать eager-связь между User и Authority,
+ * чтобы отправлять все данные клиенту сразу: это позволило бы обойтись без View Model и DTO,
+ * уменьшить объем кода и использовать outer join для лучшей производительности.
  * <p>
- * We use a View Model and a DTO for 3 reasons:
+ * Однако здесь используются View Model и DTO по трем причинам:
  * <ul>
- * <li>We want to keep a lazy association between the user and the authorities, because people will
- * quite often do relationships with the user, and we don't want them to get the authorities all
- * the time for nothing (for performance reasons). This is the #1 goal: we should not impact our users'
- * application because of this use-case.</li>
- * <li> Not having an outer join causes n+1 requests to the database. This is not a real issue as
- * we have by default a second-level cache. This means on the first HTTP call we do the n+1 requests,
- * but then all authorities come from the cache, so in fact it's much better than doing an outer join
- * (which will get lots of data from the database, for each HTTP call).</li>
- * <li> As this manages users, for security reasons, we'd rather have a DTO layer.</li>
+ * <li>Мы хотим сохранить lazy-ассоциацию между пользователем и authorities, потому что
+ * часто будут использоваться связи с пользователем, и мы не хотим каждый раз загружать authorities
+ * без необходимости (для оптимизации производительности). Это главная цель: мы не должны
+ * влиять на производительность приложения из-за этого сценария.</li>
+ * <li>Отсутствие outer join приводит к n+1 запросам к базе данных. Это не является проблемой,
+ * так как у нас по умолчанию есть кеш второго уровня. Это означает, что при первом HTTP-вызове
+ * мы делаем n+1 запросов, но затем все authorities берутся из кеша, что на практике
+ * работает лучше, чем outer join (который получает много данных из БД при каждом HTTP-вызове).</li>
+ * <li>Поскольку это управление пользователями, из соображений безопасности лучше иметь слой DTO.</li>
  * </ul>
  * <p>
- * Another option would be to have a specific JPA entity graph to handle this case.
+ * Альтернативой могло бы быть использование специального JPA entity graph для этого случая.
  */
 @RestController
 @RequestMapping("/api/admin")
 public class UserResource {
 
+    // Список разрешенных свойств для сортировки
     private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(
         Arrays.asList(
             "id",
@@ -75,17 +76,29 @@ public class UserResource {
         )
     );
 
+    // Логгер для записи информации о работе контроллера
     private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
+    // Название клиентского приложения из конфигурации
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    // Сервис для работы с пользователями
     private final UserService userService;
 
+    // Репозиторий для работы с данными пользователей
     private final UserRepository userRepository;
 
+    // Сервис для отправки email
     private final MailService mailService;
 
+    /**
+     * Конструктор с внедрением зависимостей.
+     *
+     * @param userService сервис пользователей
+     * @param userRepository репозиторий пользователей
+     * @param mailService сервис отправки email
+     */
     public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
         this.userService = userService;
         this.userRepository = userRepository;
@@ -93,25 +106,26 @@ public class UserResource {
     }
 
     /**
-     * {@code POST  /admin/users}  : Creates a new user.
+     * {@code POST  /admin/users}  : Создает нового пользователя.
      * <p>
-     * Creates a new user if the login and email are not already used, and sends a
-     * mail with an activation link.
-     * The user needs to be activated on creation.
+     * Создает нового пользователя, если логин и email еще не используются, и отправляет
+     * письмо со ссылкой для активации.
+     * Пользователь должен быть активирован при создании.
      *
-     * @param userDTO the user to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
+     * @param userDTO данные пользователя для создания.
+     * @return ответ со статусом {@code 201 (Created)} и телом нового пользователя,
+     *         или статус {@code 400 (Bad Request)} если логин или email уже используются.
+     * @throws URISyntaxException если синтаксис URI некорректен.
+     * @throws BadRequestAlertException {@code 400 (Bad Request)} если логин или email уже используются.
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<User> createUser(@Valid @RequestBody AdminUserDTO userDTO) throws URISyntaxException {
-        LOG.debug("REST request to save User : {}", userDTO);
+        LOG.debug("REST запрос для сохранения User : {}", userDTO);
 
         if (userDTO.getId() != null) {
-            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
-            // Lowercase the user login before comparing with database
+            throw new BadRequestAlertException("Новый пользователь не может иметь ID", "userManagement", "idexists");
+            // Приводим логин к нижнему регистру перед сравнением с базой данных
         } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
@@ -126,12 +140,13 @@ public class UserResource {
     }
 
     /**
-     * {@code PUT /admin/users} : Updates an existing User.
+     * {@code PUT /admin/users} : Обновляет существующего пользователя.
      *
-     * @param userDTO the user to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
+     * @param login логин пользователя для обновления (опциональный параметр)
+     * @param userDTO новые данные пользователя.
+     * @return ответ со статусом {@code 200 (OK)} и телом обновленного пользователя.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} если email уже используется.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} если логин уже используется.
      */
     @PutMapping({ "/users", "/users/{login}" })
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
@@ -139,7 +154,7 @@ public class UserResource {
         @PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login,
         @Valid @RequestBody AdminUserDTO userDTO
     ) {
-        LOG.debug("REST request to update User : {}", userDTO);
+        LOG.debug("REST запрос для обновления User : {}", userDTO);
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
@@ -157,15 +172,15 @@ public class UserResource {
     }
 
     /**
-     * {@code GET /admin/users} : get all users with all the details - calling this are only allowed for the administrators.
+     * {@code GET /admin/users} : Получает всех пользователей со всеми деталями - доступно только администраторам.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
+     * @param pageable информация о пагинации и сортировке.
+     * @return ответ со статусом {@code 200 (OK)} и списком всех пользователей.
      */
     @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<AdminUserDTO>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get all User for an admin");
+        LOG.debug("REST запрос для получения всех User для администратора");
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
@@ -175,33 +190,40 @@ public class UserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    /**
+     * Проверяет, что сортировка выполняется только по разрешенным свойствам.
+     *
+     * @param pageable информация о пагинации и сортировке
+     * @return true если все свойства для сортировки разрешены, false в противном случае
+     */
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
         return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
     }
 
     /**
-     * {@code GET /admin/users/:login} : get the "login" user.
+     * {@code GET /admin/users/:login} : Получает пользователя по логину.
      *
-     * @param login the login of the user to find.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "login" user, or with status {@code 404 (Not Found)}.
+     * @param login логин пользователя для поиска.
+     * @return ответ со статусом {@code 200 (OK)} и телом пользователя,
+     *         или статус {@code 404 (Not Found)} если пользователь не найден.
      */
     @GetMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<AdminUserDTO> getUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
-        LOG.debug("REST request to get User : {}", login);
+        LOG.debug("REST запрос для получения User : {}", login);
         return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new));
     }
 
     /**
-     * {@code DELETE /admin/users/:login} : delete the "login" User.
+     * {@code DELETE /admin/users/:login} : Удаляет пользователя по логину.
      *
-     * @param login the login of the user to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param login логин пользователя для удаления.
+     * @return ответ со статусом {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
-        LOG.debug("REST request to delete User: {}", login);
+        LOG.debug("REST запрос для удаления User: {}", login);
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", login)).build();
     }

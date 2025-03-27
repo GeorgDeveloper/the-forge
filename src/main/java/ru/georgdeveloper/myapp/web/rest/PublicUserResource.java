@@ -15,10 +15,15 @@ import ru.georgdeveloper.myapp.service.UserService;
 import ru.georgdeveloper.myapp.service.dto.UserDTO;
 import tech.jhipster.web.util.PaginationUtil;
 
+/**
+ * REST контроллер для работы с публичной информацией о пользователях.
+ * Доступен всем пользователям без аутентификации.
+ */
 @RestController
 @RequestMapping("/api")
 public class PublicUserResource {
 
+    // Список разрешенных свойств для сортировки
     private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(
         Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey")
     );
@@ -27,19 +32,27 @@ public class PublicUserResource {
 
     private final UserService userService;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param userService сервис для работы с пользователями
+     */
     public PublicUserResource(UserService userService) {
         this.userService = userService;
     }
 
     /**
-     * {@code GET /users} : get all users with only public information - calling this method is allowed for anyone.
+     * Получает список всех пользователей с публичной информацией.
+     * GET /api/users
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
+     * @param pageable параметры пагинации и сортировки
+     * @return ResponseEntity со списком пользователей и заголовками пагинации
      */
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllPublicUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get all public User names");
+        LOG.debug("REST запрос на получение публичной информации о пользователях");
+
+        // Проверка разрешенных полей для сортировки
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
@@ -49,6 +62,12 @@ public class PublicUserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    /**
+     * Проверяет, что сортировка запрошена только по разрешенным полям.
+     *
+     * @param pageable параметры пагинации
+     * @return true если все поля сортировки разрешены, false в противном случае
+     */
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
         return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
     }

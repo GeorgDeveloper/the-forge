@@ -20,7 +20,7 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.JobDescription}.
+ * REST контроллер для управления описаниями должностной инструкцией {@link ru.georgdeveloper.myapp.domain.JobDescription}.
  */
 @RestController
 @RequestMapping("/api/job-descriptions")
@@ -34,27 +34,33 @@ public class JobDescriptionResource {
     private String applicationName;
 
     private final JobDescriptionService jobDescriptionService;
-
     private final JobDescriptionRepository jobDescriptionRepository;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param jobDescriptionService сервис для работы с описаниями должностей
+     * @param jobDescriptionRepository репозиторий описаний должностей
+     */
     public JobDescriptionResource(JobDescriptionService jobDescriptionService, JobDescriptionRepository jobDescriptionRepository) {
         this.jobDescriptionService = jobDescriptionService;
         this.jobDescriptionRepository = jobDescriptionRepository;
     }
 
     /**
-     * {@code POST  /job-descriptions} : Create a new jobDescription.
+     * Создает новое описание должности.
+     * POST /api/job-descriptions
      *
-     * @param jobDescription the jobDescription to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new jobDescription, or with status {@code 400 (Bad Request)} if the jobDescription has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param jobDescription данные для создания описания должности
+     * @return ResponseEntity с созданным описанием или ошибкой 400 если ID уже существует
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PostMapping("")
     public ResponseEntity<JobDescription> createJobDescription(@Valid @RequestBody JobDescription jobDescription)
         throws URISyntaxException {
-        LOG.debug("REST request to save JobDescription : {}", jobDescription);
+        LOG.debug("REST запрос на создание описания должности: {}", jobDescription);
         if (jobDescription.getId() != null) {
-            throw new BadRequestAlertException("A new jobDescription cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Новое описание должности не может иметь ID", ENTITY_NAME, "idexists");
         }
         jobDescription = jobDescriptionService.save(jobDescription);
         return ResponseEntity.created(new URI("/api/job-descriptions/" + jobDescription.getId()))
@@ -63,30 +69,29 @@ public class JobDescriptionResource {
     }
 
     /**
-     * {@code PUT  /job-descriptions/:id} : Updates an existing jobDescription.
+     * Полностью обновляет описание должности.
+     * PUT /api/job-descriptions/{id}
      *
-     * @param id the id of the jobDescription to save.
-     * @param jobDescription the jobDescription to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated jobDescription,
-     * or with status {@code 400 (Bad Request)} if the jobDescription is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the jobDescription couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID описания должности
+     * @param jobDescription новые данные описания
+     * @return ResponseEntity с обновленным описанием или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PutMapping("/{id}")
     public ResponseEntity<JobDescription> updateJobDescription(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody JobDescription jobDescription
     ) throws URISyntaxException {
-        LOG.debug("REST request to update JobDescription : {}, {}", id, jobDescription);
+        LOG.debug("REST запрос на обновление описания должности: {}, {}", id, jobDescription);
         if (jobDescription.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, jobDescription.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!jobDescriptionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Описание должности не найдено", ENTITY_NAME, "idnotfound");
         }
 
         jobDescription = jobDescriptionService.update(jobDescription);
@@ -96,31 +101,29 @@ public class JobDescriptionResource {
     }
 
     /**
-     * {@code PATCH  /job-descriptions/:id} : Partial updates given fields of an existing jobDescription, field will ignore if it is null
+     * Частично обновляет описание должности.
+     * PATCH /api/job-descriptions/{id}
      *
-     * @param id the id of the jobDescription to save.
-     * @param jobDescription the jobDescription to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated jobDescription,
-     * or with status {@code 400 (Bad Request)} if the jobDescription is not valid,
-     * or with status {@code 404 (Not Found)} if the jobDescription is not found,
-     * or with status {@code 500 (Internal Server Error)} if the jobDescription couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID описания должности
+     * @param jobDescription данные для частичного обновления
+     * @return ResponseEntity с обновленным описанием или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<JobDescription> partialUpdateJobDescription(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody JobDescription jobDescription
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update JobDescription partially : {}, {}", id, jobDescription);
+        LOG.debug("REST запрос на частичное обновление описания должности: {}, {}", id, jobDescription);
         if (jobDescription.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, jobDescription.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!jobDescriptionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Описание должности не найдено", ENTITY_NAME, "idnotfound");
         }
 
         Optional<JobDescription> result = jobDescriptionService.partialUpdate(jobDescription);
@@ -132,43 +135,46 @@ public class JobDescriptionResource {
     }
 
     /**
-     * {@code GET  /job-descriptions} : get all the jobDescriptions.
+     * Получает список описаний должностей.
+     * GET /api/job-descriptions
      *
-     * @param filter the filter of the request.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of jobDescriptions in body.
+     * @param filter фильтр для запроса (например "position-is-null")
+     * @return список описаний должностей
      */
     @GetMapping("")
     public List<JobDescription> getAllJobDescriptions(@RequestParam(name = "filter", required = false) String filter) {
         if ("position-is-null".equals(filter)) {
-            LOG.debug("REST request to get all JobDescriptions where position is null");
+            LOG.debug("REST запрос на получение описаний должностей без привязки к позиции");
             return jobDescriptionService.findAllWherePositionIsNull();
         }
-        LOG.debug("REST request to get all JobDescriptions");
+        LOG.debug("REST запрос на получение всех описаний должностей");
         return jobDescriptionService.findAll();
     }
 
     /**
-     * {@code GET  /job-descriptions/:id} : get the "id" jobDescription.
+     * Получает описание должности по ID.
+     * GET /api/job-descriptions/{id}
      *
-     * @param id the id of the jobDescription to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the jobDescription, or with status {@code 404 (Not Found)}.
+     * @param id ID описания должности
+     * @return ResponseEntity с найденным описанием или 404 если не найдено
      */
     @GetMapping("/{id}")
     public ResponseEntity<JobDescription> getJobDescription(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get JobDescription : {}", id);
+        LOG.debug("REST запрос на получение описания должности: {}", id);
         Optional<JobDescription> jobDescription = jobDescriptionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(jobDescription);
     }
 
     /**
-     * {@code DELETE  /job-descriptions/:id} : delete the "id" jobDescription.
+     * Удаляет описание должности по ID.
+     * DELETE /api/job-descriptions/{id}
      *
-     * @param id the id of the jobDescription to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id ID описания должности для удаления
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJobDescription(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete JobDescription : {}", id);
+        LOG.debug("REST запрос на удаление описания должности: {}", id);
         jobDescriptionService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

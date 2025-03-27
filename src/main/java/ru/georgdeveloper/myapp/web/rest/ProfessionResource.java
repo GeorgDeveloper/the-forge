@@ -25,7 +25,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.Profession}.
+ * REST контроллер для управления профессиями {@link ru.georgdeveloper.myapp.domain.Profession}.
  */
 @RestController
 @RequestMapping("/api/professions")
@@ -39,26 +39,32 @@ public class ProfessionResource {
     private String applicationName;
 
     private final ProfessionService professionService;
-
     private final ProfessionRepository professionRepository;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param professionService сервис для работы с профессиями
+     * @param professionRepository репозиторий профессий
+     */
     public ProfessionResource(ProfessionService professionService, ProfessionRepository professionRepository) {
         this.professionService = professionService;
         this.professionRepository = professionRepository;
     }
 
     /**
-     * {@code POST  /professions} : Create a new profession.
+     * Создает новую профессию.
+     * POST /api/professions
      *
-     * @param profession the profession to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new profession, or with status {@code 400 (Bad Request)} if the profession has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param profession данные новой профессии
+     * @return ResponseEntity с созданной профессией или ошибкой 400 если ID уже существует
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PostMapping("")
     public ResponseEntity<Profession> createProfession(@Valid @RequestBody Profession profession) throws URISyntaxException {
-        LOG.debug("REST request to save Profession : {}", profession);
+        LOG.debug("REST запрос на создание профессии: {}", profession);
         if (profession.getId() != null) {
-            throw new BadRequestAlertException("A new profession cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Новая профессия не может иметь ID", ENTITY_NAME, "idexists");
         }
         profession = professionService.save(profession);
         return ResponseEntity.created(new URI("/api/professions/" + profession.getId()))
@@ -67,30 +73,29 @@ public class ProfessionResource {
     }
 
     /**
-     * {@code PUT  /professions/:id} : Updates an existing profession.
+     * Полностью обновляет данные профессии.
+     * PUT /api/professions/{id}
      *
-     * @param id the id of the profession to save.
-     * @param profession the profession to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated profession,
-     * or with status {@code 400 (Bad Request)} if the profession is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the profession couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID профессии для обновления
+     * @param profession новые данные профессии
+     * @return ResponseEntity с обновленной профессией или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PutMapping("/{id}")
     public ResponseEntity<Profession> updateProfession(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Profession profession
     ) throws URISyntaxException {
-        LOG.debug("REST request to update Profession : {}, {}", id, profession);
+        LOG.debug("REST запрос на обновление профессии: {}, {}", id, profession);
         if (profession.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, profession.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!professionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Профессия не найдена", ENTITY_NAME, "idnotfound");
         }
 
         profession = professionService.update(profession);
@@ -100,31 +105,29 @@ public class ProfessionResource {
     }
 
     /**
-     * {@code PATCH  /professions/:id} : Partial updates given fields of an existing profession, field will ignore if it is null
+     * Частично обновляет данные профессии.
+     * PATCH /api/professions/{id}
      *
-     * @param id the id of the profession to save.
-     * @param profession the profession to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated profession,
-     * or with status {@code 400 (Bad Request)} if the profession is not valid,
-     * or with status {@code 404 (Not Found)} if the profession is not found,
-     * or with status {@code 500 (Internal Server Error)} if the profession couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID профессии для обновления
+     * @param profession данные для частичного обновления
+     * @return ResponseEntity с обновленной профессией или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Profession> partialUpdateProfession(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Profession profession
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update Profession partially : {}, {}", id, profession);
+        LOG.debug("REST запрос на частичное обновление профессии: {}, {}", id, profession);
         if (profession.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, profession.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!professionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Профессия не найдена", ENTITY_NAME, "idnotfound");
         }
 
         Optional<Profession> result = professionService.partialUpdate(profession);
@@ -136,41 +139,44 @@ public class ProfessionResource {
     }
 
     /**
-     * {@code GET  /professions} : get all the professions.
+     * Получает список профессий с пагинацией.
+     * GET /api/professions
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of professions in body.
+     * @param pageable параметры пагинации
+     * @return ResponseEntity со списком профессий
      */
     @GetMapping("")
     public ResponseEntity<List<Profession>> getAllProfessions(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Professions");
+        LOG.debug("REST запрос на получение страницы профессий");
         Page<Profession> page = professionService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * {@code GET  /professions/:id} : get the "id" profession.
+     * Получает профессию по ID.
+     * GET /api/professions/{id}
      *
-     * @param id the id of the profession to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the profession, or with status {@code 404 (Not Found)}.
+     * @param id ID профессии
+     * @return ResponseEntity с найденной профессией или 404 если не найдена
      */
     @GetMapping("/{id}")
     public ResponseEntity<Profession> getProfession(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get Profession : {}", id);
+        LOG.debug("REST запрос на получение профессии: {}", id);
         Optional<Profession> profession = professionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(profession);
     }
 
     /**
-     * {@code DELETE  /professions/:id} : delete the "id" profession.
+     * Удаляет профессию по ID.
+     * DELETE /api/professions/{id}
      *
-     * @param id the id of the profession to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id ID профессии для удаления
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfession(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete Profession : {}", id);
+        LOG.debug("REST запрос на удаление профессии: {}", id);
         professionService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

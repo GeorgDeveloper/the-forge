@@ -19,7 +19,7 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.Authority}.
+ * REST контроллер для управления {@link ru.georgdeveloper.myapp.domain.Authority}.
  */
 @RestController
 @RequestMapping("/api/authorities")
@@ -35,23 +35,28 @@ public class AuthorityResource {
 
     private final AuthorityRepository authorityRepository;
 
+    /**
+     * Конструктор контроллера.
+     * @param authorityRepository репозиторий для работы с ролями
+     */
     public AuthorityResource(AuthorityRepository authorityRepository) {
         this.authorityRepository = authorityRepository;
     }
 
     /**
-     * {@code POST  /authorities} : Create a new authority.
+     * Создает новую роль.
+     * POST /api/authorities
      *
-     * @param authority the authority to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new authority, or with status {@code 400 (Bad Request)} if the authority has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param authority данные новой роли
+     * @return ResponseEntity с созданной ролью или кодом ошибки 400
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PostMapping("")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<Authority> createAuthority(@Valid @RequestBody Authority authority) throws URISyntaxException {
-        LOG.debug("REST request to save Authority : {}", authority);
+        LOG.debug("REST запрос на создание роли: {}", authority);
         if (authorityRepository.existsById(authority.getName())) {
-            throw new BadRequestAlertException("authority already exists", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Роль уже существует", ENTITY_NAME, "idexists");
         }
         authority = authorityRepository.save(authority);
         return ResponseEntity.created(new URI("/api/authorities/" + authority.getName()))
@@ -60,41 +65,44 @@ public class AuthorityResource {
     }
 
     /**
-     * {@code GET  /authorities} : get all the authorities.
+     * Получает список всех ролей.
+     * GET /api/authorities
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authorities in body.
+     * @return список всех ролей
      */
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public List<Authority> getAllAuthorities() {
-        LOG.debug("REST request to get all Authorities");
+        LOG.debug("REST запрос на получение всех ролей");
         return authorityRepository.findAll();
     }
 
     /**
-     * {@code GET  /authorities/:id} : get the "id" authority.
+     * Получает роль по идентификатору.
+     * GET /api/authorities/{id}
      *
-     * @param id the id of the authority to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the authority, or with status {@code 404 (Not Found)}.
+     * @param id идентификатор роли
+     * @return ResponseEntity с найденной ролью или кодом 404
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<Authority> getAuthority(@PathVariable("id") String id) {
-        LOG.debug("REST request to get Authority : {}", id);
+        LOG.debug("REST запрос на получение роли: {}", id);
         Optional<Authority> authority = authorityRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(authority);
     }
 
     /**
-     * {@code DELETE  /authorities/:id} : delete the "id" authority.
+     * Удаляет роль по идентификатору.
+     * DELETE /api/authorities/{id}
      *
-     * @param id the id of the authority to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id идентификатор удаляемой роли
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteAuthority(@PathVariable("id") String id) {
-        LOG.debug("REST request to delete Authority : {}", id);
+        LOG.debug("REST запрос на удаление роли: {}", id);
         authorityRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
     }

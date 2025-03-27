@@ -25,7 +25,8 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.Task}.
+ * REST контроллер для управления задачами {@link ru.georgdeveloper.myapp.domain.Task}.
+ * Предоставляет CRUD-операции для работы с задачами.
  */
 @RestController
 @RequestMapping("/api/tasks")
@@ -33,32 +34,39 @@ public class TaskResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(TaskResource.class);
 
+    // Название сущности для сообщений об ошибках
     private static final String ENTITY_NAME = "task";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final TaskService taskService;
-
     private final TaskRepository taskRepository;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param taskService сервис для работы с задачами
+     * @param taskRepository репозиторий задач
+     */
     public TaskResource(TaskService taskService, TaskRepository taskRepository) {
         this.taskService = taskService;
         this.taskRepository = taskRepository;
     }
 
     /**
-     * {@code POST  /tasks} : Create a new task.
+     * Создает новую задачу.
+     * POST /api/tasks
      *
-     * @param task the task to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new task, or with status {@code 400 (Bad Request)} if the task has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param task данные новой задачи
+     * @return ResponseEntity с созданной задачей или ошибкой 400 если ID уже существует
+     * @throws URISyntaxException при некорректном URI
      */
     @PostMapping("")
     public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) throws URISyntaxException {
-        LOG.debug("REST request to save Task : {}", task);
+        LOG.debug("Запрос на создание задачи: {}", task);
         if (task.getId() != null) {
-            throw new BadRequestAlertException("A new task cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Новая задача не может иметь ID", ENTITY_NAME, "idexists");
         }
         task = taskService.save(task);
         return ResponseEntity.created(new URI("/api/tasks/" + task.getId()))
@@ -67,28 +75,27 @@ public class TaskResource {
     }
 
     /**
-     * {@code PUT  /tasks/:id} : Updates an existing task.
+     * Полностью обновляет задачу.
+     * PUT /api/tasks/{id}
      *
-     * @param id the id of the task to save.
-     * @param task the task to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated task,
-     * or with status {@code 400 (Bad Request)} if the task is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the task couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID задачи
+     * @param task обновленные данные задачи
+     * @return ResponseEntity с обновленной задачей или кодом ошибки
+     * @throws URISyntaxException при некорректном URI
      */
     @PutMapping("/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Task task)
         throws URISyntaxException {
-        LOG.debug("REST request to update Task : {}, {}", id, task);
+        LOG.debug("Запрос на обновление задачи: ID {}, Данные: {}", id, task);
         if (task.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, task.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!taskRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Задача не найдена", ENTITY_NAME, "idnotfound");
         }
 
         task = taskService.update(task);
@@ -98,31 +105,29 @@ public class TaskResource {
     }
 
     /**
-     * {@code PATCH  /tasks/:id} : Partial updates given fields of an existing task, field will ignore if it is null
+     * Частично обновляет задачу.
+     * PATCH /api/tasks/{id}
      *
-     * @param id the id of the task to save.
-     * @param task the task to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated task,
-     * or with status {@code 400 (Bad Request)} if the task is not valid,
-     * or with status {@code 404 (Not Found)} if the task is not found,
-     * or with status {@code 500 (Internal Server Error)} if the task couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID задачи
+     * @param task данные для частичного обновления
+     * @return ResponseEntity с обновленной задачей или кодом ошибки
+     * @throws URISyntaxException при некорректном URI
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Task> partialUpdateTask(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Task task
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update Task partially : {}, {}", id, task);
+        LOG.debug("Запрос на частичное обновление задачи: ID {}, Данные: {}", id, task);
         if (task.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, task.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!taskRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Задача не найдена", ENTITY_NAME, "idnotfound");
         }
 
         Optional<Task> result = taskService.partialUpdate(task);
@@ -134,41 +139,44 @@ public class TaskResource {
     }
 
     /**
-     * {@code GET  /tasks} : get all the tasks.
+     * Получает список задач с пагинацией.
+     * GET /api/tasks
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tasks in body.
+     * @param pageable параметры пагинации
+     * @return ResponseEntity со списком задач и заголовками пагинации
      */
     @GetMapping("")
     public ResponseEntity<List<Task>> getAllTasks(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Tasks");
+        LOG.debug("Запрос на получение списка задач");
         Page<Task> page = taskService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * {@code GET  /tasks/:id} : get the "id" task.
+     * Получает задачу по ID.
+     * GET /api/tasks/{id}
      *
-     * @param id the id of the task to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the task, or with status {@code 404 (Not Found)}.
+     * @param id ID задачи
+     * @return ResponseEntity с задачей или 404 если не найдена
      */
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTask(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get Task : {}", id);
+        LOG.debug("Запрос на получение задачи: ID {}", id);
         Optional<Task> task = taskService.findOne(id);
         return ResponseUtil.wrapOrNotFound(task);
     }
 
     /**
-     * {@code DELETE  /tasks/:id} : delete the "id" task.
+     * Удаляет задачу.
+     * DELETE /api/tasks/{id}
      *
-     * @param id the id of the task to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id ID задачи для удаления
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete Task : {}", id);
+        LOG.debug("Запрос на удаление задачи: ID {}", id);
         taskService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

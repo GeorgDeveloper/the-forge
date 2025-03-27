@@ -1,11 +1,11 @@
 package ru.georgdeveloper.myapp.web.rest.errors;
 
-@SuppressWarnings("java:S110") // Inheritance tree of classes should not be too deep
+@SuppressWarnings("java:S110") // Дерево наследования классов не должно быть слишком глубоким
 public class EmailAlreadyUsedException extends BadRequestAlertException {
 
     private static final long serialVersionUID = 1L;
 
     public EmailAlreadyUsedException() {
-        super(ErrorConstants.EMAIL_ALREADY_USED_TYPE, "Email is already in use!", "userManagement", "emailexists");
+        super(ErrorConstants.EMAIL_ALREADY_USED_TYPE, "Электронная почта уже используется!", "userManagement", "emailexists");
     }
 }

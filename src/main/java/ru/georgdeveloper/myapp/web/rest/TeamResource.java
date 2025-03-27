@@ -25,7 +25,8 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.Team}.
+ * REST контроллер для управления рабочими командами.
+ * Предоставляет CRUD-операции для сущности {@link ru.georgdeveloper.myapp.domain.Team}.
  */
 @RestController
 @RequestMapping("/api/teams")
@@ -33,32 +34,39 @@ public class TeamResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(TeamResource.class);
 
+    // Название сущности для сообщений об ошибках
     private static final String ENTITY_NAME = "team";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final TeamService teamService;
-
     private final TeamRepository teamRepository;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param teamService сервис для работы с командами
+     * @param teamRepository репозиторий команд
+     */
     public TeamResource(TeamService teamService, TeamRepository teamRepository) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
     }
 
     /**
-     * {@code POST  /teams} : Create a new team.
+     * Создает новую рабочую команду.
+     * POST /api/teams
      *
-     * @param team the team to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new team, or with status {@code 400 (Bad Request)} if the team has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param team данные новой команды
+     * @return ResponseEntity с созданной командой или ошибкой 400 если ID уже существует
+     * @throws URISyntaxException при некорректном URI
      */
     @PostMapping("")
     public ResponseEntity<Team> createTeam(@Valid @RequestBody Team team) throws URISyntaxException {
-        LOG.debug("REST request to save Team : {}", team);
+        LOG.debug("Запрос на создание команды: {}", team);
         if (team.getId() != null) {
-            throw new BadRequestAlertException("A new team cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Новая команда не может иметь ID", ENTITY_NAME, "idexists");
         }
         team = teamService.save(team);
         return ResponseEntity.created(new URI("/api/teams/" + team.getId()))
@@ -67,28 +75,27 @@ public class TeamResource {
     }
 
     /**
-     * {@code PUT  /teams/:id} : Updates an existing team.
+     * Полностью обновляет данные команды.
+     * PUT /api/teams/{id}
      *
-     * @param id the id of the team to save.
-     * @param team the team to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated team,
-     * or with status {@code 400 (Bad Request)} if the team is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the team couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID команды
+     * @param team обновленные данные команды
+     * @return ResponseEntity с обновленной командой или кодом ошибки
+     * @throws URISyntaxException при некорректном URI
      */
     @PutMapping("/{id}")
     public ResponseEntity<Team> updateTeam(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Team team)
         throws URISyntaxException {
-        LOG.debug("REST request to update Team : {}, {}", id, team);
+        LOG.debug("Запрос на обновление команды: ID {}, Данные: {}", id, team);
         if (team.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, team.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!teamRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Команда не найдена", ENTITY_NAME, "idnotfound");
         }
 
         team = teamService.update(team);
@@ -98,31 +105,29 @@ public class TeamResource {
     }
 
     /**
-     * {@code PATCH  /teams/:id} : Partial updates given fields of an existing team, field will ignore if it is null
+     * Частично обновляет данные команды.
+     * PATCH /api/teams/{id}
      *
-     * @param id the id of the team to save.
-     * @param team the team to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated team,
-     * or with status {@code 400 (Bad Request)} if the team is not valid,
-     * or with status {@code 404 (Not Found)} if the team is not found,
-     * or with status {@code 500 (Internal Server Error)} if the team couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID команды
+     * @param team данные для частичного обновления
+     * @return ResponseEntity с обновленной командой или кодом ошибки
+     * @throws URISyntaxException при некорректном URI
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Team> partialUpdateTeam(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Team team
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update Team partially : {}, {}", id, team);
+        LOG.debug("Запрос на частичное обновление команды: ID {}, Данные: {}", id, team);
         if (team.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, team.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!teamRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Команда не найдена", ENTITY_NAME, "idnotfound");
         }
 
         Optional<Team> result = teamService.partialUpdate(team);
@@ -134,41 +139,44 @@ public class TeamResource {
     }
 
     /**
-     * {@code GET  /teams} : get all the teams.
+     * Получает список команд с пагинацией.
+     * GET /api/teams
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of teams in body.
+     * @param pageable параметры пагинации
+     * @return ResponseEntity со списком команд и заголовками пагинации
      */
     @GetMapping("")
     public ResponseEntity<List<Team>> getAllTeams(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Teams");
+        LOG.debug("Запрос на получение списка команд");
         Page<Team> page = teamService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * {@code GET  /teams/:id} : get the "id" team.
+     * Получает команду по ID.
+     * GET /api/teams/{id}
      *
-     * @param id the id of the team to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the team, or with status {@code 404 (Not Found)}.
+     * @param id ID команды
+     * @return ResponseEntity с командой или 404 если не найдена
      */
     @GetMapping("/{id}")
     public ResponseEntity<Team> getTeam(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get Team : {}", id);
+        LOG.debug("Запрос на получение команды: ID {}", id);
         Optional<Team> team = teamService.findOne(id);
         return ResponseUtil.wrapOrNotFound(team);
     }
 
     /**
-     * {@code DELETE  /teams/:id} : delete the "id" team.
+     * Удаляет команду.
+     * DELETE /api/teams/{id}
      *
-     * @param id the id of the team to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id ID команды для удаления
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeam(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete Team : {}", id);
+        LOG.debug("Запрос на удаление команды: ID {}", id);
         teamService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

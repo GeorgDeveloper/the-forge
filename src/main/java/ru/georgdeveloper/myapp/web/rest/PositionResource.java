@@ -25,7 +25,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.Position}.
+ * REST контроллер для управления должностями {@link ru.georgdeveloper.myapp.domain.Position}.
  */
 @RestController
 @RequestMapping("/api/positions")
@@ -39,26 +39,32 @@ public class PositionResource {
     private String applicationName;
 
     private final PositionService positionService;
-
     private final PositionRepository positionRepository;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param positionService сервис для работы с должностями
+     * @param positionRepository репозиторий должностей
+     */
     public PositionResource(PositionService positionService, PositionRepository positionRepository) {
         this.positionService = positionService;
         this.positionRepository = positionRepository;
     }
 
     /**
-     * {@code POST  /positions} : Create a new position.
+     * Создает новую должность.
+     * POST /api/positions
      *
-     * @param position the position to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new position, or with status {@code 400 (Bad Request)} if the position has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param position данные новой должности
+     * @return ResponseEntity с созданной должностью или ошибкой 400 если ID уже существует
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PostMapping("")
     public ResponseEntity<Position> createPosition(@Valid @RequestBody Position position) throws URISyntaxException {
-        LOG.debug("REST request to save Position : {}", position);
+        LOG.debug("REST запрос на создание должности: {}", position);
         if (position.getId() != null) {
-            throw new BadRequestAlertException("A new position cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Новая должность не может иметь ID", ENTITY_NAME, "idexists");
         }
         position = positionService.save(position);
         return ResponseEntity.created(new URI("/api/positions/" + position.getId()))
@@ -67,30 +73,29 @@ public class PositionResource {
     }
 
     /**
-     * {@code PUT  /positions/:id} : Updates an existing position.
+     * Полностью обновляет данные должности.
+     * PUT /api/positions/{id}
      *
-     * @param id the id of the position to save.
-     * @param position the position to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated position,
-     * or with status {@code 400 (Bad Request)} if the position is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the position couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID должности для обновления
+     * @param position новые данные должности
+     * @return ResponseEntity с обновленной должностью или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PutMapping("/{id}")
     public ResponseEntity<Position> updatePosition(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Position position
     ) throws URISyntaxException {
-        LOG.debug("REST request to update Position : {}, {}", id, position);
+        LOG.debug("REST запрос на обновление должности: {}, {}", id, position);
         if (position.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, position.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!positionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Должность не найдена", ENTITY_NAME, "idnotfound");
         }
 
         position = positionService.update(position);
@@ -100,31 +105,29 @@ public class PositionResource {
     }
 
     /**
-     * {@code PATCH  /positions/:id} : Partial updates given fields of an existing position, field will ignore if it is null
+     * Частично обновляет данные должности.
+     * PATCH /api/positions/{id}
      *
-     * @param id the id of the position to save.
-     * @param position the position to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated position,
-     * or with status {@code 400 (Bad Request)} if the position is not valid,
-     * or with status {@code 404 (Not Found)} if the position is not found,
-     * or with status {@code 500 (Internal Server Error)} if the position couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID должности для обновления
+     * @param position данные для частичного обновления
+     * @return ResponseEntity с обновленной должностью или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Position> partialUpdatePosition(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Position position
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update Position partially : {}, {}", id, position);
+        LOG.debug("REST запрос на частичное обновление должности: {}, {}", id, position);
         if (position.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, position.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!positionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Должность не найдена", ENTITY_NAME, "idnotfound");
         }
 
         Optional<Position> result = positionService.partialUpdate(position);
@@ -136,41 +139,44 @@ public class PositionResource {
     }
 
     /**
-     * {@code GET  /positions} : get all the positions.
+     * Получает список должностей с пагинацией.
+     * GET /api/positions
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of positions in body.
+     * @param pageable параметры пагинации
+     * @return ResponseEntity со списком должностей
      */
     @GetMapping("")
     public ResponseEntity<List<Position>> getAllPositions(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Positions");
+        LOG.debug("REST запрос на получение страницы должностей");
         Page<Position> page = positionService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * {@code GET  /positions/:id} : get the "id" position.
+     * Получает должность по ID.
+     * GET /api/positions/{id}
      *
-     * @param id the id of the position to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the position, or with status {@code 404 (Not Found)}.
+     * @param id ID должности
+     * @return ResponseEntity с найденной должностью или 404 если не найдена
      */
     @GetMapping("/{id}")
     public ResponseEntity<Position> getPosition(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get Position : {}", id);
+        LOG.debug("REST запрос на получение должности: {}", id);
         Optional<Position> position = positionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(position);
     }
 
     /**
-     * {@code DELETE  /positions/:id} : delete the "id" position.
+     * Удаляет должность по ID.
+     * DELETE /api/positions/{id}
      *
-     * @param id the id of the position to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id ID должности для удаления
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePosition(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete Position : {}", id);
+        LOG.debug("REST запрос на удаление должности: {}", id);
         positionService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

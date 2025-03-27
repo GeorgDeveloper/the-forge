@@ -19,7 +19,7 @@ import ru.georgdeveloper.myapp.web.rest.vm.KeyAndPasswordVM;
 import ru.georgdeveloper.myapp.web.rest.vm.ManagedUserVM;
 
 /**
- * REST controller for managing the current user's account.
+ * REST контроллер для управления учетной записью текущего пользователя.
  */
 @RestController
 @RequestMapping("/api")
@@ -35,11 +35,12 @@ public class AccountResource {
     private static final Logger LOG = LoggerFactory.getLogger(AccountResource.class);
 
     private final UserRepository userRepository;
-
     private final UserService userService;
-
     private final MailService mailService;
 
+    /**
+     * Конструктор контроллера.
+     */
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
         this.userRepository = userRepository;
         this.userService = userService;
@@ -47,12 +48,13 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST  /register} : register the user.
+     * Регистрирует нового пользователя.
+     * POST /register
      *
-     * @param managedUserVM the managed user View Model.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
+     * @param managedUserVM данные нового пользователя
+     * @throws InvalidPasswordException если пароль не соответствует требованиям
+     * @throws EmailAlreadyUsedException если email уже используется
+     * @throws LoginAlreadyUsedException если логин уже используется
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -65,51 +67,54 @@ public class AccountResource {
     }
 
     /**
-     * {@code GET  /activate} : activate the registered user.
+     * Активирует зарегистрированного пользователя по ключу активации.
+     * GET /activate
      *
-     * @param key the activation key.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
+     * @param key ключ активации
+     * @throws RuntimeException если пользователь не может быть активирован
      */
     @GetMapping("/activate")
     public void activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
-            throw new AccountResourceException("No user was found for this activation key");
+            throw new AccountResourceException("Пользователь с таким ключом активации не найден");
         }
     }
 
     /**
-     * {@code GET  /account} : get the current user.
+     * Получает данные текущего пользователя.
+     * GET /account
      *
-     * @return the current user.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     * @return данные текущего пользователя
+     * @throws RuntimeException если пользователь не может быть получен
      */
     @GetMapping("/account")
     public AdminUserDTO getAccount() {
         return userService
             .getUserWithAuthorities()
             .map(AdminUserDTO::new)
-            .orElseThrow(() -> new AccountResourceException("User could not be found"));
+            .orElseThrow(() -> new AccountResourceException("Пользователь не найден"));
     }
 
     /**
-     * {@code POST  /account} : update the current user information.
+     * Обновляет информацию текущего пользователя.
+     * POST /account
      *
-     * @param userDTO the current user information.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
+     * @param userDTO новые данные пользователя
+     * @throws EmailAlreadyUsedException если email уже используется
+     * @throws RuntimeException если логин пользователя не найден
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+            .orElseThrow(() -> new AccountResourceException("Текущий пользователь не найден"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.orElseThrow().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
         Optional<User> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
-            throw new AccountResourceException("User could not be found");
+            throw new AccountResourceException("Пользователь не найден");
         }
         userService.updateUser(
             userDTO.getFirstName(),
@@ -121,10 +126,11 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST  /account/change-password} : changes the current user's password.
+     * Изменяет пароль текущего пользователя.
+     * POST /account/change-password
      *
-     * @param passwordChangeDto current and new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
+     * @param passwordChangeDto текущий и новый пароль
+     * @throws InvalidPasswordException если новый пароль не соответствует требованиям
      */
     @PostMapping(path = "/account/change-password")
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
@@ -135,9 +141,10 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
+     * Инициирует сброс пароля пользователя (отправка email).
+     * POST /account/reset-password/init
      *
-     * @param mail the mail of the user.
+     * @param mail email пользователя
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
@@ -145,18 +152,18 @@ public class AccountResource {
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.orElseThrow());
         } else {
-            // Pretend the request has been successful to prevent checking which emails really exist
-            // but log that an invalid attempt has been made
-            LOG.warn("Password reset requested for non existing mail");
+            // Логируем попытку сброса для несуществующего email
+            LOG.warn("Запрошен сброс пароля для несуществующего email: {}", mail);
         }
     }
 
     /**
-     * {@code POST   /account/reset-password/finish} : Finish to reset the password of the user.
+     * Завершает процесс сброса пароля пользователя.
+     * POST /account/reset-password/finish
      *
-     * @param keyAndPassword the generated key and the new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the password could not be reset.
+     * @param keyAndPassword сгенерированный ключ и новый пароль
+     * @throws InvalidPasswordException если пароль не соответствует требованиям
+     * @throws RuntimeException если не удалось сбросить пароль
      */
     @PostMapping(path = "/account/reset-password/finish")
     public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
@@ -166,10 +173,13 @@ public class AccountResource {
         Optional<User> user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
-            throw new AccountResourceException("No user was found for this reset key");
+            throw new AccountResourceException("Пользователь с таким ключом сброса не найден");
         }
     }
 
+    /**
+     * Проверяет валидность длины пароля.
+     */
     private static boolean isPasswordLengthInvalid(String password) {
         return (
             StringUtils.isEmpty(password) ||

@@ -25,7 +25,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.AdditionalTraining}.
+ * REST контроллер для управления {@link ru.georgdeveloper.myapp.domain.AdditionalTraining}.
  */
 @RestController
 @RequestMapping("/api/additional-trainings")
@@ -39,9 +39,11 @@ public class AdditionalTrainingResource {
     private String applicationName;
 
     private final AdditionalTrainingService additionalTrainingService;
-
     private final AdditionalTrainingRepository additionalTrainingRepository;
 
+    /**
+     * Конструктор контроллера.
+     */
     public AdditionalTrainingResource(
         AdditionalTrainingService additionalTrainingService,
         AdditionalTrainingRepository additionalTrainingRepository
@@ -51,18 +53,19 @@ public class AdditionalTrainingResource {
     }
 
     /**
-     * {@code POST  /additional-trainings} : Create a new additionalTraining.
+     * Создает новое дополнительное обучение.
+     * POST /additional-trainings
      *
-     * @param additionalTraining the additionalTraining to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new additionalTraining, or with status {@code 400 (Bad Request)} if the additionalTraining has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param additionalTraining данные для создания обучения
+     * @return ResponseEntity с созданным обучением или ошибкой 400 если ID уже существует
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PostMapping("")
     public ResponseEntity<AdditionalTraining> createAdditionalTraining(@Valid @RequestBody AdditionalTraining additionalTraining)
         throws URISyntaxException {
-        LOG.debug("REST request to save AdditionalTraining : {}", additionalTraining);
+        LOG.debug("REST запрос на создание AdditionalTraining: {}", additionalTraining);
         if (additionalTraining.getId() != null) {
-            throw new BadRequestAlertException("A new additionalTraining cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Новое обучение не может иметь ID", ENTITY_NAME, "idexists");
         }
         additionalTraining = additionalTrainingService.save(additionalTraining);
         return ResponseEntity.created(new URI("/api/additional-trainings/" + additionalTraining.getId()))
@@ -71,30 +74,29 @@ public class AdditionalTrainingResource {
     }
 
     /**
-     * {@code PUT  /additional-trainings/:id} : Updates an existing additionalTraining.
+     * Полностью обновляет существующее дополнительное обучение.
+     * PUT /additional-trainings/:id
      *
-     * @param id the id of the additionalTraining to save.
-     * @param additionalTraining the additionalTraining to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated additionalTraining,
-     * or with status {@code 400 (Bad Request)} if the additionalTraining is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the additionalTraining couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID обучения для обновления
+     * @param additionalTraining новые данные обучения
+     * @return ResponseEntity с обновленным обучением или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PutMapping("/{id}")
     public ResponseEntity<AdditionalTraining> updateAdditionalTraining(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody AdditionalTraining additionalTraining
     ) throws URISyntaxException {
-        LOG.debug("REST request to update AdditionalTraining : {}, {}", id, additionalTraining);
+        LOG.debug("REST запрос на обновление AdditionalTraining: {}, {}", id, additionalTraining);
         if (additionalTraining.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, additionalTraining.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!additionalTrainingRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Обучение не найдено", ENTITY_NAME, "idnotfound");
         }
 
         additionalTraining = additionalTrainingService.update(additionalTraining);
@@ -104,31 +106,29 @@ public class AdditionalTrainingResource {
     }
 
     /**
-     * {@code PATCH  /additional-trainings/:id} : Partial updates given fields of an existing additionalTraining, field will ignore if it is null
+     * Частично обновляет существующее дополнительное обучение.
+     * PATCH /additional-trainings/:id
      *
-     * @param id the id of the additionalTraining to save.
-     * @param additionalTraining the additionalTraining to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated additionalTraining,
-     * or with status {@code 400 (Bad Request)} if the additionalTraining is not valid,
-     * or with status {@code 404 (Not Found)} if the additionalTraining is not found,
-     * or with status {@code 500 (Internal Server Error)} if the additionalTraining couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID обучения для обновления
+     * @param additionalTraining данные для частичного обновления
+     * @return ResponseEntity с обновленным обучением или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<AdditionalTraining> partialUpdateAdditionalTraining(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody AdditionalTraining additionalTraining
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update AdditionalTraining partially : {}, {}", id, additionalTraining);
+        LOG.debug("REST запрос на частичное обновление AdditionalTraining: {}, {}", id, additionalTraining);
         if (additionalTraining.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, additionalTraining.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!additionalTrainingRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Обучение не найдено", ENTITY_NAME, "idnotfound");
         }
 
         Optional<AdditionalTraining> result = additionalTrainingService.partialUpdate(additionalTraining);
@@ -140,43 +140,46 @@ public class AdditionalTrainingResource {
     }
 
     /**
-     * {@code GET  /additional-trainings} : get all the additionalTrainings.
+     * Получает список всех дополнительных обучений с пагинацией.
+     * GET /additional-trainings
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of additionalTrainings in body.
+     * @param pageable параметры пагинации
+     * @return ResponseEntity со списком обучений
      */
     @GetMapping("")
     public ResponseEntity<List<AdditionalTraining>> getAllAdditionalTrainings(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        LOG.debug("REST request to get a page of AdditionalTrainings");
+        LOG.debug("REST запрос на получение страницы AdditionalTrainings");
         Page<AdditionalTraining> page = additionalTrainingService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * {@code GET  /additional-trainings/:id} : get the "id" additionalTraining.
+     * Получает дополнительное обучение по ID.
+     * GET /additional-trainings/:id
      *
-     * @param id the id of the additionalTraining to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the additionalTraining, or with status {@code 404 (Not Found)}.
+     * @param id ID обучения
+     * @return ResponseEntity с найденным обучением или 404 если не найдено
      */
     @GetMapping("/{id}")
     public ResponseEntity<AdditionalTraining> getAdditionalTraining(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get AdditionalTraining : {}", id);
+        LOG.debug("REST запрос на получение AdditionalTraining: {}", id);
         Optional<AdditionalTraining> additionalTraining = additionalTrainingService.findOne(id);
         return ResponseUtil.wrapOrNotFound(additionalTraining);
     }
 
     /**
-     * {@code DELETE  /additional-trainings/:id} : delete the "id" additionalTraining.
+     * Удаляет дополнительное обучение по ID.
+     * DELETE /additional-trainings/:id
      *
-     * @param id the id of the additionalTraining to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id ID обучения для удаления
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAdditionalTraining(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete AdditionalTraining : {}", id);
+        LOG.debug("REST запрос на удаление AdditionalTraining: {}", id);
         additionalTrainingService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

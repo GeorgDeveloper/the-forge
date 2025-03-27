@@ -25,7 +25,8 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.SafetyInstruction}.
+ * REST контроллер для управления инструкциями по технике безопасности.
+ * Предоставляет CRUD-операции для сущности {@link ru.georgdeveloper.myapp.domain.SafetyInstruction}.
  */
 @RestController
 @RequestMapping("/api/safety-instructions")
@@ -33,15 +34,21 @@ public class SafetyInstructionResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(SafetyInstructionResource.class);
 
+    // Название сущности для сообщений об ошибках
     private static final String ENTITY_NAME = "safetyInstruction";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final SafetyInstructionService safetyInstructionService;
-
     private final SafetyInstructionRepository safetyInstructionRepository;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param safetyInstructionService сервис для работы с инструкциями
+     * @param safetyInstructionRepository репозиторий инструкций
+     */
     public SafetyInstructionResource(
         SafetyInstructionService safetyInstructionService,
         SafetyInstructionRepository safetyInstructionRepository
@@ -51,18 +58,19 @@ public class SafetyInstructionResource {
     }
 
     /**
-     * {@code POST  /safety-instructions} : Create a new safetyInstruction.
+     * Создает новую инструкцию по технике безопасности.
+     * POST /api/safety-instructions
      *
-     * @param safetyInstruction the safetyInstruction to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new safetyInstruction, or with status {@code 400 (Bad Request)} if the safetyInstruction has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param safetyInstruction данные новой инструкции
+     * @return ResponseEntity с созданной инструкцией или ошибкой 400 если ID уже существует
+     * @throws URISyntaxException при некорректном URI
      */
     @PostMapping("")
     public ResponseEntity<SafetyInstruction> createSafetyInstruction(@Valid @RequestBody SafetyInstruction safetyInstruction)
         throws URISyntaxException {
-        LOG.debug("REST request to save SafetyInstruction : {}", safetyInstruction);
+        LOG.debug("Запрос на создание инструкции по ТБ: {}", safetyInstruction);
         if (safetyInstruction.getId() != null) {
-            throw new BadRequestAlertException("A new safetyInstruction cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Новая инструкция не может иметь ID", ENTITY_NAME, "idexists");
         }
         safetyInstruction = safetyInstructionService.save(safetyInstruction);
         return ResponseEntity.created(new URI("/api/safety-instructions/" + safetyInstruction.getId()))
@@ -71,30 +79,29 @@ public class SafetyInstructionResource {
     }
 
     /**
-     * {@code PUT  /safety-instructions/:id} : Updates an existing safetyInstruction.
+     * Полностью обновляет инструкцию по технике безопасности.
+     * PUT /api/safety-instructions/{id}
      *
-     * @param id the id of the safetyInstruction to save.
-     * @param safetyInstruction the safetyInstruction to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated safetyInstruction,
-     * or with status {@code 400 (Bad Request)} if the safetyInstruction is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the safetyInstruction couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID инструкции
+     * @param safetyInstruction обновленные данные инструкции
+     * @return ResponseEntity с обновленной инструкцией или кодом ошибки
+     * @throws URISyntaxException при некорректном URI
      */
     @PutMapping("/{id}")
     public ResponseEntity<SafetyInstruction> updateSafetyInstruction(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody SafetyInstruction safetyInstruction
     ) throws URISyntaxException {
-        LOG.debug("REST request to update SafetyInstruction : {}, {}", id, safetyInstruction);
+        LOG.debug("Запрос на обновление инструкции по ТБ: ID {}, Данные: {}", id, safetyInstruction);
         if (safetyInstruction.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, safetyInstruction.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!safetyInstructionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Инструкция не найдена", ENTITY_NAME, "idnotfound");
         }
 
         safetyInstruction = safetyInstructionService.update(safetyInstruction);
@@ -104,31 +111,29 @@ public class SafetyInstructionResource {
     }
 
     /**
-     * {@code PATCH  /safety-instructions/:id} : Partial updates given fields of an existing safetyInstruction, field will ignore if it is null
+     * Частично обновляет инструкцию по технике безопасности.
+     * PATCH /api/safety-instructions/{id}
      *
-     * @param id the id of the safetyInstruction to save.
-     * @param safetyInstruction the safetyInstruction to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated safetyInstruction,
-     * or with status {@code 400 (Bad Request)} if the safetyInstruction is not valid,
-     * or with status {@code 404 (Not Found)} if the safetyInstruction is not found,
-     * or with status {@code 500 (Internal Server Error)} if the safetyInstruction couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID инструкции
+     * @param safetyInstruction данные для частичного обновления
+     * @return ResponseEntity с обновленной инструкцией или кодом ошибки
+     * @throws URISyntaxException при некорректном URI
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<SafetyInstruction> partialUpdateSafetyInstruction(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody SafetyInstruction safetyInstruction
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update SafetyInstruction partially : {}, {}", id, safetyInstruction);
+        LOG.debug("Запрос на частичное обновление инструкции по ТБ: ID {}, Данные: {}", id, safetyInstruction);
         if (safetyInstruction.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, safetyInstruction.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!safetyInstructionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Инструкция не найдена", ENTITY_NAME, "idnotfound");
         }
 
         Optional<SafetyInstruction> result = safetyInstructionService.partialUpdate(safetyInstruction);
@@ -140,43 +145,46 @@ public class SafetyInstructionResource {
     }
 
     /**
-     * {@code GET  /safety-instructions} : get all the safetyInstructions.
+     * Получает список инструкций по технике безопасности с пагинацией.
+     * GET /api/safety-instructions
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of safetyInstructions in body.
+     * @param pageable параметры пагинации
+     * @return ResponseEntity со списком инструкций и заголовками пагинации
      */
     @GetMapping("")
     public ResponseEntity<List<SafetyInstruction>> getAllSafetyInstructions(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        LOG.debug("REST request to get a page of SafetyInstructions");
+        LOG.debug("Запрос на получение списка инструкций по ТБ");
         Page<SafetyInstruction> page = safetyInstructionService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * {@code GET  /safety-instructions/:id} : get the "id" safetyInstruction.
+     * Получает инструкцию по технике безопасности по ID.
+     * GET /api/safety-instructions/{id}
      *
-     * @param id the id of the safetyInstruction to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the safetyInstruction, or with status {@code 404 (Not Found)}.
+     * @param id ID инструкции
+     * @return ResponseEntity с инструкцией или 404 если не найдена
      */
     @GetMapping("/{id}")
     public ResponseEntity<SafetyInstruction> getSafetyInstruction(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get SafetyInstruction : {}", id);
+        LOG.debug("Запрос на получение инструкции по ТБ: ID {}", id);
         Optional<SafetyInstruction> safetyInstruction = safetyInstructionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(safetyInstruction);
     }
 
     /**
-     * {@code DELETE  /safety-instructions/:id} : delete the "id" safetyInstruction.
+     * Удаляет инструкцию по технике безопасности.
+     * DELETE /api/safety-instructions/{id}
      *
-     * @param id the id of the safetyInstruction to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id ID инструкции для удаления
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSafetyInstruction(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete SafetyInstruction : {}", id);
+        LOG.debug("Запрос на удаление инструкции по ТБ: ID {}", id);
         safetyInstructionService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

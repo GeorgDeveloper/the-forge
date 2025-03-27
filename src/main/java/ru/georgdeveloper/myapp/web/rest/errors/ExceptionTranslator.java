@@ -37,32 +37,43 @@ import tech.jhipster.web.rest.errors.ProblemDetailWithCause.ProblemDetailWithCau
 import tech.jhipster.web.util.HeaderUtil;
 
 /**
- * Controller advice to translate the server side exceptions to client-friendly json structures.
- * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
+ * Глобальный обработчик исключений для преобразования серверных исключений
+ * в клиенто-ориентированные JSON-структуры.
+ * Ответы об ошибках соответствуют RFC 7807 (Problem Details for HTTP APIs).
  */
 @ControllerAdvice
 public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
+    // Ключи для дополнительных свойств в ответе об ошибке
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
+    // Флаг включения цепочки причин в ответе
     private static final boolean CASUAL_CHAIN_ENABLED = false;
 
+    // Название клиентского приложения из конфигурации
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    // Окружение Spring для проверки активных профилей
     private final Environment env;
 
     public ExceptionTranslator(Environment env) {
         this.env = env;
     }
 
+    /**
+     * Обрабатывает любое исключение, преобразуя его в стандартизированный ответ.
+     */
     @ExceptionHandler
     public ResponseEntity<Object> handleAnyException(Throwable ex, NativeWebRequest request) {
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
         return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
 
+    /**
+     * Переопределение стандартной обработки исключений Spring.
+     */
     @Nullable
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(
@@ -72,14 +83,21 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         HttpStatusCode statusCode,
         WebRequest request
     ) {
+        // Если тело ответа не задано, создаем ProblemDetail
         body = body == null ? wrapAndCustomizeProblem((Throwable) ex, (NativeWebRequest) request) : body;
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
     }
 
+    /**
+     * Создает и настраивает объект ProblemDetail для исключения.
+     */
     protected ProblemDetailWithCause wrapAndCustomizeProblem(Throwable ex, NativeWebRequest request) {
         return customizeProblem(getProblemDetailWithCause(ex), ex, request);
     }
 
+    /**
+     * Создает ProblemDetail для конкретного типа исключения.
+     */
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
         if (
             ex instanceof ru.georgdeveloper.myapp.service.UsernameAlreadyUsedException
@@ -97,6 +115,9 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
 
+    /**
+     * Настраивает ProblemDetail дополнительными свойствами.
+     */
     protected ProblemDetailWithCause customizeProblem(ProblemDetailWithCause problem, Throwable err, NativeWebRequest request) {
         if (problem.getStatus() <= 0) problem.setStatus(toStatus(err));
 
@@ -136,6 +157,9 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         return getCustomizedTitle(err) != null ? getCustomizedTitle(err) : extractTitleForResponseStatus(err, statusCode);
     }
 
+    /**
+     * Создает список ошибок валидации полей.
+     */
     private List<FieldErrorVM> getFieldErrors(MethodArgumentNotValidException ex) {
         return ex
             .getBindingResult()
@@ -161,6 +185,9 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         return nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
     }
 
+    /**
+     * Определяет HTTP статус для исключения.
+     */
     private HttpStatus toStatus(final Throwable throwable) {
         // Let the ErrorResponse take this responsibility
         if (throwable instanceof ErrorResponse err) return HttpStatus.valueOf(err.getBody().getStatus());

@@ -25,7 +25,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link ru.georgdeveloper.myapp.domain.Employee}.
+ * REST контроллер для управления сущностью {@link ru.georgdeveloper.myapp.domain.Employee}.
  */
 @RestController
 @RequestMapping("/api/employees")
@@ -39,26 +39,32 @@ public class EmployeeResource {
     private String applicationName;
 
     private final EmployeeService employeeService;
-
     private final EmployeeRepository employeeRepository;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param employeeService сервис для работы с сотрудниками
+     * @param employeeRepository репозиторий сотрудников
+     */
     public EmployeeResource(EmployeeService employeeService, EmployeeRepository employeeRepository) {
         this.employeeService = employeeService;
         this.employeeRepository = employeeRepository;
     }
 
     /**
-     * {@code POST  /employees} : Create a new employee.
+     * Создает нового сотрудника.
+     * POST /api/employees
      *
-     * @param employee the employee to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new employee, or with status {@code 400 (Bad Request)} if the employee has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param employee данные нового сотрудника
+     * @return ResponseEntity с созданным сотрудником или ошибкой 400 если ID уже существует
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PostMapping("")
     public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) throws URISyntaxException {
-        LOG.debug("REST request to save Employee : {}", employee);
+        LOG.debug("REST запрос на создание сотрудника: {}", employee);
         if (employee.getId() != null) {
-            throw new BadRequestAlertException("A new employee cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Новый сотрудник не может иметь ID", ENTITY_NAME, "idexists");
         }
         employee = employeeService.save(employee);
         return ResponseEntity.created(new URI("/api/employees/" + employee.getId()))
@@ -67,30 +73,29 @@ public class EmployeeResource {
     }
 
     /**
-     * {@code PUT  /employees/:id} : Updates an existing employee.
+     * Полностью обновляет данные сотрудника.
+     * PUT /api/employees/{id}
      *
-     * @param id the id of the employee to save.
-     * @param employee the employee to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated employee,
-     * or with status {@code 400 (Bad Request)} if the employee is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the employee couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID сотрудника для обновления
+     * @param employee новые данные сотрудника
+     * @return ResponseEntity с обновленным сотрудником или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PutMapping("/{id}")
     public ResponseEntity<Employee> updateEmployee(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Employee employee
     ) throws URISyntaxException {
-        LOG.debug("REST request to update Employee : {}, {}", id, employee);
+        LOG.debug("REST запрос на обновление сотрудника: {}, {}", id, employee);
         if (employee.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, employee.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!employeeRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Сотрудник не найден", ENTITY_NAME, "idnotfound");
         }
 
         employee = employeeService.update(employee);
@@ -100,31 +105,29 @@ public class EmployeeResource {
     }
 
     /**
-     * {@code PATCH  /employees/:id} : Partial updates given fields of an existing employee, field will ignore if it is null
+     * Частично обновляет данные сотрудника.
+     * PATCH /api/employees/{id}
      *
-     * @param id the id of the employee to save.
-     * @param employee the employee to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated employee,
-     * or with status {@code 400 (Bad Request)} if the employee is not valid,
-     * or with status {@code 404 (Not Found)} if the employee is not found,
-     * or with status {@code 500 (Internal Server Error)} if the employee couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id ID сотрудника для обновления
+     * @param employee данные для частичного обновления
+     * @return ResponseEntity с обновленным сотрудником или кодом ошибки
+     * @throws URISyntaxException при некорректном синтаксисе URI
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Employee> partialUpdateEmployee(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Employee employee
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update Employee partially : {}, {}", id, employee);
+        LOG.debug("REST запрос на частичное обновление сотрудника: {}, {}", id, employee);
         if (employee.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Неверный ID", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, employee.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("Несоответствие ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!employeeRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw new BadRequestAlertException("Сотрудник не найден", ENTITY_NAME, "idnotfound");
         }
 
         Optional<Employee> result = employeeService.partialUpdate(employee);
@@ -136,18 +139,19 @@ public class EmployeeResource {
     }
 
     /**
-     * {@code GET  /employees} : get all the employees.
+     * Получает список сотрудников с пагинацией.
+     * GET /api/employees
      *
-     * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of employees in body.
+     * @param pageable параметры пагинации
+     * @param eagerload флаг загрузки связанных сущностей (для many-to-many)
+     * @return ResponseEntity со списком сотрудников
      */
     @GetMapping("")
     public ResponseEntity<List<Employee>> getAllEmployees(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
-        LOG.debug("REST request to get a page of Employees");
+        LOG.debug("REST запрос на получение страницы сотрудников");
         Page<Employee> page;
         if (eagerload) {
             page = employeeService.findAllWithEagerRelationships(pageable);
@@ -159,27 +163,29 @@ public class EmployeeResource {
     }
 
     /**
-     * {@code GET  /employees/:id} : get the "id" employee.
+     * Получает сотрудника по ID.
+     * GET /api/employees/{id}
      *
-     * @param id the id of the employee to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the employee, or with status {@code 404 (Not Found)}.
+     * @param id ID сотрудника
+     * @return ResponseEntity с найденным сотрудником или 404 если не найден
      */
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get Employee : {}", id);
+        LOG.debug("REST запрос на получение сотрудника: {}", id);
         Optional<Employee> employee = employeeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(employee);
     }
 
     /**
-     * {@code DELETE  /employees/:id} : delete the "id" employee.
+     * Удаляет сотрудника по ID.
+     * DELETE /api/employees/{id}
      *
-     * @param id the id of the employee to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id ID сотрудника для удаления
+     * @return ResponseEntity с кодом 204 (NO_CONTENT)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete Employee : {}", id);
+        LOG.debug("REST запрос на удаление сотрудника: {}", id);
         employeeService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
