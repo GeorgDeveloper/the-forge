@@ -171,4 +171,6 @@ public class Position implements Serializable {
             ", наименование='" + getPositionName() + "'" +
             "}";
     }
+
+    public void safetyInstructions(HashSet<SafetyInstruction> safetyInstructions) {}
 }
