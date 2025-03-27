@@ -19,6 +19,15 @@
           <dd>
             <span>{{ teamRef.teamName }}</span>
           </dd>
+          <dt><span jhiTranslate="theForgeApp.team.employee">Employee</span></dt>
+          <dd>
+            @for (employee of team()?.employees; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/employee', employee.id, 'view']">{{ employee?.firstName }} {{ employee?.lastName }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

@@ -35,6 +35,10 @@ export class TeamService {
     return this.http.get<ITeam>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findWithEmployees(id: number): Observable<EntityResponseType> {
+    return this.http.get<ITeam>(`${this.resourceUrl}/${id}/with-employees`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ITeam[]>(this.resourceUrl, { params: options, observe: 'response' });

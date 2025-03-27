@@ -55,4 +55,12 @@ public interface TeamService {
      * @param id идентификатор удаляемой команды.
      */
     void delete(Long id);
+
+    /**
+     * Получить команду по идентификатору.
+     *
+     * @param id идентификатор команды.
+     * @return найденная команда со списком сотрудников.
+     */
+    Optional<Team> findOneWithEmployees(Long id);
 }

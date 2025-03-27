@@ -182,4 +182,16 @@ public class TeamResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    /**
+     * Возвращает команды со списком сотрудников.
+     * @param id ID команды в которую входят сотрудники
+     * @return ResponseEntity со списком сотрудников
+     */
+    @GetMapping("/{id}/with-employees")
+    public ResponseEntity<Team> getTeamWithEmployees(@PathVariable("id") Long id) {
+        LOG.debug("Запрос на получение команды с сотрудниками: ID {}", id);
+        Optional<Team> team = teamService.findOneWithEmployees(id);
+        return ResponseUtil.wrapOrNotFound(team);
+    }
 }

@@ -1,8 +1,9 @@
-import { Component, input } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TeamService } from '../service/team.service';
 import SharedModule from 'app/shared/shared.module';
 import { ITeam } from '../team.model';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'jhi-team-detail',
@@ -10,7 +11,32 @@ import { ITeam } from '../team.model';
   imports: [SharedModule, RouterModule],
 })
 export class TeamDetailComponent {
-  team = input<ITeam | null>(null);
+  private teamService = inject(TeamService);
+  private route = inject(ActivatedRoute);
+
+  // Используем signal() вместо input()
+  team = signal<ITeam | null>(null);
+  isLoading = false;
+
+  constructor() {
+    this.loadTeamWithEmployees();
+  }
+
+  loadTeamWithEmployees(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isLoading = true;
+      this.teamService.findWithEmployees(+id).subscribe({
+        next: response => {
+          this.team.set(response.body); // Теперь set доступен
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+      });
+    }
+  }
 
   previousState(): void {
     window.history.back();

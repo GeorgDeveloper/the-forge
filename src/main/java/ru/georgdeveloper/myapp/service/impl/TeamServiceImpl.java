@@ -110,4 +110,14 @@ public class TeamServiceImpl implements TeamService {
         LOG.debug("Запрос на удаление команды с ID: {}", id);
         teamRepository.deleteById(id);
     }
+
+    /**
+     * Находит команду по уникальному идентификатору
+     * @param id - идентификатор команды СО СПИСКОМ СОТРУДНИКОВ
+     * @return Optional с найденной командой или пустой
+     */
+    @Override
+    public Optional<Team> findOneWithEmployees(Long id) {
+        return teamRepository.findByIdWithEmployees(id);
+    }
 }
