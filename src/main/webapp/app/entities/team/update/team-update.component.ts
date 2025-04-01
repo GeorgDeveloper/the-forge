@@ -87,6 +87,18 @@ export class TeamUpdateComponent implements OnInit {
   protected updateForm(team: ITeam): void {
     this.team = team;
     this.teamFormService.resetForm(this.editForm, team);
+
+    // Устанавливаем выбранных сотрудников
+    if (team.employees) {
+      this.editForm.patchValue({
+        employees: team.employees,
+      });
+    }
+  }
+
+  isEmployeeSelected(employee: IEmployee): boolean {
+    if (!this.team || !this.team.employees) return false;
+    return this.team.employees.some(e => e.id === employee.id);
   }
 }
 // import { Component, OnInit, inject } from '@angular/core';

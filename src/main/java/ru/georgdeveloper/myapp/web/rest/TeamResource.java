@@ -78,13 +78,13 @@ public class TeamResource {
      * @throws URISyntaxException при некорректном URI
      */
     @PostMapping("")
-    public ResponseEntity<Team> createTeam(@Valid @RequestBody Team team) throws URISyntaxException {
+    public ResponseEntity<Team> createTeam(@Valid @RequestBody Team team, Principal principal) throws URISyntaxException {
         LOG.debug("Запрос на создание команды: {}", team);
         if (team.getId() != null) {
             throw new BadRequestAlertException("Новая команда не может иметь ID", ENTITY_NAME, "idexists");
         }
-        //        team = teamService.save(team);
-        team = teamAccessService.createTeam(1L, team);
+        Optional<User> user = userService.getUserWithAuthoritiesByLogin(principal.getName());
+        team = teamAccessService.createTeam(user.get().getId(), team);
         return ResponseEntity.created(new URI("/api/teams/" + team.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, team.getId().toString()))
             .body(team);
@@ -213,7 +213,7 @@ public class TeamResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeam(@PathVariable("id") Long id) {
         LOG.debug("Запрос на удаление команды: ID {}", id);
-        teamService.delete(id);
+        teamAccessService.deleteTeam(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();

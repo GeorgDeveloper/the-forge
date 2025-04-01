@@ -10,4 +10,6 @@ public interface UserTeamAccessRepository extends JpaRepository<UserTeamAccess, 
     boolean existsByUserAndTeam(User user, Team team);
 
     boolean existsByUserAndTeamAndAccessLevel(User user, Team team, AccessLevel accessLevel);
+
+    void deleteByTeam_Id(Long teamId);
 }

@@ -30,10 +30,12 @@
 
         <!-- Employee Management -->
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="theForgeApp.team.employees">Employees</label>
+          <label class="form-label" for="field_employees" jhiTranslate="theForgeApp.training.employee">Employee</label>
           <select class="form-control" multiple id="field_employees" data-cy="employees" formControlName="employees">
             @for (employee of employees; track employee.id) {
-              <option [ngValue]="employee">{{ employee.firstName }} {{ employee.lastName }}</option>
+              <option [ngValue]="employee" [selected]="isEmployeeSelected(employee)">
+                {{ employee.firstName }} {{ employee.lastName }}
+              </option>
             }
           </select>
         </div>

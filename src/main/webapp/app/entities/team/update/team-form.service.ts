@@ -19,6 +19,7 @@ type TeamFormDefaults = Pick<NewTeam, 'id'>;
 type TeamFormGroupContent = {
   id: FormControl<ITeam['id'] | NewTeam['id']>;
   teamName: FormControl<ITeam['teamName']>;
+  employees: FormControl<ITeam['employees']>;
 };
 
 export type TeamFormGroup = FormGroup<TeamFormGroupContent>;
@@ -41,6 +42,7 @@ export class TeamFormService {
       teamName: new FormControl(teamRawValue.teamName, {
         validators: [Validators.required],
       }),
+      employees: new FormControl(teamRawValue.employees || []), // Добавляем это
     });
   }
 

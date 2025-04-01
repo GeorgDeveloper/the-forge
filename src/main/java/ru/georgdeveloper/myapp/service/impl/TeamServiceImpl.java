@@ -1,13 +1,20 @@
 package ru.georgdeveloper.myapp.service.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.georgdeveloper.myapp.domain.Employee;
 import ru.georgdeveloper.myapp.domain.Team;
+import ru.georgdeveloper.myapp.domain.User;
+import ru.georgdeveloper.myapp.domain.UserTeamAccess;
+import ru.georgdeveloper.myapp.domain.enumeration.AccessLevel;
+import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.repository.TeamRepository;
 import ru.georgdeveloper.myapp.service.TeamService;
 
@@ -24,13 +31,15 @@ public class TeamServiceImpl implements TeamService {
 
     // Репозиторий для работы с данными команд в БД
     private final TeamRepository teamRepository;
+    private final EmployeeRepository employeeRepository;
 
     /**
      * Конструктор с внедрением зависимости TeamRepository
      * @param teamRepository - репозиторий для работы с командами
      */
-    public TeamServiceImpl(TeamRepository teamRepository) {
+    public TeamServiceImpl(TeamRepository teamRepository, EmployeeRepository employeeRepository) {
         this.teamRepository = teamRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     /**
@@ -41,7 +50,24 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team save(Team team) {
         LOG.debug("Запрос на сохранение команды: {}", team);
-        return teamRepository.save(team);
+
+        // Сначала сохраняем саму команду (без сотрудников)
+        Team savedTeam = teamRepository.save(team);
+
+        // Затем обновляем связи с сотрудниками
+        if (team.getEmployees() != null) {
+            Set<Employee> employees = (Set<Employee>) team.getEmployees();
+            for (Employee employee : employees) {
+                Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
+                if (employeeOpt.isPresent()) {
+                    Employee employeeToUpdate = employeeOpt.get();
+                    employeeToUpdate.setTeam(savedTeam);
+                    employeeRepository.save(employeeToUpdate);
+                }
+            }
+        }
+
+        return savedTeam;
     }
 
     /**
@@ -52,7 +78,21 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team update(Team team) {
         LOG.debug("Запрос на обновление команды: {}", team);
-        return teamRepository.save(team);
+        Team savedTeam = teamRepository.save(team);
+
+        // Затем обновляем связи с сотрудниками
+        if (team.getEmployees() != null) {
+            Set<Employee> employees = (Set<Employee>) team.getEmployees();
+            for (Employee employee : employees) {
+                Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
+                if (employeeOpt.isPresent()) {
+                    Employee employeeToUpdate = employeeOpt.get();
+                    employeeToUpdate.setTeam(savedTeam);
+                    employeeRepository.save(employeeToUpdate);
+                }
+            }
+        }
+        return savedTeam;
     }
 
     /**
@@ -70,6 +110,17 @@ public class TeamServiceImpl implements TeamService {
                 // Обновляем только название команды, если оно указано
                 if (team.getTeamName() != null) {
                     existingTeam.setTeamName(team.getTeamName());
+                }
+                if (team.getEmployees() != null) {
+                    Set<Employee> employees = (Set<Employee>) team.getEmployees();
+                    for (Employee employee : employees) {
+                        Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
+                        if (employeeOpt.isPresent()) {
+                            Employee employeeToUpdate = employeeOpt.get();
+                            employeeToUpdate.setTeam(existingTeam);
+                            employeeRepository.save(employeeToUpdate);
+                        }
+                    }
                 }
 
                 return existingTeam;
@@ -119,6 +170,16 @@ public class TeamServiceImpl implements TeamService {
      */
     @Override
     public void delete(Long id) {
+        // Затем обновляем связи с сотрудниками
+        Set<Employee> employees = (Set<Employee>) teamRepository.findById(id).get().getEmployees();
+        for (Employee employee : employees) {
+            Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
+            if (employeeOpt.isPresent()) {
+                Employee employeeToUpdate = employeeOpt.get();
+                employeeToUpdate.setTeam(null);
+                employeeRepository.save(employeeToUpdate);
+            }
+        }
         LOG.debug("Запрос на удаление команды с ID: {}", id);
         teamRepository.deleteById(id);
     }

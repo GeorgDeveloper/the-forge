@@ -8,6 +8,9 @@ public interface TeamAccessService {
     // Создать команду (автоматически дает доступ владельца)
     Team createTeam(Long userID, Team team);
 
+    // Удалить команду
+    void deleteTeam(Long teamID);
+
     // Предоставить доступ другому пользователю
     void grantAccess(Team team, User owner, User userToShareWith);
 

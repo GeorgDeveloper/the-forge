@@ -32,15 +32,27 @@ public class TeamAccessServiceImpl implements TeamAccessService {
     // Создать команду (автоматически дает доступ владельца)
     @Override
     public Team createTeam(Long userID, Team team) {
-        User owner = userRepository.findById(userID).get();
+        // Сначала сохраняем команду (без связей)
+        Team savedTeam = teamServiceImpl.save(team);
+
+        User owner = userRepository.findById(userID).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Создаем новый доступ (не устанавливаем ID вручную)
         UserTeamAccess access = new UserTeamAccess();
         access.setUser(owner);
-        access.setTeam(team);
+        access.setTeam(savedTeam);
         access.setAccessLevel(AccessLevel.OWNER);
 
-        team.getUserAccesses().add(access);
-        owner.getTeamAccesses().add(access);
-        return teamServiceImpl.save(team);
+        // Сохраняем доступ через репозиторий
+        accessRepository.save(access);
+
+        return savedTeam;
+    }
+
+    @Override
+    public void deleteTeam(Long teamID) {
+        accessRepository.deleteByTeam_Id(teamID);
+        teamServiceImpl.delete(teamID);
     }
 
     // Предоставить доступ другому пользователю
