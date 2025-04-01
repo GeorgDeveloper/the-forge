@@ -3,6 +3,7 @@ package ru.georgdeveloper.myapp.service;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import ru.georgdeveloper.myapp.domain.Team;
 
 /**
@@ -40,6 +41,15 @@ public interface TeamService {
      * @return список команд.
      */
     Page<Team> findAll(Pageable pageable);
+
+    /**
+     * Получить все команды.
+     *
+     * @param pageable параметры постраничного вывода.
+     * @return список команд.
+     */
+
+    Page<Team> findAllByIdUser(Pageable pageable, Long idUser);
 
     /**
      * Получить команду по идентификатору.

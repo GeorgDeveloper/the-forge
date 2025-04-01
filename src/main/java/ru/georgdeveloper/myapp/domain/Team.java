@@ -1,5 +1,6 @@
 package ru.georgdeveloper.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -36,6 +37,11 @@ public class Team implements Serializable {
     )
     private Set<Employee> employees = new HashSet<>();
 
+    // Связь с User через права доступа
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<UserTeamAccess> userAccesses = new HashSet<>();
+
     // Методы доступа с fluent-интерфейсом
     public Long getId() {
         return this.id;
@@ -61,6 +67,14 @@ public class Team implements Serializable {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public Set<UserTeamAccess> getUserAccesses() {
+        return userAccesses;
+    }
+
+    public void setUserAccesses(Set<UserTeamAccess> userAccesses) {
+        this.userAccesses = userAccesses;
     }
 
     /**

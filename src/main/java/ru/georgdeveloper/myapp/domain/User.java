@@ -92,6 +92,11 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @BatchSize(size = 20) // Оптимизация загрузки для пакетной обработки
     private Set<Authority> authorities = new HashSet<>();
 
+    // Связь с Teams через права доступа
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<UserTeamAccess> teamAccesses = new HashSet<>();
+
     // Методы доступа и модификации полей
 
     public Long getId() {
@@ -200,6 +205,14 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Set<UserTeamAccess> getTeamAccesses() {
+        return teamAccesses;
+    }
+
+    public void setTeamAccesses(Set<UserTeamAccess> teamAccesses) {
+        this.teamAccesses = teamAccesses;
     }
 
     /**

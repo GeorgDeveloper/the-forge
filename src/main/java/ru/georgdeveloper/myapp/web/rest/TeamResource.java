@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,8 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.georgdeveloper.myapp.domain.Team;
+import ru.georgdeveloper.myapp.domain.User;
 import ru.georgdeveloper.myapp.repository.TeamRepository;
+import ru.georgdeveloper.myapp.service.TeamAccessService;
 import ru.georgdeveloper.myapp.service.TeamService;
+import ru.georgdeveloper.myapp.service.UserService;
+import ru.georgdeveloper.myapp.service.dto.AdminUserDTO;
 import ru.georgdeveloper.myapp.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -42,6 +47,9 @@ public class TeamResource {
 
     private final TeamService teamService;
     private final TeamRepository teamRepository;
+    private final TeamAccessService teamAccessService;
+
+    private final UserService userService;
 
     /**
      * Конструктор контроллера.
@@ -49,9 +57,16 @@ public class TeamResource {
      * @param teamService сервис для работы с командами
      * @param teamRepository репозиторий команд
      */
-    public TeamResource(TeamService teamService, TeamRepository teamRepository) {
+    public TeamResource(
+        TeamService teamService,
+        TeamRepository teamRepository,
+        TeamAccessService teamAccessService,
+        UserService userService
+    ) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
+        this.teamAccessService = teamAccessService;
+        this.userService = userService;
     }
 
     /**
@@ -68,7 +83,8 @@ public class TeamResource {
         if (team.getId() != null) {
             throw new BadRequestAlertException("Новая команда не может иметь ID", ENTITY_NAME, "idexists");
         }
-        team = teamService.save(team);
+        //        team = teamService.save(team);
+        team = teamAccessService.createTeam(1L, team);
         return ResponseEntity.created(new URI("/api/teams/" + team.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, team.getId().toString()))
             .body(team);
@@ -145,10 +161,30 @@ public class TeamResource {
      * @param pageable параметры пагинации
      * @return ResponseEntity со списком команд и заголовками пагинации
      */
+    //    @GetMapping("")
+    //    public ResponseEntity<List<Team>> getAllTeams(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    //        LOG.debug("Запрос на получение списка команд");
+    //        Page<Team> page = teamService.findAll(pageable);
+    //        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    //        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    //    }
+
+    /**
+     * Получает список команд с пагинацией по ID пользователя.
+     * GET /api/teams
+     *
+     * @param pageable параметры пагинации
+     * @return ResponseEntity со списком команд и заголовками пагинации
+     */
     @GetMapping("")
-    public ResponseEntity<List<Team>> getAllTeams(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("Запрос на получение списка команд");
-        Page<Team> page = teamService.findAll(pageable);
+    public ResponseEntity<List<Team>> getAllTeamsByIdUser(
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+        Principal principal
+    ) {
+        Optional<User> user = userService.getUserWithAuthoritiesByLogin(principal.getName());
+
+        LOG.debug("Запрос на получение списка команд по Id пользователя User : {}", user.get().getId());
+        Page<Team> page = teamService.findAllByIdUser(pageable, user.get().getId());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

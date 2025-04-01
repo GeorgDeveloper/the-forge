@@ -90,6 +90,18 @@ public class TeamServiceImpl implements TeamService {
     }
 
     /**
+     * Получает список всех команд по ID пользователя с поддержкой пагинации
+     * @param pageable - параметры пагинации (номер страницы, размер страницы)
+     * @return страница с командами
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Team> findAllByIdUser(Pageable pageable, Long idUser) {
+        LOG.debug("Запрос на получение всех команд по ID user: {}", idUser);
+        return teamRepository.findAllByUserId(pageable, idUser);
+    }
+
+    /**
      * Находит команду по уникальному идентификатору
      * @param id - идентификатор команды
      * @return Optional с найденной командой или пустой
