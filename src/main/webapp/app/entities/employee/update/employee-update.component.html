@@ -153,6 +153,13 @@
               <option [ngValue]="teamOption">{{ teamOption.id }}</option>
             }
           </select>
+          @if (editForm.get('team')?.invalid && (editForm.get('team')?.dirty || editForm.get('team')?.touched)) {
+            <div>
+              @if (editForm.get('team')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
         </div>
       </div>
 

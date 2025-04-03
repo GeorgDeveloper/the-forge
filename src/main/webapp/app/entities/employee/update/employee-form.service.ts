@@ -62,7 +62,9 @@ export class EmployeeFormService {
       }),
       position: new FormControl(employeeRawValue.position),
       professions: new FormControl(employeeRawValue.professions ?? []),
-      team: new FormControl(employeeRawValue.team),
+      team: new FormControl(employeeRawValue.team, {
+        validators: [Validators.required], // Добавляем валидатор required
+      }),
     });
   }
 
