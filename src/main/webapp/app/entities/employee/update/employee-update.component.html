@@ -123,7 +123,7 @@
           >
             <option [ngValue]="null"></option>
             @for (positionOption of positionsSharedCollection; track $index) {
-              <option [ngValue]="positionOption">{{ positionOption.id }}</option>
+              <option [ngValue]="positionOption">{{ positionOption.positionName }}</option>
             }
           </select>
         </div>
@@ -140,7 +140,7 @@
             [compareWith]="compareProfession"
           >
             @for (professionOption of professionsSharedCollection; track $index) {
-              <option [ngValue]="professionOption">{{ professionOption.id }}</option>
+              <option [ngValue]="professionOption">{{ professionOption.professionName }}</option>
             }
           </select>
         </div>
@@ -150,7 +150,7 @@
           <select class="form-control" id="field_team" data-cy="team" name="team" formControlName="team" [compareWith]="compareTeam">
             <option [ngValue]="null"></option>
             @for (teamOption of teamsSharedCollection; track $index) {
-              <option [ngValue]="teamOption">{{ teamOption.id }}</option>
+              <option [ngValue]="teamOption">{{ teamOption.teamName }}</option>
             }
           </select>
           @if (editForm.get('team')?.invalid && (editForm.get('team')?.dirty || editForm.get('team')?.touched)) {

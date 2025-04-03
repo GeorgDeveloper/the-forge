@@ -37,9 +37,11 @@
           </dd>
           <dt><span jhiTranslate="theForgeApp.employee.position">Position</span></dt>
           <dd>
-            @if (employee()!.position) {
+            @if (positionName) {
               <div>
-                <a [routerLink]="['/position', employee()!.position?.id, 'view']">{{ employeeRef.position?.id }}</a>
+                <a [routerLink]="['/position', employee()?.position?.id, 'view']">
+                  {{ positionName }}
+                </a>
               </div>
             }
           </dd>
@@ -47,16 +49,18 @@
           <dd>
             @for (profession of employeeRef.professions; track $index; let last = $last) {
               <span>
-                <a [routerLink]="['/profession', profession.id, 'view']">{{ profession?.id }}</a
+                <a [routerLink]="['/profession', profession.id, 'view']">{{ profession?.professionName }}</a
                 >{{ last ? '' : ', ' }}
               </span>
             }
           </dd>
           <dt><span jhiTranslate="theForgeApp.employee.team">Team</span></dt>
           <dd>
-            @if (employee()!.team) {
+            @if (teamName) {
               <div>
-                <a [routerLink]="['/team', employee()!.team?.id, 'view']">{{ employeeRef.team?.id }}</a>
+                <a [routerLink]="['/team', employee()?.team?.id, 'view']">
+                  {{ teamName }}
+                </a>
               </div>
             }
           </dd>
