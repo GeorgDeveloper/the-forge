@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.georgdeveloper.myapp.domain.Employee;
 
@@ -17,6 +18,7 @@ import ru.georgdeveloper.myapp.domain.Employee;
 public interface EmployeeRepository extends EmployeeRepositoryWithBagRelationships, JpaRepository<Employee, Long> {
     /**
      * Находит одного сотрудника с eagerly загруженными связанными сущностями.
+     *
      * @param id идентификатор сотрудника
      * @return Optional с сотрудником и загруженными связями
      */
@@ -26,18 +28,54 @@ public interface EmployeeRepository extends EmployeeRepositoryWithBagRelationshi
 
     /**
      * Находит всех сотрудников с eagerly загруженными связанными сущностями.
+     *
      * @return список сотрудников с загруженными связями
      */
     default List<Employee> findAllWithEagerRelationships() {
         return this.fetchBagRelationships(this.findAll());
     }
 
+    //    /**
+    //     * Находит всех сотрудников с eagerly загруженными связанными сущностями (с пагинацией).
+    //     * @param pageable параметры пагинации
+    //     * @return страница сотрудников с загруженными связями
+    //     */
+    //    default Page<Employee> findAllWithEagerRelationships(Pageable pageable) {
+    //        return this.fetchBagRelationships(this.findAll(pageable));
+    //    }
+
+    /**
+     * Находит всех сотрудников из команд текущего пользователя (с пагинацией).
+     *
+     * @param pageable параметры пагинации
+     */
+    @Query("SELECT e FROM Employee e WHERE e.team IN (SELECT uta.team FROM UserTeamAccess uta WHERE uta.user.login = :currentUserLogin)")
+    Page<Employee> findAllByUserTeams(@Param("currentUserLogin") String currentUserLogin, Pageable pageable);
+
     /**
      * Находит всех сотрудников с eagerly загруженными связанными сущностями (с пагинацией).
-     * @param pageable параметры пагинации
-     * @return страница сотрудников с загруженными связями
+     *
+     * @param employeeIds параметры пагинации
      */
-    default Page<Employee> findAllWithEagerRelationships(Pageable pageable) {
-        return this.fetchBagRelationships(this.findAll(pageable));
-    }
+    @EntityGraph(attributePaths = { "team", "position" }) // Загружаем только то, что нужно
+    @Query("SELECT e FROM Employee e WHERE e.id IN :employeeIds")
+    List<Employee> findAllWithTeamAndPosition(@Param("employeeIds") List<Long> employeeIds);
+
+    /**
+     * Находит всех сотрудников из команд текущего пользователя
+     */
+    @Query("SELECT e FROM Employee e JOIN e.team t JOIN t.userAccesses ua WHERE ua.user.login = :currentUserLogin")
+    List<Employee> findAllForCurrentUser(@Param("currentUserLogin") String currentUserLogin);
+
+    /**
+     * Находит всех сотрудников из команд текущего пользователя (с пагинацией)
+     */
+    @Query("SELECT e FROM Employee e JOIN e.team t JOIN t.userAccesses ua WHERE ua.user.login = :currentUserLogin")
+    Page<Employee> findAllForCurrentUser(@Param("currentUserLogin") String currentUserLogin, Pageable pageable);
+
+    /**
+     * Находит одного сотрудника с проверкой доступа текущего пользователя
+     */
+    @Query("SELECT e FROM Employee e JOIN e.team t JOIN t.userAccesses ua WHERE e.id = :employeeId AND ua.user.login = :currentUserLogin")
+    Optional<Employee> findOneForCurrentUser(@Param("employeeId") Long employeeId, @Param("currentUserLogin") String currentUserLogin);
 }

@@ -1,8 +1,12 @@
 package ru.georgdeveloper.myapp.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import ru.georgdeveloper.myapp.domain.Employee;
 
 /**
@@ -47,7 +51,8 @@ public interface EmployeeService {
      * @param pageable информация о пагинации.
      * @return список сущностей.
      */
-    Page<Employee> findAllWithEagerRelationships(Pageable pageable);
+    @Transactional(readOnly = true)
+    Page<Employee> findAllWithEagerRelationships(@Param("currentUserLogin") String currentUserLogin, Pageable pageable);
 
     /**
      * Получить сотрудника по "id".
@@ -63,4 +68,19 @@ public interface EmployeeService {
      * @param id идентификатор сущности.
      */
     void delete(Long id);
+
+    /**
+     * Находит всех сотрудников из команд текущего пользователя
+     */
+    List<Employee> findAllForCurrentUser(@Param("currentUserLogin") String currentUserLogin);
+
+    /**
+     * Находит всех сотрудников из команд текущего пользователя (с пагинацией)
+     */
+    Page<Employee> findAllForCurrentUser(@Param("currentUserLogin") String currentUserLogin, Pageable pageable);
+
+    /**
+     * Находит одного сотрудника с проверкой доступа текущего пользователя
+     */
+    Optional<Employee> findOneForCurrentUser(@Param("employeeId") Long employeeId, @Param("currentUserLogin") String currentUserLogin);
 }

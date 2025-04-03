@@ -267,22 +267,23 @@ class EmployeeResourceIT {
             .andExpect(jsonPath("$.[*].hireDate").value(hasItem(DEFAULT_HIRE_DATE.toString())));
     }
 
-    @SuppressWarnings({ "unchecked" })
-    void getAllEmployeesWithEagerRelationshipsIsEnabled() throws Exception {
-        when(employeeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restEmployeeMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(employeeServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllEmployeesWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(employeeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restEmployeeMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
-        verify(employeeRepositoryMock, times(1)).findAll(any(Pageable.class));
-    }
+    //
+    //    @SuppressWarnings({ "unchecked" })
+    //    void getAllEmployeesWithEagerRelationshipsIsEnabled() throws Exception {
+    //        when(employeeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+    //
+    //        restEmployeeMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+    //
+    //        verify(employeeServiceMock, times(1)).findAllWithEagerRelationships(any());
+    //    }
+    //
+    //    @SuppressWarnings({ "unchecked" })
+    //    void getAllEmployeesWithEagerRelationshipsIsNotEnabled() throws Exception {
+    //        when(employeeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+    //
+    //        restEmployeeMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+    //        verify(employeeRepositoryMock, times(1)).findAll(any(Pageable.class));
+    //    }
 
     @Test
     @Transactional

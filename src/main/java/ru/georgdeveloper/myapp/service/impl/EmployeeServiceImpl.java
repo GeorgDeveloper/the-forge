@@ -1,9 +1,12 @@
 package ru.georgdeveloper.myapp.service.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,8 +107,19 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param pageable параметры пагинации
      * @return страница с сотрудниками и загруженными связями
      */
-    public Page<Employee> findAllWithEagerRelationships(Pageable pageable) {
-        return employeeRepository.findAllWithEagerRelationships(pageable);
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Employee> findAllWithEagerRelationships(String currentUserLogin, Pageable pageable) {
+        // Сначала получаем страницу ID с пагинацией
+        Page<Employee> employeePage = employeeRepository.findAllByUserTeams(currentUserLogin, pageable);
+
+        // Затем загружаем связанные сущности для этих ID
+        List<Long> employeeIds = employeePage.getContent().stream().map(Employee::getId).collect(Collectors.toList());
+
+        List<Employee> employeesWithRelationships = employeeRepository.findAllWithTeamAndPosition(employeeIds);
+
+        // Собираем результат
+        return new PageImpl<>(employeesWithRelationships, pageable, employeePage.getTotalElements());
     }
 
     /**
@@ -128,5 +142,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void delete(Long id) {
         LOG.debug("Запрос на удаление сотрудника с ID: {}", id);
         employeeRepository.deleteById(id);
+    }
+
+    /**
+     * Находит всех сотрудников из команд текущего пользователя
+     */
+    @Override
+    public List<Employee> findAllForCurrentUser(String currentUserLogin) {
+        return employeeRepository.findAllForCurrentUser(currentUserLogin);
+    }
+
+    /**
+     * Находит всех сотрудников из команд текущего пользователя (с пагинацией)
+     */
+    @Override
+    public Page<Employee> findAllForCurrentUser(String currentUserLogin, Pageable pageable) {
+        return employeeRepository.findAllForCurrentUser(currentUserLogin, pageable);
+    }
+
+    /**
+     * Находит одного сотрудника с проверкой доступа текущего пользователя
+     */
+    @Override
+    public Optional<Employee> findOneForCurrentUser(Long employeeId, String currentUserLogin) {
+        return employeeRepository.findOneForCurrentUser(employeeId, currentUserLogin);
     }
 }

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,8 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.georgdeveloper.myapp.domain.Employee;
+import ru.georgdeveloper.myapp.domain.User;
 import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.service.EmployeeService;
+import ru.georgdeveloper.myapp.service.UserService;
 import ru.georgdeveloper.myapp.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -41,15 +44,18 @@ public class EmployeeResource {
     private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
 
+    private final UserService userService;
+
     /**
      * Конструктор контроллера.
      *
      * @param employeeService сервис для работы с сотрудниками
      * @param employeeRepository репозиторий сотрудников
      */
-    public EmployeeResource(EmployeeService employeeService, EmployeeRepository employeeRepository) {
+    public EmployeeResource(EmployeeService employeeService, EmployeeRepository employeeRepository, UserService userService) {
         this.employeeService = employeeService;
         this.employeeRepository = employeeRepository;
+        this.userService = userService;
     }
 
     /**
@@ -149,12 +155,13 @@ public class EmployeeResource {
     @GetMapping("")
     public ResponseEntity<List<Employee>> getAllEmployees(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+        Principal principal
     ) {
         LOG.debug("REST запрос на получение страницы сотрудников");
         Page<Employee> page;
         if (eagerload) {
-            page = employeeService.findAllWithEagerRelationships(pageable);
+            page = employeeService.findAllWithEagerRelationships(principal.getName(), pageable);
         } else {
             page = employeeService.findAll(pageable);
         }

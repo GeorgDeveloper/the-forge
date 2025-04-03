@@ -3,6 +3,10 @@ package ru.georgdeveloper.myapp.repository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.georgdeveloper.myapp.domain.Employee;
 
 /**
@@ -25,12 +29,12 @@ public interface EmployeeRepositoryWithBagRelationships {
      * @return тот же список Employee, но с загруженными связанными сущностями
      */
     List<Employee> fetchBagRelationships(List<Employee> employees);
-
     /**
      * Загружает связанные сущности (bag relationships) для страницы (Page) Employee.
      *
-     * @param employees страница Employee, для которых нужно загрузить связи
+     * @param pageable страница Employee, для которых нужно загрузить связи
      * @return та же страница Employee, но с загруженными связанными сущностями
      */
-    Page<Employee> fetchBagRelationships(Page<Employee> employees);
+    //    Page<Employee> fetchBagRelationships(Page<Employee> employees);
+
 }
