@@ -1,19 +1,37 @@
+// Импорт интерфейса пользователя
 import { IUser } from './user.model';
 
+/**
+ * Тестовый объект пользователя с обязательными полями.
+ * Соответствует минимальным требованиям интерфейса IUser.
+ * Используется в тестах, где нужен только минимальный валидный пользователь.
+ */
 export const sampleWithRequiredData: IUser = {
-  id: 24814,
-  login: 'nuGud',
+  id: 24814, // Уникальный идентификатор
+  login: 'nuGud', // Логин пользователя
 };
 
+/**
+ * Тестовый объект пользователя с частично заполненными полями.
+ * Может использоваться для тестирования случаев неполных данных.
+ */
 export const sampleWithPartialData: IUser = {
-  id: 966,
-  login: 'a',
+  id: 966, // Другой ID
+  login: 'a', // Короткий логин (пограничный случай)
 };
 
+/**
+ * Тестовый объект пользователя с полным набором данных.
+ * В текущей реализации IUser не имеет дополнительных полей,
+ * поэтому совпадает с sampleWithRequiredData.
+ * Может быть расширен при добавлении новых полей в интерфейс.
+ */
 export const sampleWithFullData: IUser = {
   id: 5440,
-  login: 'h',
+  login: 'h', // Еще один вариант логина
 };
-Object.freeze(sampleWithRequiredData);
-Object.freeze(sampleWithPartialData);
-Object.freeze(sampleWithFullData);
+
+// Замораживание объектов для предотвращения изменений
+Object.freeze(sampleWithRequiredData); // Делает объект неизменяемым
+Object.freeze(sampleWithPartialData); // Защита от случайных изменений
+Object.freeze(sampleWithFullData); // Гарантирует постоянство тестовых данных
