@@ -8,37 +8,49 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'jhi-team-detail',
   templateUrl: './team-detail.component.html',
-  imports: [SharedModule, RouterModule],
+  imports: [SharedModule, RouterModule], // Импортируем необходимые модули
 })
 export class TeamDetailComponent {
+  // Инжектируем сервисы через inject()
   private teamService = inject(TeamService);
   private route = inject(ActivatedRoute);
 
-  // Используем signal() вместо input()
-  team = signal<ITeam | null>(null);
-  isLoading = false;
+  // Используем сигналы для реактивного состояния
+  team = signal<ITeam | null>(null); // Сигнал для хранения данных команды
+  isLoading = false; // Флаг загрузки данных
 
   constructor() {
+    // При создании компонента загружаем данные
     this.loadTeamWithEmployees();
   }
 
+  /**
+   * Загружает данные команды вместе с сотрудниками
+   */
   loadTeamWithEmployees(): void {
+    // Получаем ID команды из параметров маршрута
     const id = this.route.snapshot.paramMap.get('id');
+
     if (id) {
-      this.isLoading = true;
+      this.isLoading = true; // Устанавливаем флаг загрузки
+
+      // Вызываем сервис для получения данных
       this.teamService.findWithEmployees(+id).subscribe({
         next: response => {
-          this.team.set(response.body); // Теперь set доступен
-          this.isLoading = false;
+          this.team.set(response.body); // Обновляем сигнал с полученными данными
+          this.isLoading = false; // Сбрасываем флаг загрузки
         },
         error: () => {
-          this.isLoading = false;
+          this.isLoading = false; // В случае ошибки также сбрасываем флаг
         },
       });
     }
   }
 
+  /**
+   * Возвращает на предыдущую страницу
+   */
   previousState(): void {
-    window.history.back();
+    window.history.back(); // Используем History API для навигации назад
   }
 }

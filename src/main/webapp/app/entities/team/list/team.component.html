@@ -1,13 +1,18 @@
 <div>
+  <!-- Заголовок страницы -->
   <h2 id="page-heading" data-cy="TeamHeading">
+    <!-- Локализованный заголовок -->
     <span jhiTranslate="theForgeApp.team.home.title">Teams</span>
 
+    <!-- Группа кнопок справа -->
     <div class="d-flex justify-content-end">
+      <!-- Кнопка обновления списка -->
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
         <span jhiTranslate="theForgeApp.team.home.refreshListLabel">Обновить список</span>
       </button>
 
+      <!-- Кнопка создания новой команды -->
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
@@ -20,55 +25,67 @@
     </div>
   </h2>
 
+  <!-- Компоненты для отображения ошибок и уведомлений -->
   <jhi-alert-error></jhi-alert-error>
-
   <jhi-alert></jhi-alert>
 
+  <!-- Условный рендеринг: если нет команд -->
   @if (teams().length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span jhiTranslate="theForgeApp.team.home.notFound">Teams не найдено</span>
     </div>
   } @else {
+    <!-- Таблица с командами -->
     <div class="table-responsive table-entities" id="entities">
       <table class="table table-striped" aria-describedby="page-heading">
         <thead>
+          <!-- Заголовки таблицы с возможностью сортировки -->
           <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <!-- Колонка ID с сортировкой -->
             <th scope="col" jhiSortBy="id">
               <div class="d-flex">
                 <span jhiTranslate="global.field.id">ID</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <!-- Колонка названия команды с сортировкой -->
             <th scope="col" jhiSortBy="teamName">
               <div class="d-flex">
                 <span jhiTranslate="theForgeApp.team.teamName">Team Name</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <!-- Колонка для действий -->
             <th scope="col"></th>
           </tr>
         </thead>
+        <!-- Тело таблицы с бесконечным скроллом -->
         <tbody infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0">
+          <!-- Цикл по командам -->
           @for (team of teams(); track trackId(team)) {
             <tr data-cy="entityTable">
+              <!-- Ячейка с ID и ссылкой на просмотр -->
               <td>
                 <a [routerLink]="['/team', team.id, 'view']">{{ team.id }}</a>
               </td>
+              <!-- Ячейка с названием команды -->
               <td>{{ team.teamName }}</td>
+              <!-- Ячейка с кнопками действий -->
               <td class="text-end">
                 <div class="btn-group">
+                  <!-- Кнопка просмотра -->
                   <a [routerLink]="['/team', team.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                     <fa-icon icon="eye"></fa-icon>
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Просмотр</span>
                   </a>
 
+                  <!-- Кнопка редактирования -->
                   <a [routerLink]="['/team', team.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                     <fa-icon icon="pencil-alt"></fa-icon>
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Изменить</span>
                   </a>
 
+                  <!-- Кнопка удаления -->
                   <button type="submit" (click)="delete(team)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                     <fa-icon icon="times"></fa-icon>
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Удалить</span>

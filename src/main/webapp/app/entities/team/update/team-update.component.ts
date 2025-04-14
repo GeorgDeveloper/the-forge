@@ -10,170 +10,107 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ITeam } from '../team.model';
 import { TeamService } from '../service/team.service';
 import { TeamFormGroup, TeamFormService } from './team-form.service';
-import { IEmployee } from 'app/entities/employee/employee.model'; // Import IEmployee
-import { EmployeeService } from 'app/entities/employee/service/employee.service'; // Import EmployeeService
+import { IEmployee } from 'app/entities/employee/employee.model'; // Импорт интерфейса IEmployee для работы с данными о сотрудниках
+import { EmployeeService } from 'app/entities/employee/service/employee.service'; // Импорт сервиса EmployeeService для получения данных о сотрудниках
 
 @Component({
-  selector: 'jhi-team-update',
-  templateUrl: './team-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  selector: 'jhi-team-update', // Селектор компонента, используется для вставки компонента в HTML
+  templateUrl: './team-update.component.html', // Путь к HTML-шаблону компонента
+  imports: [SharedModule, FormsModule, ReactiveFormsModule], // Импорт необходимых модулей Angular
 })
 export class TeamUpdateComponent implements OnInit {
-  isSaving = false;
-  team: ITeam | null = null;
-  employees: IEmployee[] = []; // List of all available employees
+  isSaving = false; // Флаг, указывающий, выполняется ли сохранение данных
+  team: ITeam | null = null; // Объект команды, который мы редактируем или создаем, может быть null
+  employees: IEmployee[] = []; // Массив всех доступных сотрудников для выбора
 
-  protected teamService = inject(TeamService);
-  protected teamFormService = inject(TeamFormService);
-  protected activatedRoute = inject(ActivatedRoute);
-  protected employeeService = inject(EmployeeService); // Inject EmployeeService
+  protected teamService = inject(TeamService); // Внедрение сервиса TeamService для работы с данными команд
+  protected teamFormService = inject(TeamFormService); // Внедрение сервиса TeamFormService для работы с формой команды
+  protected activatedRoute = inject(ActivatedRoute); // Внедрение сервиса ActivatedRoute для получения данных из URL
+  protected employeeService = inject(EmployeeService); // Внедрение сервиса EmployeeService для работы с данными сотрудников
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  editForm: TeamFormGroup = this.teamFormService.createTeamFormGroup();
+  editForm: TeamFormGroup = this.teamFormService.createTeamFormGroup(); // Создание формы для редактирования команды с помощью TeamFormService
 
   ngOnInit(): void {
-    this.loadAllEmployees(); // Load all employees
+    this.loadAllEmployees(); // Вызов метода для загрузки всех сотрудников при инициализации компонента
 
     this.activatedRoute.data.subscribe(({ team }) => {
+      // Подписка на данные, переданные через маршрут (например, данные команды для редактирования)
       this.team = team;
       if (team) {
-        this.updateForm(team);
+        this.updateForm(team); // Если команда существует, заполняем форму данными команды
       }
     });
   }
 
   loadAllEmployees(): void {
+    // Метод для загрузки всех сотрудников из сервиса EmployeeService
     this.employeeService.query().subscribe({
       next: (res: HttpResponse<IEmployee[]>) => {
-        this.employees = res.body ?? [];
+        // При успешном получении данных, сохраняем массив сотрудников в свойство employees
+        this.employees = res.body ?? []; // Используем оператор ?? для установки пустого массива, если res.body равен null или undefined
       },
-      error: () => console.error('Error loading employees'),
+      error: () => console.error('Error loading employees'), // Обработка ошибки при загрузке сотрудников
     });
   }
 
   previousState(): void {
+    // Метод для возврата к предыдущему состоянию (например, к списку команд)
     window.history.back();
   }
 
   save(): void {
-    this.isSaving = true;
-    const team = this.teamFormService.getTeam(this.editForm);
+    // Метод для сохранения данных команды
+    this.isSaving = true; // Устанавливаем флаг сохранения в true
+    const team = this.teamFormService.getTeam(this.editForm); // Получаем данные команды из формы
     if (team.id !== null) {
-      this.subscribeToSaveResponse(this.teamService.update(team));
+      // Если у команды есть id, значит, это редактирование существующей команды
+      this.subscribeToSaveResponse(this.teamService.update(team)); // Вызываем метод для обновления команды
     } else {
-      this.subscribeToSaveResponse(this.teamService.create(team));
+      // Если у команды нет id, значит, это создание новой команды
+      this.subscribeToSaveResponse(this.teamService.create(team)); // Вызываем метод для создания команды
     }
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITeam>>): void {
+    // Метод для обработки ответа от сервиса при сохранении команды
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-      next: () => this.onSaveSuccess(),
-      error: () => this.onSaveError(),
+      // Используем оператор finalize для выполнения действий после завершения запроса (независимо от успеха или ошибки)
+      next: () => this.onSaveSuccess(), // Обработка успешного сохранения
+      error: () => this.onSaveError(), // Обработка ошибки при сохранении
     });
   }
 
   protected onSaveSuccess(): void {
-    this.previousState();
+    // Метод для обработки успешного сохранения команды
+    this.previousState(); // Возвращаемся к предыдущему состоянию
   }
 
   protected onSaveError(): void {
-    // Api for inheritance.
+    // Метод для обработки ошибки при сохранении команды (можно добавить логику обработки ошибок)
   }
 
   protected onSaveFinalize(): void {
+    // Метод для выполнения действий после завершения запроса на сохранение (например, сброс флага isSaving)
     this.isSaving = false;
   }
 
   protected updateForm(team: ITeam): void {
+    // Метод для заполнения формы данными команды
     this.team = team;
-    this.teamFormService.resetForm(this.editForm, team);
+    this.teamFormService.resetForm(this.editForm, team); // Сброс и заполнение формы данными команды
 
     // Устанавливаем выбранных сотрудников
     if (team.employees) {
       this.editForm.patchValue({
-        employees: team.employees,
+        employees: team.employees, // Установка выбранных сотрудников в форму
       });
     }
   }
 
   isEmployeeSelected(employee: IEmployee): boolean {
-    if (!this.team || !this.team.employees) return false;
-    return this.team.employees.some(e => e.id === employee.id);
+    // Метод для проверки, выбран ли сотрудник в команде
+    if (!this.team || !this.team.employees) return false; // Если команда или сотрудники не существуют, возвращаем false
+    return this.team.employees.some(e => e.id === employee.id); // Проверяем, есть ли сотрудник в списке сотрудников команды
   }
 }
-// import { Component, OnInit, inject } from '@angular/core';
-// import { HttpResponse } from '@angular/common/http';
-// import { ActivatedRoute } from '@angular/router';
-// import { Observable } from 'rxjs';
-// import { finalize } from 'rxjs/operators';
-//
-// import SharedModule from 'app/shared/shared.module';
-// import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-//
-// import { ITeam } from '../team.model';
-// import { TeamService } from '../service/team.service';
-// import { TeamFormGroup, TeamFormService } from './team-form.service';
-//
-// @Component({
-//   selector: 'jhi-team-update',
-//   templateUrl: './team-update.component.html',
-//   imports: [SharedModule, FormsModule, ReactiveFormsModule],
-// })
-// export class TeamUpdateComponent implements OnInit {
-//   isSaving = false;
-//   team: ITeam | null = null;
-//
-//   protected teamService = inject(TeamService);
-//   protected teamFormService = inject(TeamFormService);
-//   protected activatedRoute = inject(ActivatedRoute);
-//
-//   // eslint-disable-next-line @typescript-eslint/member-ordering
-//   editForm: TeamFormGroup = this.teamFormService.createTeamFormGroup();
-//
-//   ngOnInit(): void {
-//     this.activatedRoute.data.subscribe(({ team }) => {
-//       this.team = team;
-//       if (team) {
-//         this.updateForm(team);
-//       }
-//     });
-//   }
-//
-//   previousState(): void {
-//     window.history.back();
-//   }
-//
-//   save(): void {
-//     this.isSaving = true;
-//     const team = this.teamFormService.getTeam(this.editForm);
-//     if (team.id !== null) {
-//       this.subscribeToSaveResponse(this.teamService.update(team));
-//     } else {
-//       this.subscribeToSaveResponse(this.teamService.create(team));
-//     }
-//   }
-//
-//   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITeam>>): void {
-//     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-//       next: () => this.onSaveSuccess(),
-//       error: () => this.onSaveError(),
-//     });
-//   }
-//
-//   protected onSaveSuccess(): void {
-//     this.previousState();
-//   }
-//
-//   protected onSaveError(): void {
-//     // Api for inheritance.
-//   }
-//
-//   protected onSaveFinalize(): void {
-//     this.isSaving = false;
-//   }
-//
-//   protected updateForm(team: ITeam): void {
-//     this.team = team;
-//     this.teamFormService.resetForm(this.editForm, team);
-//   }
-// }

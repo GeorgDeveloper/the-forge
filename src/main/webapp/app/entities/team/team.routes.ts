@@ -1,42 +1,43 @@
 import { Routes } from '@angular/router';
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { ASC } from 'app/config/navigation.constants';
-import TeamResolve from './route/team-routing-resolve.service';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'; // Сервис для контроля доступа к маршрутам на основе авторизации пользователя
+import { ASC } from 'app/config/navigation.constants'; // Константа для определения порядка сортировки (по возрастанию)
+import TeamResolve from './route/team-routing-resolve.service'; // Сервис для предварительной загрузки данных команды перед отображением компонента
 
+// Определение маршрутов для компонента "Команда"
 const teamRoute: Routes = [
   {
-    path: '',
-    loadComponent: () => import('./list/team.component').then(m => m.TeamComponent),
+    path: '', // Путь по умолчанию (корневой) для компонента "Команда"
+    loadComponent: () => import('./list/team.component').then(m => m.TeamComponent), // Ленивая загрузка компонента списка команд
     data: {
-      defaultSort: `id,${ASC}`,
+      defaultSort: `id,${ASC}`, // Параметры данных, передаваемые в компонент, в данном случае - сортировка по id по возрастанию
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [UserRouteAccessService], // Защита маршрута, доступ только для авторизованных пользователей
   },
   {
-    path: ':id/view',
-    loadComponent: () => import('./detail/team-detail.component').then(m => m.TeamDetailComponent),
+    path: ':id/view', // Путь для просмотра деталей команды с определенным id
+    loadComponent: () => import('./detail/team-detail.component').then(m => m.TeamDetailComponent), // Ленивая загрузка компонента деталей команды
     resolve: {
-      team: TeamResolve,
+      team: TeamResolve, // Предварительная загрузка данных команды с помощью сервиса TeamResolve
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [UserRouteAccessService], // Защита маршрута, доступ только для авторизованных пользователей
   },
   {
-    path: 'new',
-    loadComponent: () => import('./update/team-update.component').then(m => m.TeamUpdateComponent),
+    path: 'new', // Путь для создания новой команды
+    loadComponent: () => import('./update/team-update.component').then(m => m.TeamUpdateComponent), // Ленивая загрузка компонента обновления/создания команды
     resolve: {
-      team: TeamResolve,
+      team: TeamResolve, // Предварительная загрузка данных команды с помощью сервиса TeamResolve (может использоваться для инициализации формы)
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [UserRouteAccessService], // Защита маршрута, доступ только для авторизованных пользователей
   },
   {
-    path: ':id/edit',
-    loadComponent: () => import('./update/team-update.component').then(m => m.TeamUpdateComponent),
+    path: ':id/edit', // Путь для редактирования команды с определенным id
+    loadComponent: () => import('./update/team-update.component').then(m => m.TeamUpdateComponent), // Ленивая загрузка компонента обновления/создания команды
     resolve: {
-      team: TeamResolve,
+      team: TeamResolve, // Предварительная загрузка данных команды с помощью сервиса TeamResolve
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [UserRouteAccessService], // Защита маршрута, доступ только для авторизованных пользователей
   },
 ];
 
-export default teamRoute;
+export default teamRoute; // Экспорт массива маршрутов для использования в Angular Router

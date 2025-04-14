@@ -22,17 +22,18 @@ import { ITeam } from '../team.model';
   imports: [RouterModule, FormsModule, SharedModule, SortDirective, SortByDirective, InfiniteScrollDirective],
 })
 export class TeamComponent implements OnInit {
-  subscription: Subscription | null = null;
-  teams = signal<ITeam[]>([]);
-  isLoading = false;
+  subscription: Subscription | null = null; // Подписка на Observable для управления жизненным циклом
+  teams = signal<ITeam[]>([]); // Сигнал для хранения списка команд
+  isLoading = false; // Флаг загрузки данных
 
-  sortState = sortStateSignal({});
+  sortState = sortStateSignal({}); // Сигнал для хранения состояния сортировки
 
-  itemsPerPage = ITEMS_PER_PAGE;
-  links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
-  hasMorePage = computed(() => !!this.links().next);
-  isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
+  itemsPerPage = ITEMS_PER_PAGE; // Количество элементов на странице
+  links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({}); // Сигнал для хранения ссылок пагинации
+  hasMorePage = computed(() => !!this.links().next); // Вычисляемое свойство - есть ли еще страницы
+  isFirstFetch = computed(() => Object.keys(this.links()).length === 0); // Вычисляемое свойство - первая ли загрузка данных
 
+  // Инжектируемые сервисы
   public readonly router = inject(Router);
   protected readonly teamService = inject(TeamService);
   protected readonly activatedRoute = inject(ActivatedRoute);
@@ -41,38 +42,49 @@ export class TeamComponent implements OnInit {
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
 
+  // Функция для отслеживания элементов по id
   trackId = (item: ITeam): number => this.teamService.getTeamIdentifier(item);
 
   ngOnInit(): void {
+    // Подписываемся на изменения параметров маршрута и данных
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
       .pipe(
+        // Обновляем атрибуты компонента на основе параметров маршрута
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+        // Сбрасываем состояние перед загрузкой новых данных
         tap(() => this.reset()),
+        // Загружаем данные
         tap(() => this.load()),
       )
       .subscribe();
   }
 
+  // Сброс состояния компонента
   reset(): void {
     this.teams.set([]);
   }
 
+  // Загрузка следующей страницы данных
   loadNextPage(): void {
     this.load();
   }
 
+  // Открытие диалога удаления команды
   delete(team: ITeam): void {
     const modalRef = this.modalService.open(TeamDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.team = team;
-    // unsubscribe not needed because closed completes on modal close
+    // Подписываемся на событие закрытия модального окна
     modalRef.closed
       .pipe(
+        // Фильтруем только успешное удаление
         filter(reason => reason === ITEM_DELETED_EVENT),
+        // Перезагружаем данные после удаления
         tap(() => this.load()),
       )
       .subscribe();
   }
 
+  // Основной метод загрузки данных
   load(): void {
     this.queryBackend().subscribe({
       next: (res: EntityArrayResponseType) => {
@@ -81,22 +93,26 @@ export class TeamComponent implements OnInit {
     });
   }
 
+  // Обработка изменения сортировки
   navigateToWithComponentValues(event: SortState): void {
     this.handleNavigation(event);
   }
 
+  // Заполнение атрибутов компонента из параметров маршрута
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
     this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
   }
 
+  // Обработка успешного ответа от сервера
   protected onResponseSuccess(response: EntityArrayResponseType): void {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.teams.set(dataFromBody);
   }
 
+  // Обработка данных из тела ответа
   protected fillComponentAttributesFromResponseBody(data: ITeam[] | null): ITeam[] {
-    // If there is previous link, data is a infinite scroll pagination content.
+    // Если есть предыдущая страница, добавляем новые данные к существующим (бесконечный скролл)
     if (this.links().prev) {
       const teamsNew = this.teams();
       if (data) {
@@ -111,6 +127,7 @@ export class TeamComponent implements OnInit {
     return data ?? [];
   }
 
+  // Обработка заголовков ответа (пагинация)
   protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
     const linkHeader = headers.get('link');
     if (linkHeader) {
@@ -120,27 +137,32 @@ export class TeamComponent implements OnInit {
     }
   }
 
+  // Запрос данных с сервера
   protected queryBackend(): Observable<EntityArrayResponseType> {
     this.isLoading = true;
     const queryObject: any = {
       size: this.itemsPerPage,
     };
+    // Если есть следующая страница, используем ее параметры
     if (this.hasMorePage()) {
       Object.assign(queryObject, this.links().next);
     } else if (this.isFirstFetch()) {
+      // Для первой загрузки добавляем параметры сортировки
       Object.assign(queryObject, { sort: this.sortService.buildSortParam(this.sortState()) });
     }
 
     return this.teamService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
+  // Обработка навигации при изменении сортировки
   protected handleNavigation(sortState: SortState): void {
-    this.links.set({});
+    this.links.set({}); // Сбрасываем ссылки пагинации
 
     const queryParamsObj = {
       sort: this.sortService.buildSortParam(sortState),
     };
 
+    // Выполняем навигацию внутри зоны Angular
     this.ngZone.run(() => {
       this.router.navigate(['./'], {
         relativeTo: this.activatedRoute,
