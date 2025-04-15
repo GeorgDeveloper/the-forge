@@ -4,39 +4,52 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { ITeam } from '../team.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../team.test-samples';
-
 import { TeamService } from './team.service';
 
+// Тестовые данные
 const requireRestSample: ITeam = {
-  ...sampleWithRequiredData,
+  ...sampleWithRequiredData, // Используем sample с обязательными полями
 };
 
 describe('Team Service', () => {
   let service: TeamService;
-  let httpMock: HttpTestingController;
-  let expectedResult: ITeam | ITeam[] | boolean | null;
+  let httpMock: HttpTestingController; // Мок HTTP-клиента
+  let expectedResult: ITeam | ITeam[] | boolean | null; // Переменная для проверки результатов
 
   beforeEach(() => {
+    // Настройка тестового модуля
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(), // Реальный HttpClient
+        provideHttpClientTesting(), // Мок для HttpClient
+      ],
     });
+
+    // Инициализация переменных
     expectedResult = null;
     service = TestBed.inject(TeamService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
+  // Группа тестов методов сервиса
   describe('Service methods', () => {
+    // Тест метода find()
     it('should find an element', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
+      // Вызываем метод и подписываемся на результат
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
+      // Ожидаем HTTP-запрос и мокируем ответ
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
+
+      // Проверяем результат
       expect(expectedResult).toMatchObject(expected);
     });
 
+    // Тест метода create()
     it('should create a Team', () => {
       const team = { ...sampleWithNewData };
       const returnedFromService = { ...requireRestSample };
@@ -49,6 +62,7 @@ describe('Team Service', () => {
       expect(expectedResult).toMatchObject(expected);
     });
 
+    // Тест метода update()
     it('should update a Team', () => {
       const team = { ...sampleWithRequiredData };
       const returnedFromService = { ...requireRestSample };
@@ -61,6 +75,7 @@ describe('Team Service', () => {
       expect(expectedResult).toMatchObject(expected);
     });
 
+    // Тест метода partialUpdate()
     it('should partial update a Team', () => {
       const patchObject = { ...sampleWithPartialData };
       const returnedFromService = { ...requireRestSample };
@@ -73,29 +88,31 @@ describe('Team Service', () => {
       expect(expectedResult).toMatchObject(expected);
     });
 
+    // Тест метода query()
     it('should return a list of Team', () => {
       const returnedFromService = { ...requireRestSample };
-
       const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
-      httpMock.verify();
+      httpMock.verify(); // Проверяем что нет незавершенных запросов
       expect(expectedResult).toMatchObject([expected]);
     });
 
+    // Тест метода delete()
     it('should delete a Team', () => {
       const expected = true;
 
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
-      req.flush({ status: 200 });
+      req.flush({ status: 200 }); // Мокируем успешный ответ
       expect(expectedResult).toBe(expected);
     });
 
+    // Группа тестов для addTeamToCollectionIfMissing()
     describe('addTeamToCollectionIfMissing', () => {
       it('should add a Team to an empty array', () => {
         const team: ITeam = sampleWithRequiredData;
@@ -106,12 +123,7 @@ describe('Team Service', () => {
 
       it('should not add a Team to an array that contains it', () => {
         const team: ITeam = sampleWithRequiredData;
-        const teamCollection: ITeam[] = [
-          {
-            ...team,
-          },
-          sampleWithPartialData,
-        ];
+        const teamCollection: ITeam[] = [{ ...team }, sampleWithPartialData];
         expectedResult = service.addTeamToCollectionIfMissing(teamCollection, team);
         expect(expectedResult).toHaveLength(2);
       });
@@ -154,51 +166,35 @@ describe('Team Service', () => {
       });
     });
 
+    // Группа тестов для compareTeam()
     describe('compareTeam', () => {
       it('Should return true if both entities are null', () => {
-        const entity1 = null;
-        const entity2 = null;
-
-        const compareResult = service.compareTeam(entity1, entity2);
-
-        expect(compareResult).toEqual(true);
+        expect(service.compareTeam(null, null)).toEqual(true);
       });
 
       it('Should return false if one entity is null', () => {
         const entity1 = { id: 1226 };
-        const entity2 = null;
-
-        const compareResult1 = service.compareTeam(entity1, entity2);
-        const compareResult2 = service.compareTeam(entity2, entity1);
-
-        expect(compareResult1).toEqual(false);
-        expect(compareResult2).toEqual(false);
+        expect(service.compareTeam(entity1, null)).toEqual(false);
+        expect(service.compareTeam(null, entity1)).toEqual(false);
       });
 
       it('Should return false if primaryKey differs', () => {
         const entity1 = { id: 1226 };
         const entity2 = { id: 14592 };
-
-        const compareResult1 = service.compareTeam(entity1, entity2);
-        const compareResult2 = service.compareTeam(entity2, entity1);
-
-        expect(compareResult1).toEqual(false);
-        expect(compareResult2).toEqual(false);
+        expect(service.compareTeam(entity1, entity2)).toEqual(false);
+        expect(service.compareTeam(entity2, entity1)).toEqual(false);
       });
 
-      it('Should return false if primaryKey matches', () => {
+      it('Should return true if primaryKey matches', () => {
         const entity1 = { id: 1226 };
         const entity2 = { id: 1226 };
-
-        const compareResult1 = service.compareTeam(entity1, entity2);
-        const compareResult2 = service.compareTeam(entity2, entity1);
-
-        expect(compareResult1).toEqual(true);
-        expect(compareResult2).toEqual(true);
+        expect(service.compareTeam(entity1, entity2)).toEqual(true);
+        expect(service.compareTeam(entity2, entity1)).toEqual(true);
       });
     });
   });
 
+  // Проверка, что нет незавершенных HTTP-запросов после каждого теста
   afterEach(() => {
     httpMock.verify();
   });
