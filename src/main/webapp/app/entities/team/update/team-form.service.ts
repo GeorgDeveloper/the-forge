@@ -27,6 +27,7 @@ type TeamFormGroupContent = {
   id: FormControl<ITeam['id'] | NewTeam['id']>;
   teamName: FormControl<ITeam['teamName']>;
   employees: FormControl<ITeam['employees']>;
+  users: FormControl<ITeam['users']>;
 };
 
 /**
@@ -61,6 +62,7 @@ export class TeamFormService {
         validators: [Validators.required], // Название команды обязательно
       }),
       employees: new FormControl(teamRawValue.employees || []), // Сотрудники - массив, по умолчанию пустой
+      users: new FormControl(teamRawValue.users || []), // Сотрудники - массив, по умолчанию пустой
     });
   }
 

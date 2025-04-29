@@ -11,7 +11,9 @@ import { ITeam } from '../team.model';
 import { TeamService } from '../service/team.service';
 import { TeamFormGroup, TeamFormService } from './team-form.service';
 import { IEmployee } from 'app/entities/employee/employee.model'; // Импорт интерфейса IEmployee для работы с данными о сотрудниках
-import { EmployeeService } from 'app/entities/employee/service/employee.service'; // Импорт сервиса EmployeeService для получения данных о сотрудниках
+import { IUser } from 'app/entities/user/user.model'; // Импорт интерфейса IUser для работы с данными о пользователях
+import { EmployeeService } from 'app/entities/employee/service/employee.service';
+import { UserService } from '../../user/service/user.service'; // Импорт сервиса EmployeeService для получения данных о сотрудниках
 
 @Component({
   selector: 'jhi-team-update', // Селектор компонента, используется для вставки компонента в HTML
@@ -22,11 +24,13 @@ export class TeamUpdateComponent implements OnInit {
   isSaving = false; // Флаг, указывающий, выполняется ли сохранение данных
   team: ITeam | null = null; // Объект команды, который мы редактируем или создаем, может быть null
   employees: IEmployee[] = []; // Массив всех доступных сотрудников для выбора
+  users: IUser[] = []; // Массив всех доступных пользователей для выбора
 
   protected teamService = inject(TeamService); // Внедрение сервиса TeamService для работы с данными команд
   protected teamFormService = inject(TeamFormService); // Внедрение сервиса TeamFormService для работы с формой команды
   protected activatedRoute = inject(ActivatedRoute); // Внедрение сервиса ActivatedRoute для получения данных из URL
   protected employeeService = inject(EmployeeService); // Внедрение сервиса EmployeeService для работы с данными сотрудников
+  protected userService = inject(UserService); // Внедрение сервиса UserService для работы с данными пользователей
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: TeamFormGroup = this.teamFormService.createTeamFormGroup(); // Создание формы для редактирования команды с помощью TeamFormService
@@ -34,6 +38,7 @@ export class TeamUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.loadAllEmployees(); // Вызов метода для загрузки всех сотрудников при инициализации компонента
 
+    this.loadAllUsers();
     this.activatedRoute.data.subscribe(({ team }) => {
       // Подписка на данные, переданные через маршрут (например, данные команды для редактирования)
       this.team = team;
@@ -51,6 +56,17 @@ export class TeamUpdateComponent implements OnInit {
         this.employees = res.body ?? []; // Используем оператор ?? для установки пустого массива, если res.body равен null или undefined
       },
       error: () => console.error('Error loading employees'), // Обработка ошибки при загрузке сотрудников
+    });
+  }
+
+  loadAllUsers(): void {
+    // Метод для загрузки всех сотрудников из сервиса UserService
+    this.userService.query().subscribe({
+      next: (res: HttpResponse<IUser[]>) => {
+        // При успешном получении данных, сохраняем массив сотрудников в свойство users
+        this.users = res.body ?? []; // Используем оператор ?? для установки пустого массива, если res.body равен null или undefined
+      },
+      error: () => console.error('Error loading users'), // Обработка ошибки при загрузке сотрудников
     });
   }
 
@@ -106,11 +122,23 @@ export class TeamUpdateComponent implements OnInit {
         employees: team.employees, // Установка выбранных сотрудников в форму
       });
     }
+
+    if (team.users) {
+      this.editForm.patchValue({
+        users: team.users, // Установка выбранных сотрудников в форму
+      });
+    }
   }
 
   isEmployeeSelected(employee: IEmployee): boolean {
     // Метод для проверки, выбран ли сотрудник в команде
     if (!this.team || !this.team.employees) return false; // Если команда или сотрудники не существуют, возвращаем false
     return this.team.employees.some(e => e.id === employee.id); // Проверяем, есть ли сотрудник в списке сотрудников команды
+  }
+
+  isUsersSelected(user: IUser): boolean {
+    // Метод для проверки, выбран ли сотрудник в команде
+    if (!this.team || !this.team.users) return false; // Если команда или сотрудники не существуют, возвращаем false
+    return this.team.users.some(e => e.id === user.id); // Проверяем, есть ли сотрудник в списке сотрудников команды
   }
 }

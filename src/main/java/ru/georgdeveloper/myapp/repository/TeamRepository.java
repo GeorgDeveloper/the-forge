@@ -23,4 +23,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     @Query("SELECT t FROM Team t JOIN UserTeamAccess a ON t.id = a.team.id WHERE a.user.id = :userId")
     Page<Team> findAllByUserId(Pageable pageable, @Param("userId") Long userId);
+
+    @EntityGraph(attributePaths = { "userAccesses", "userAccesses.user" })
+    Optional<Team> findWithUsersById(Long id);
 }

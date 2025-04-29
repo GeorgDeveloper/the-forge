@@ -1,8 +1,8 @@
 package ru.georgdeveloper.myapp.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,6 +16,7 @@ import ru.georgdeveloper.myapp.domain.UserTeamAccess;
 import ru.georgdeveloper.myapp.domain.enumeration.AccessLevel;
 import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.repository.TeamRepository;
+import ru.georgdeveloper.myapp.repository.UserTeamAccessRepository;
 import ru.georgdeveloper.myapp.service.TeamService;
 
 /**
@@ -31,15 +32,27 @@ public class TeamServiceImpl implements TeamService {
 
     // Репозиторий для работы с данными команд в БД
     private final TeamRepository teamRepository;
+    private final UserTeamAccessRepository userTeamAccessRepository;
     private final EmployeeRepository employeeRepository;
+    private final TeamAccessServiceImpl teamAccessService;
 
     /**
      * Конструктор с внедрением зависимости TeamRepository
-     * @param teamRepository - репозиторий для работы с командами
+     *
+     * @param teamRepository           - репозиторий для работы с командами
+     * @param userTeamAccessRepository
+     * @param teamAccessService
      */
-    public TeamServiceImpl(TeamRepository teamRepository, EmployeeRepository employeeRepository) {
+    public TeamServiceImpl(
+        TeamRepository teamRepository,
+        UserTeamAccessRepository userTeamAccessRepository,
+        EmployeeRepository employeeRepository,
+        TeamAccessServiceImpl teamAccessService
+    ) {
         this.teamRepository = teamRepository;
+        this.userTeamAccessRepository = userTeamAccessRepository;
         this.employeeRepository = employeeRepository;
+        this.teamAccessService = teamAccessService;
     }
 
     /**
@@ -76,24 +89,61 @@ public class TeamServiceImpl implements TeamService {
      * @return обновленная сущность Team
      */
     @Override
+    @Transactional
     public Team update(Team team) {
         LOG.debug("Запрос на обновление команды: {}", team);
+
+        // 1. Сохраняем основную информацию о команде
         Team savedTeam = teamRepository.save(team);
 
-        // Затем обновляем связи с сотрудниками
+        // 2. Обработка сотрудников
         if (team.getEmployees() != null) {
-            Set<Employee> employees = (Set<Employee>) team.getEmployees();
-            for (Employee employee : employees) {
-                Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
-                if (employeeOpt.isPresent()) {
-                    Employee employeeToUpdate = employeeOpt.get();
-                    employeeToUpdate.setTeam(savedTeam);
-                    employeeRepository.save(employeeToUpdate);
-                }
-            }
+            updateTeamEmployees(savedTeam, team.getEmployees());
         }
+
+        // 3. Обработка пользователей (новый функционал)
+        if (team.getUsers() != null) {
+            teamAccessService.updateTeamUsers(savedTeam, team.getUsers());
+        }
+
         return savedTeam;
     }
+
+    private void updateTeamEmployees(Team team, Set<Employee> employees) {
+        // Существующая логика для сотрудников
+        Set<Employee> currentEmployees = team.getEmployees();
+
+        // Удаляем сотрудников, которых больше нет в команде
+        currentEmployees.removeIf(emp -> !employees.contains(emp));
+
+        // Добавляем новых сотрудников
+        for (Employee employee : employees) {
+            if (!currentEmployees.contains(employee)) {
+                employee.setTeam(team);
+                employeeRepository.save(employee);
+            }
+        }
+    }
+
+    //    @Override
+    //    public Team update(Team team) {
+    //        LOG.debug("Запрос на обновление команды: {}", team);
+    //        Team savedTeam = teamRepository.save(team);
+    //
+    //        // Затем обновляем связи с сотрудниками
+    //        if (team.getEmployees() != null) {
+    //            Set<Employee> employees = (Set<Employee>) team.getEmployees();
+    //            for (Employee employee : employees) {
+    //                Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
+    //                if (employeeOpt.isPresent()) {
+    //                    Employee employeeToUpdate = employeeOpt.get();
+    //                    employeeToUpdate.setTeam(savedTeam);
+    //                    employeeRepository.save(employeeToUpdate);
+    //                }
+    //            }
+    //        }
+    //        return savedTeam;
+    //    }
 
     /**
      * Частично обновляет данные команды

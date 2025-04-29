@@ -1,12 +1,14 @@
 package ru.georgdeveloper.myapp.service.impl;
 
-import java.security.Principal;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.georgdeveloper.myapp.domain.Team;
 import ru.georgdeveloper.myapp.domain.User;
 import ru.georgdeveloper.myapp.domain.UserTeamAccess;
 import ru.georgdeveloper.myapp.domain.enumeration.AccessLevel;
+import ru.georgdeveloper.myapp.repository.TeamRepository;
 import ru.georgdeveloper.myapp.repository.UserRepository;
 import ru.georgdeveloper.myapp.repository.UserTeamAccessRepository;
 import ru.georgdeveloper.myapp.service.TeamAccessService;
@@ -17,23 +19,20 @@ public class TeamAccessServiceImpl implements TeamAccessService {
 
     private final UserRepository userRepository;
     private final UserTeamAccessRepository accessRepository;
-    private final TeamServiceImpl teamServiceImpl;
 
-    public TeamAccessServiceImpl(
-        UserRepository userRepository,
-        UserTeamAccessRepository accessRepository,
-        TeamServiceImpl teamServiceImpl
-    ) {
+    private final TeamRepository teamRepository;
+
+    public TeamAccessServiceImpl(UserRepository userRepository, UserTeamAccessRepository accessRepository, TeamRepository teamRepository) {
         this.userRepository = userRepository;
         this.accessRepository = accessRepository;
-        this.teamServiceImpl = teamServiceImpl;
+        this.teamRepository = teamRepository;
     }
 
     // Создать команду (автоматически дает доступ владельца)
     @Override
     public Team createTeam(Long userID, Team team) {
         // Сначала сохраняем команду (без связей)
-        Team savedTeam = teamServiceImpl.save(team);
+        Team savedTeam = teamRepository.save(team);
 
         User owner = userRepository.findById(userID).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -50,9 +49,37 @@ public class TeamAccessServiceImpl implements TeamAccessService {
     }
 
     @Override
+    @Transactional
+    public void updateTeamUsers(Team team, Set<User> users) {
+        // Удаляем старые связи, которые больше не актуальны
+        Set<UserTeamAccess> existingAccesses = accessRepository.findByTeam(team);
+        Set<Long> existingUserIds = existingAccesses.stream().map(access -> access.getUser().getId()).collect(Collectors.toSet());
+
+        Set<Long> newUserIds = users.stream().map(User::getId).collect(Collectors.toSet());
+
+        // Удаляем доступы для пользователей, которых больше нет в команде
+        for (UserTeamAccess access : existingAccesses) {
+            if (!newUserIds.contains(access.getUser().getId())) {
+                accessRepository.delete(access);
+            }
+        }
+
+        // Добавляем новых пользователей
+        for (User user : users) {
+            if (!existingUserIds.contains(user.getId())) {
+                UserTeamAccess access = new UserTeamAccess();
+                access.setUser(user);
+                access.setTeam(team);
+                access.setAccessLevel(AccessLevel.VIEWER); // Или другой уровень доступа по умолчанию
+                accessRepository.save(access);
+            }
+        }
+    }
+
+    @Override
     public void deleteTeam(Long teamID) {
         accessRepository.deleteByTeam_Id(teamID);
-        teamServiceImpl.delete(teamID);
+        teamRepository.deleteById(teamID);
     }
 
     // Предоставить доступ другому пользователю

@@ -2,11 +2,14 @@ package ru.georgdeveloper.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import ru.georgdeveloper.myapp.domain.enumeration.AccessLevel;
 
 /**
  * Сущность "Команда/Отдел".
@@ -41,6 +44,41 @@ public class Team implements Serializable {
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<UserTeamAccess> userAccesses = new HashSet<>();
+
+    @Transient
+    @JsonProperty("users") // Добавляем аннотацию для Jackson
+    private Set<User> users;
+
+    @PostLoad
+    private void postLoad() {
+        if (users == null) {
+            users = userAccesses.stream().map(UserTeamAccess::getUser).collect(Collectors.toSet());
+        }
+    }
+
+    @JsonProperty("users")
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    @JsonProperty("users")
+    public void setUsers(Set<User> users) {
+        this.users = users;
+        //        updateUserAccesses(users);
+    }
+
+    private void updateUserAccesses(Set<User> users) {
+        this.userAccesses.clear();
+        if (users != null) {
+            users.forEach(user -> {
+                UserTeamAccess access = new UserTeamAccess();
+                access.setUser(user);
+                access.setTeam(this);
+                access.setAccessLevel(AccessLevel.VIEWER);
+                this.userAccesses.add(access);
+            });
+        }
+    }
 
     // Методы доступа с fluent-интерфейсом
     public Long getId() {

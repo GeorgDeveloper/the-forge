@@ -1,6 +1,7 @@
 package ru.georgdeveloper.myapp.service;
 
 import java.security.Principal;
+import java.util.Set;
 import ru.georgdeveloper.myapp.domain.Team;
 import ru.georgdeveloper.myapp.domain.User;
 
@@ -19,4 +20,5 @@ public interface TeamAccessService {
 
     // Проверить, является ли пользователь владельцем команды
     boolean hasOwnerAccess(User user, Team team);
+    void updateTeamUsers(Team team, Set<User> users);
 }

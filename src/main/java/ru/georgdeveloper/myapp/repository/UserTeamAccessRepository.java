@@ -1,6 +1,9 @@
 package ru.georgdeveloper.myapp.repository;
 
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.georgdeveloper.myapp.domain.Team;
 import ru.georgdeveloper.myapp.domain.User;
 import ru.georgdeveloper.myapp.domain.UserTeamAccess;
@@ -12,4 +15,7 @@ public interface UserTeamAccessRepository extends JpaRepository<UserTeamAccess, 
     boolean existsByUserAndTeamAndAccessLevel(User user, Team team, AccessLevel accessLevel);
 
     void deleteByTeam_Id(Long teamId);
+
+    @Query("SELECT u FROM UserTeamAccess u WHERE u.team = :team")
+    Set<UserTeamAccess> findByTeam(@Param("team") Team team);
 }

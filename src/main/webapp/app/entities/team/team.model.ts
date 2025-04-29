@@ -1,10 +1,12 @@
 import { IEmployee } from 'app/entities/employee/employee.model';
+import { IUser } from '../user/user.model';
 
 // Интерфейс ITeam определяет структуру данных для объекта "Команда"
 export interface ITeam {
   id: number; // Уникальный идентификатор команды
   teamName?: string | null; // Название команды (может быть null или отсутствовать)
   employees?: IEmployee[] | null; // Массив сотрудников, входящих в команду (может быть null или отсутствовать)
+  users?: IUser[] | null; // Массив пользователей, входящих в команду (может быть null или отсутствовать)
 }
 
 // Тип NewTeam определяет структуру данных для создания новой команды, включая поле 'id'.

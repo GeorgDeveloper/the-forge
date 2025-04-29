@@ -52,7 +52,7 @@ class PositionTest {
         assertThat(position.getSafetyInstructions()).doesNotContain(safetyInstructionBack);
         assertThat(safetyInstructionBack.getPosition()).isNull();
 
-        position.safetyInstructions(new HashSet<>(Set.of(safetyInstructionBack)));
+        position.setSafetyInstructions(new HashSet<>(Set.of(safetyInstructionBack)));
         assertThat(position.getSafetyInstructions()).containsOnly(safetyInstructionBack);
         assertThat(safetyInstructionBack.getPosition()).isEqualTo(position);
 

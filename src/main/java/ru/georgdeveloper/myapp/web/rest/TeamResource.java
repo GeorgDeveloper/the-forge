@@ -5,9 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +18,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.georgdeveloper.myapp.domain.Team;
 import ru.georgdeveloper.myapp.domain.User;
 import ru.georgdeveloper.myapp.repository.TeamRepository;
+import ru.georgdeveloper.myapp.repository.UserRepository;
 import ru.georgdeveloper.myapp.service.TeamAccessService;
 import ru.georgdeveloper.myapp.service.TeamService;
 import ru.georgdeveloper.myapp.service.UserService;
-import ru.georgdeveloper.myapp.service.dto.AdminUserDTO;
 import ru.georgdeveloper.myapp.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -47,6 +45,7 @@ public class TeamResource {
 
     private final TeamService teamService;
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
     private final TeamAccessService teamAccessService;
 
     private final UserService userService;
@@ -54,17 +53,20 @@ public class TeamResource {
     /**
      * Конструктор контроллера.
      *
-     * @param teamService сервис для работы с командами
+     * @param teamService    сервис для работы с командами
      * @param teamRepository репозиторий команд
+     * @param userRepository
      */
     public TeamResource(
         TeamService teamService,
         TeamRepository teamRepository,
+        UserRepository userRepository,
         TeamAccessService teamAccessService,
         UserService userService
     ) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
+        this.userRepository = userRepository;
         this.teamAccessService = teamAccessService;
         this.userService = userService;
     }
@@ -94,11 +96,12 @@ public class TeamResource {
      * Полностью обновляет данные команды.
      * PUT /api/teams/{id}
      *
-     * @param id ID команды
+     * @param id   ID команды
      * @param team обновленные данные команды
      * @return ResponseEntity с обновленной командой или кодом ошибки
      * @throws URISyntaxException при некорректном URI
      */
+
     @PutMapping("/{id}")
     public ResponseEntity<Team> updateTeam(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Team team)
         throws URISyntaxException {
@@ -124,7 +127,7 @@ public class TeamResource {
      * Частично обновляет данные команды.
      * PATCH /api/teams/{id}
      *
-     * @param id ID команды
+     * @param id   ID команды
      * @param team данные для частичного обновления
      * @return ResponseEntity с обновленной командой или кодом ошибки
      * @throws URISyntaxException при некорректном URI
@@ -144,6 +147,11 @@ public class TeamResource {
 
         if (!teamRepository.existsById(id)) {
             throw new BadRequestAlertException("Команда не найдена", ENTITY_NAME, "idnotfound");
+        }
+
+        Set<User> users = team.getUsers();
+        for (User user : users) {
+            System.out.println(user);
         }
 
         Optional<Team> result = teamService.partialUpdate(team);
@@ -221,6 +229,7 @@ public class TeamResource {
 
     /**
      * Возвращает команды со списком сотрудников.
+     *
      * @param id ID команды в которую входят сотрудники
      * @return ResponseEntity со списком сотрудников
      */
