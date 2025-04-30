@@ -2,7 +2,7 @@
   "theForgeApp": {
     "adminAuthority": {
       "home": {
-        "title": "Authorities",
+        "title": "Пользователи",
         "refreshListLabel": "Обновить список",
         "createLabel": "Создать новый Authority",
         "createOrEditLabel": "Создать или отредактировать Authority",
@@ -15,7 +15,7 @@
         "question": "Вы уверены что хотите удалить Authority {{ id }}?"
       },
       "detail": {
-        "title": "Authority"
+        "title": "Пользователи"
       },
       "name": "Name"
     }

@@ -15,8 +15,14 @@ import ru.georgdeveloper.myapp.domain.Team;
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
     // Добавьте этот метод
-    @Query("SELECT t FROM Team t LEFT JOIN FETCH t.employees WHERE t.id = :id")
-    Optional<Team> findByIdWithEmployees(@Param("id") Long id);
+    @Query(
+        "SELECT DISTINCT t FROM Team t " +
+        "LEFT JOIN FETCH t.employees " +
+        "LEFT JOIN FETCH t.userAccesses ua " +
+        "LEFT JOIN FETCH ua.user u " +
+        "WHERE t.id = :id"
+    )
+    Optional<Team> findByIdWithEmployeesAndUsers(@Param("id") Long id);
 
     //    @EntityGraph(attributePaths = {"employees"})  // ← Явно указываем загрузку сотрудников
     //    Optional<Team> findWithEmployeesById(Long id);

@@ -21,13 +21,13 @@ export class TeamDetailComponent {
 
   constructor() {
     // При создании компонента загружаем данные
-    this.loadTeamWithEmployees();
+    this.loadTeamWithEmployeesAndUsers();
   }
 
   /**
    * Загружает данные команды вместе с сотрудниками
    */
-  loadTeamWithEmployees(): void {
+  loadTeamWithEmployeesAndUsers(): void {
     // Получаем ID команды из параметров маршрута
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -35,7 +35,7 @@ export class TeamDetailComponent {
       this.isLoading = true; // Устанавливаем флаг загрузки
 
       // Вызываем сервис для получения данных
-      this.teamService.findWithEmployees(+id).subscribe({
+      this.teamService.findWithEmployeesAndUsers(+id).subscribe({
         next: response => {
           this.team.set(response.body); // Обновляем сигнал с полученными данными
           this.isLoading = false; // Сбрасываем флаг загрузки

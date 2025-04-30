@@ -4,16 +4,22 @@
       <div>
         <h2 data-cy="teamDetailsHeading"><span jhiTranslate="theForgeApp.team.detail.title">Team</span></h2>
 
-        <hr />
-
         <jhi-alert-error></jhi-alert-error>
 
         <jhi-alert></jhi-alert>
 
         <dl class="row-md jh-entity-details">
+          <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+          </button>
+
+          <button type="button" [routerLink]="['/team', teamRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+          </button>
+
           <dt><span jhiTranslate="global.field.id">ID</span></dt>
           <dd>
-            <span>{{ teamRef.id }}</span>
+            <span>{{ teamRef.id }} </span>
           </dd>
           <dt><span jhiTranslate="theForgeApp.team.teamName">Team Name</span></dt>
           <dd>
@@ -28,15 +34,67 @@
               </span>
             }
           </dd>
+
+          <!-- <dt><span jhiTranslate="theForgeApp.adminAuthority.home.title">Authorities</span></dt> -->
+          <!-- <dd> -->
+          <!--      @for(user of team()?.users; track $index; let last = $last) { -->
+          <!-- <span> -->
+          <!-- <a [routerLink]="['/user', user.id, 'view']">{{user?.login}}</a> -->
+          <!-- > {{last ? '' : ', '}} -->
+          <!-- </span> -->
+          <!--    } -->
+          <!-- </dd> -->
         </dl>
-
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
-        </button>
-
-        <button type="button" [routerLink]="['/team', teamRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
-        </button>
+      </div>
+      <!-- Таблица с командами -->
+      <div class="table-responsive table-entities" id="entities">
+        <table class="table table-striped" aria-describedby="page-heading">
+          <thead>
+            <!-- Заголовки таблицы с возможностью сортировки -->
+            <tr>
+              <!-- Колонка ID с сортировкой -->
+              <th scope="col">
+                <div class="d-flex">
+                  <span jhiTranslate="global.field.id">ID</span>
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                </div>
+              </th>
+              <!-- Колонка названия команды с сортировкой -->
+              <th scope="col">
+                <div class="d-flex">
+                  <span jhiTranslate="theForgeApp.team.teamName">Team Name</span>
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                </div>
+              </th>
+              <!-- Колонка для действий -->
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <!-- Тело таблицы с бесконечным скроллом -->
+          <tbody>
+            <!-- Цикл по командам -->
+            @for (user of team()?.users; track $index; let last = $last) {
+              <tr data-cy="entityTable">
+                <!-- Ячейка с ID и ссылкой на просмотр -->
+                <td>
+                  <a [routerLink]="['/user', user.id, 'view']">{{ user?.login }}</a>
+                </td>
+                <!-- Ячейка с названием команды -->
+                <td>{{ user?.login }}</td>
+                <!-- Ячейка с кнопками действий -->
+                <td class="text-end">
+                  <div class="btn-group">
+                    <!-- Кнопка удаления -->
+                    <button type="submit" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                      <fa-icon icon="times"></fa-icon>
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Удалить</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
       </div>
     }
   </div>

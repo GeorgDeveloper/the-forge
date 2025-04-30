@@ -2,7 +2,6 @@ package ru.georgdeveloper.myapp.service.impl;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,9 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.georgdeveloper.myapp.domain.Employee;
 import ru.georgdeveloper.myapp.domain.Team;
-import ru.georgdeveloper.myapp.domain.User;
-import ru.georgdeveloper.myapp.domain.UserTeamAccess;
-import ru.georgdeveloper.myapp.domain.enumeration.AccessLevel;
 import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.repository.TeamRepository;
 import ru.georgdeveloper.myapp.repository.UserTeamAccessRepository;
@@ -240,7 +236,7 @@ public class TeamServiceImpl implements TeamService {
      * @return Optional с найденной командой или пустой
      */
     @Override
-    public Optional<Team> findOneWithEmployees(Long id) {
-        return teamRepository.findByIdWithEmployees(id);
+    public Optional<Team> findOneWithEmployeesAndUsers(Long id) {
+        return teamRepository.findByIdWithEmployeesAndUsers(id);
     }
 }

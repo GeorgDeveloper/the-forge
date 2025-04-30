@@ -64,7 +64,7 @@ export class TeamService {
    * @param id - идентификатор команды
    * @returns Observable с ответом сервера, содержащим команду и ее сотрудников
    */
-  findWithEmployees(id: number): Observable<EntityResponseType> {
+  findWithEmployeesAndUsers(id: number): Observable<EntityResponseType> {
     return this.http.get<ITeam>(`${this.resourceUrl}/${id}/with-employees`, { observe: 'response' });
   }
 

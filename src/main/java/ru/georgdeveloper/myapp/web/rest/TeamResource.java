@@ -234,9 +234,9 @@ public class TeamResource {
      * @return ResponseEntity со списком сотрудников
      */
     @GetMapping("/{id}/with-employees")
-    public ResponseEntity<Team> getTeamWithEmployees(@PathVariable("id") Long id) {
+    public ResponseEntity<Team> getTeamWithEmployeesAndUsers(@PathVariable("id") Long id) {
         LOG.debug("Запрос на получение команды с сотрудниками: ID {}", id);
-        Optional<Team> team = teamService.findOneWithEmployees(id);
+        Optional<Team> team = teamService.findOneWithEmployeesAndUsers(id);
         return ResponseUtil.wrapOrNotFound(team);
     }
 }

@@ -3,7 +3,6 @@ package ru.georgdeveloper.myapp.service;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import ru.georgdeveloper.myapp.domain.Team;
 
 /**
@@ -72,5 +71,5 @@ public interface TeamService {
      * @param id идентификатор команды.
      * @return найденная команда со списком сотрудников.
      */
-    Optional<Team> findOneWithEmployees(Long id);
+    Optional<Team> findOneWithEmployeesAndUsers(Long id);
 }
