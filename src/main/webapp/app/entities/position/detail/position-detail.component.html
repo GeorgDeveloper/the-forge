@@ -21,9 +21,11 @@
           </dd>
           <dt><span jhiTranslate="theForgeApp.position.jobDescription">Job Description</span></dt>
           <dd>
-            @if (position()!.jobDescription) {
+            @if (descriptionName) {
               <div>
-                <a [routerLink]="['/job-description', position()!.jobDescription?.id, 'view']">{{ positionRef.jobDescription?.id }}</a>
+                <a [routerLink]="['/job-description', position()?.jobDescription?.id, 'view']">
+                  {{ descriptionName }}
+                </a>
               </div>
             }
           </dd>

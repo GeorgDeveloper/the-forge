@@ -66,7 +66,9 @@
               <td>
                 @if (position.jobDescription) {
                   <div>
-                    <a [routerLink]="['/job-description', position.jobDescription.id, 'view']">{{ position.jobDescription.id }}</a>
+                    <a [routerLink]="['/job-description', position.jobDescription.id, 'view']">
+                      {{ getDescriptionName(position.jobDescription.id) }}
+                    </a>
                   </div>
                 }
               </td>

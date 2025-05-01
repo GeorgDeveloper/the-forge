@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit, WritableSignal, computed, inject, signal } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,6 +15,8 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { EntityArrayResponseType, PositionService } from '../service/position.service';
 import { PositionDeleteDialogComponent } from '../delete/position-delete-dialog.component';
 import { IPosition } from '../position.model';
+import { JobDescriptionService } from '../../job-description/service/job-description.service';
+import { IJobDescription } from '../../job-description/job-description.model';
 
 @Component({
   selector: 'jhi-position',
@@ -26,6 +28,9 @@ export class PositionComponent implements OnInit {
   positions = signal<IPosition[]>([]);
   isLoading = false;
 
+  // Добавляем сигнал для хранения загруженных JobDescription
+  loadedJobDescriptions = signal<Record<number, IJobDescription | null>>({});
+
   sortState = sortStateSignal({});
 
   itemsPerPage = ITEMS_PER_PAGE;
@@ -35,11 +40,12 @@ export class PositionComponent implements OnInit {
 
   public readonly router = inject(Router);
   protected readonly positionService = inject(PositionService);
+  protected readonly jobDescriptionService = inject(JobDescriptionService); // Добавляем сервис
   protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly sortService = inject(SortService);
-  protected parseLinks = inject(ParseLinks);
-  protected modalService = inject(NgbModal);
-  protected ngZone = inject(NgZone);
+  protected readonly parseLinks = inject(ParseLinks);
+  protected readonly modalService = inject(NgbModal);
+  protected readonly ngZone = inject(NgZone);
 
   trackId = (item: IPosition): number => this.positionService.getPositionIdentifier(item);
 
@@ -55,6 +61,7 @@ export class PositionComponent implements OnInit {
 
   reset(): void {
     this.positions.set([]);
+    this.loadedJobDescriptions.set({}); // Сбрасываем загруженные описания
   }
 
   loadNextPage(): void {
@@ -64,7 +71,6 @@ export class PositionComponent implements OnInit {
   delete(position: IPosition): void {
     const modalRef = this.modalService.open(PositionDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.position = position;
-    // unsubscribe not needed because closed completes on modal close
     modalRef.closed
       .pipe(
         filter(reason => reason === ITEM_DELETED_EVENT),
@@ -77,10 +83,41 @@ export class PositionComponent implements OnInit {
     this.queryBackend().subscribe({
       next: (res: EntityArrayResponseType) => {
         this.onResponseSuccess(res);
+        // После загрузки позиций загружаем их JobDescription
+        this.loadJobDescriptionsForPositions();
       },
     });
   }
 
+  // Новый метод: загружает JobDescription для всех позиций
+  loadJobDescriptionsForPositions(): void {
+    const positions = this.positions();
+    positions.forEach(position => {
+      if (position.jobDescription?.id && !this.loadedJobDescriptions()[position.jobDescription.id]) {
+        this.jobDescriptionService.find(position.jobDescription.id).subscribe({
+          next: (response: HttpResponse<IJobDescription>) => {
+            if (response.body) {
+              this.loadedJobDescriptions.update(data => ({
+                ...data,
+                [response.body!.id!]: response.body,
+              }));
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            console.error('Error loading job description:', error);
+          },
+        });
+      }
+    });
+  }
+
+  // Геттер для получения descriptionName по id JobDescription
+  getDescriptionName(jobDescriptionId: number | null | undefined): string | null {
+    if (!jobDescriptionId) return null;
+    return this.loadedJobDescriptions()[jobDescriptionId]?.descriptionName || `Job Description ${jobDescriptionId}`;
+  }
+
+  // Остальные методы остаются без изменений
   navigateToWithComponentValues(event: SortState): void {
     this.handleNavigation(event);
   }
@@ -96,12 +133,11 @@ export class PositionComponent implements OnInit {
   }
 
   protected fillComponentAttributesFromResponseBody(data: IPosition[] | null): IPosition[] {
-    // If there is previous link, data is a infinite scroll pagination content.
     if (this.links().prev) {
       const positionsNew = this.positions();
       if (data) {
         for (const d of data) {
-          if (positionsNew.some(op => op.id === d.id)) {
+          if (!positionsNew.some(op => op.id === d.id)) {
             positionsNew.push(d);
           }
         }
