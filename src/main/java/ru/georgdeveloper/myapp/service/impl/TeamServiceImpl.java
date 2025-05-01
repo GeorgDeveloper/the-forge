@@ -53,6 +53,7 @@ public class TeamServiceImpl implements TeamService {
 
     /**
      * Сохраняет новую команду в системе
+     *
      * @param team - сущность команды для сохранения
      * @return сохраненная сущность Team
      */
@@ -81,6 +82,7 @@ public class TeamServiceImpl implements TeamService {
 
     /**
      * Обновляет существующую команду
+     *
      * @param team - сущность с обновленными данными команды
      * @return обновленная сущность Team
      */
@@ -106,43 +108,19 @@ public class TeamServiceImpl implements TeamService {
     }
 
     private void updateTeamEmployees(Team team, Set<Employee> employees) {
-        // Существующая логика для сотрудников
-        Set<Employee> currentEmployees = team.getEmployees();
-
-        // Удаляем сотрудников, которых больше нет в команде
-        currentEmployees.removeIf(emp -> !employees.contains(emp));
-
-        // Добавляем новых сотрудников
         for (Employee employee : employees) {
-            if (!currentEmployees.contains(employee)) {
-                employee.setTeam(team);
-                employeeRepository.save(employee);
+            Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
+            if (employeeOpt.isPresent()) {
+                Employee employeeToUpdate = employeeOpt.get();
+                employeeToUpdate.setTeam(team);
+                employeeRepository.save(employeeToUpdate);
             }
         }
     }
 
-    //    @Override
-    //    public Team update(Team team) {
-    //        LOG.debug("Запрос на обновление команды: {}", team);
-    //        Team savedTeam = teamRepository.save(team);
-    //
-    //        // Затем обновляем связи с сотрудниками
-    //        if (team.getEmployees() != null) {
-    //            Set<Employee> employees = (Set<Employee>) team.getEmployees();
-    //            for (Employee employee : employees) {
-    //                Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
-    //                if (employeeOpt.isPresent()) {
-    //                    Employee employeeToUpdate = employeeOpt.get();
-    //                    employeeToUpdate.setTeam(savedTeam);
-    //                    employeeRepository.save(employeeToUpdate);
-    //                }
-    //            }
-    //        }
-    //        return savedTeam;
-    //    }
-
     /**
      * Частично обновляет данные команды
+     *
      * @param team - сущность с полями для обновления
      * @return Optional с обновленной командой, если команда найдена
      */
@@ -176,6 +154,7 @@ public class TeamServiceImpl implements TeamService {
 
     /**
      * Получает список всех команд с поддержкой пагинации
+     *
      * @param pageable - параметры пагинации (номер страницы, размер страницы)
      * @return страница с командами
      */
@@ -188,6 +167,7 @@ public class TeamServiceImpl implements TeamService {
 
     /**
      * Получает список всех команд по ID пользователя с поддержкой пагинации
+     *
      * @param pageable - параметры пагинации (номер страницы, размер страницы)
      * @return страница с командами
      */
@@ -200,6 +180,7 @@ public class TeamServiceImpl implements TeamService {
 
     /**
      * Находит команду по уникальному идентификатору
+     *
      * @param id - идентификатор команды
      * @return Optional с найденной командой или пустой
      */
@@ -212,6 +193,7 @@ public class TeamServiceImpl implements TeamService {
 
     /**
      * Удаляет команду по идентификатору
+     *
      * @param id - идентификатор команды для удаления
      */
     @Override
@@ -232,6 +214,7 @@ public class TeamServiceImpl implements TeamService {
 
     /**
      * Находит команду по уникальному идентификатору
+     *
      * @param id - идентификатор команды СО СПИСКОМ СОТРУДНИКОВ
      * @return Optional с найденной командой или пустой
      */
