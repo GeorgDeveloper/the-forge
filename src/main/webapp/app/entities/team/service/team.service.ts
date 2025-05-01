@@ -153,4 +153,8 @@ export class TeamService {
     }
     return teamCollection;
   }
+
+  removeUserFromTeam(teamId: number, userId: number): Observable<HttpResponse<void>> {
+    return this.http.delete<void>(`${this.resourceUrl}/${teamId}/users/${userId}`, { observe: 'response' });
+  }
 }

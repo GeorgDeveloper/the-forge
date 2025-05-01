@@ -1,5 +1,6 @@
 package ru.georgdeveloper.myapp.repository;
 
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,6 @@ public interface UserTeamAccessRepository extends JpaRepository<UserTeamAccess, 
 
     @Query("SELECT u FROM UserTeamAccess u WHERE u.team = :team")
     Set<UserTeamAccess> findByTeam(@Param("team") Team team);
+
+    Optional<UserTeamAccess> findByTeamIdAndUserId(Long teamId, Long userId);
 }

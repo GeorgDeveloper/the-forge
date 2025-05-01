@@ -19,7 +19,12 @@
       },
       "id": "ID",
       "teamName": "Team Name",
-      "employee": "Employee"
+      "employee": "Employee",
+      "user": {
+        "delete": {
+          "question": "Are you sure you want to remove user {{ login }} from team {{ teamName }}?"
+        }
+      }
     }
   }
 }

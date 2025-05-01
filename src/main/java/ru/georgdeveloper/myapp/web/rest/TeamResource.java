@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.georgdeveloper.myapp.domain.Team;
 import ru.georgdeveloper.myapp.domain.User;
+import ru.georgdeveloper.myapp.domain.UserTeamAccess;
 import ru.georgdeveloper.myapp.repository.TeamRepository;
 import ru.georgdeveloper.myapp.repository.UserRepository;
+import ru.georgdeveloper.myapp.repository.UserTeamAccessRepository;
 import ru.georgdeveloper.myapp.service.TeamAccessService;
 import ru.georgdeveloper.myapp.service.TeamService;
 import ru.georgdeveloper.myapp.service.UserService;
@@ -47,6 +49,7 @@ public class TeamResource {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
     private final TeamAccessService teamAccessService;
+    private final UserTeamAccessRepository userTeamAccessRepository;
 
     private final UserService userService;
 
@@ -62,12 +65,14 @@ public class TeamResource {
         TeamRepository teamRepository,
         UserRepository userRepository,
         TeamAccessService teamAccessService,
+        UserTeamAccessRepository userTeamAccessRepository,
         UserService userService
     ) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
         this.teamAccessService = teamAccessService;
+        this.userTeamAccessRepository = userTeamAccessRepository;
         this.userService = userService;
     }
 
@@ -238,5 +243,18 @@ public class TeamResource {
         LOG.debug("Запрос на получение команды с сотрудниками: ID {}", id);
         Optional<Team> team = teamService.findOneWithEmployeesAndUsers(id);
         return ResponseUtil.wrapOrNotFound(team);
+    }
+
+    @DeleteMapping("/{teamId}/users/{userId}")
+    public ResponseEntity<Void> removeUserFromTeam(@PathVariable Long teamId, @PathVariable Long userId) {
+        LOG.debug("REST request to remove user {} from team {}", userId, teamId);
+
+        Optional<UserTeamAccess> access = userTeamAccessRepository.findByTeamIdAndUserId(teamId, userId);
+        if (access.isPresent()) {
+            userTeamAccessRepository.delete(access.get());
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }
