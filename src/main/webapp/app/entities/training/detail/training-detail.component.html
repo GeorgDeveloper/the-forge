@@ -33,9 +33,11 @@
           </dd>
           <dt><span jhiTranslate="theForgeApp.training.employee">Employee</span></dt>
           <dd>
-            @if (training()!.employee) {
+            @if (employeeFullName) {
               <div>
-                <a [routerLink]="['/employee', training()!.employee?.id, 'view']">{{ trainingRef.employee?.id }}</a>
+                <a [routerLink]="['/employee', training()?.employee?.id, 'view']">
+                  {{ employeeFullName }}
+                </a>
               </div>
             }
           </dd>

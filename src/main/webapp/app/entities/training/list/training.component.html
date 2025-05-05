@@ -90,7 +90,10 @@
               <td>
                 @if (training.employee) {
                   <div>
-                    <a [routerLink]="['/employee', training.employee.id, 'view']">{{ training.employee.id }}</a>
+                    <!-- Ссылка на сотрудника с отображением полного имени -->
+                    <a [routerLink]="['/employee', training.employee.id, 'view']">
+                      {{ getEmployeeFullName(training.employee.id) }}
+                    </a>
                   </div>
                 }
               </td>
