@@ -46,8 +46,13 @@ export class ProfessionFormService {
     });
   }
 
-  getProfession(form: ProfessionFormGroup): IProfession | NewProfession {
-    return form.getRawValue() as IProfession | NewProfession;
+  getProfession(professionForm: ProfessionFormGroup): IProfession | NewProfession {
+    const profession = professionForm.getRawValue() as IProfession | NewProfession;
+    // Оставляем только ID сотрудников
+    if (profession.employees) {
+      profession.employees = profession.employees.map(e => ({ id: e.id }));
+    }
+    return profession;
   }
 
   resetForm(form: ProfessionFormGroup, profession: ProfessionFormGroupInput): void {

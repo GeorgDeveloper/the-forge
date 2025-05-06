@@ -23,7 +23,7 @@
           <dd>
             @for (employee of professionRef.employees; track $index; let last = $last) {
               <span>
-                <a [routerLink]="['/employee', employee.id, 'view']">{{ employee?.id }}</a
+                <a [routerLink]="['/employee', employee.id, 'view']">{{ employee?.firstName }} {{ employee?.lastName }}</a
                 >{{ last ? '' : ', ' }}
               </span>
             }

@@ -52,6 +52,7 @@ export class ProfessionUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const profession = this.professionFormService.getProfession(this.editForm);
+    console.log('Sending profession:', JSON.stringify(profession));
     if (profession.id !== null) {
       this.subscribeToSaveResponse(this.professionService.update(profession));
     } else {

@@ -1,5 +1,6 @@
 package ru.georgdeveloper.myapp.service.impl;
 
+import java.util.HashSet;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.georgdeveloper.myapp.domain.Employee;
 import ru.georgdeveloper.myapp.domain.Profession;
+import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.repository.ProfessionRepository;
 import ru.georgdeveloper.myapp.service.ProfessionService;
 
@@ -24,10 +27,12 @@ public class ProfessionServiceImpl implements ProfessionService {
 
     // Репозиторий для работы с Profession в базе данных
     private final ProfessionRepository professionRepository;
+    private final EmployeeRepository employeeRepository;
 
     // Конструктор с внедрением зависимости ProfessionRepository
-    public ProfessionServiceImpl(ProfessionRepository professionRepository) {
+    public ProfessionServiceImpl(ProfessionRepository professionRepository, EmployeeRepository employeeRepository) {
         this.professionRepository = professionRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     /**
@@ -38,7 +43,28 @@ public class ProfessionServiceImpl implements ProfessionService {
     @Override
     public Profession save(Profession profession) {
         LOG.debug("Request to save Profession : {}", profession);
-        return professionRepository.save(profession);
+
+        // Сохраняем профессию сначала без связей
+        Profession savedProfession = professionRepository.save(profession);
+
+        // Затем обновляем связи с сотрудниками
+        if (savedProfession.getEmployees() != null) {
+            for (Employee employee : savedProfession.getEmployees()) {
+                // Загружаем полную версию сотрудника из БД
+                Employee managedEmployee = employeeRepository.findById(employee.getId()).orElseThrow();
+
+                // Инициализируем коллекции, если нужно
+                if (managedEmployee.getProfessions() == null) {
+                    managedEmployee.setProfessions(new HashSet<>());
+                }
+
+                // Добавляем профессию сотруднику
+                managedEmployee.getProfessions().add(savedProfession);
+                employeeRepository.save(managedEmployee);
+            }
+        }
+
+        return savedProfession;
     }
 
     /**
@@ -49,7 +75,7 @@ public class ProfessionServiceImpl implements ProfessionService {
     @Override
     public Profession update(Profession profession) {
         LOG.debug("Request to update Profession : {}", profession);
-        return professionRepository.save(profession);
+        return save(profession);
     }
 
     /**
@@ -68,10 +94,13 @@ public class ProfessionServiceImpl implements ProfessionService {
                 if (profession.getProfessionName() != null) {
                     existingProfession.setProfessionName(profession.getProfessionName());
                 }
+                if (profession.getEmployees() != null) {
+                    existingProfession.getEmployees().addAll(profession.getEmployees());
+                }
 
                 return existingProfession;
             })
-            .map(professionRepository::save);
+            .map(m -> save(m));
     }
 
     /**
@@ -95,7 +124,8 @@ public class ProfessionServiceImpl implements ProfessionService {
     @Transactional(readOnly = true)
     public Optional<Profession> findOne(Long id) {
         LOG.debug("Request to get Profession : {}", id);
-        return professionRepository.findById(id);
+
+        return professionRepository.findWithEmployeesById(id);
     }
 
     /**

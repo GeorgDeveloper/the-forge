@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.georgdeveloper.myapp.domain.Employee;
 import ru.georgdeveloper.myapp.domain.Profession;
 import ru.georgdeveloper.myapp.repository.ProfessionRepository;
 import ru.georgdeveloper.myapp.service.ProfessionService;
@@ -62,14 +64,28 @@ public class ProfessionResource {
      */
     @PostMapping("")
     public ResponseEntity<Profession> createProfession(@Valid @RequestBody Profession profession) throws URISyntaxException {
-        LOG.debug("REST запрос на создание профессии: {}", profession);
+        LOG.debug("REST request to save Profession : {}", profession);
+
         if (profession.getId() != null) {
-            throw new BadRequestAlertException("Новая профессия не может иметь ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("A new profession cannot already have an ID", "profession", "idexists");
         }
-        profession = professionService.save(profession);
-        return ResponseEntity.created(new URI("/api/professions/" + profession.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, profession.getId().toString()))
-            .body(profession);
+
+        // Инициализируем коллекции, если они null
+        if (profession.getEmployees() == null) {
+            profession.setEmployees(new HashSet<>());
+        } else {
+            // Для каждого сотрудника убедимся, что professions инициализирована
+            for (Employee employee : profession.getEmployees()) {
+                if (employee.getProfessions() == null) {
+                    employee.setProfessions(new HashSet<>());
+                }
+            }
+        }
+
+        Profession result = professionService.save(profession);
+        return ResponseEntity.created(new URI("/api/professions/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, "profession", result.getId().toString()))
+            .body(result);
     }
 
     /**
