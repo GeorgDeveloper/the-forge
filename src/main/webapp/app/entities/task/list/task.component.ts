@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit, inject, signal } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,6 +15,8 @@ import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigati
 import { ITask } from '../task.model';
 import { EntityArrayResponseType, TaskService } from '../service/task.service';
 import { TaskDeleteDialogComponent } from '../delete/task-delete-dialog.component';
+import { IEmployee } from '../../employee/employee.model';
+import { EmployeeService } from '../../employee/service/employee.service';
 
 @Component({
   selector: 'jhi-task',
@@ -26,6 +28,9 @@ export class TaskComponent implements OnInit {
   tasks = signal<ITask[]>([]);
   isLoading = false;
 
+  // Сигнал для кэширования данных о сотрудниках
+  loadedEmployees = signal<Record<number, IEmployee | null>>({});
+
   sortState = sortStateSignal({});
 
   itemsPerPage = ITEMS_PER_PAGE;
@@ -34,6 +39,7 @@ export class TaskComponent implements OnInit {
 
   public readonly router = inject(Router);
   protected readonly taskService = inject(TaskService);
+  protected readonly employeeService = inject(EmployeeService);
   protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly sortService = inject(SortService);
   protected modalService = inject(NgbModal);
@@ -66,8 +72,41 @@ export class TaskComponent implements OnInit {
     this.queryBackend().subscribe({
       next: (res: EntityArrayResponseType) => {
         this.onResponseSuccess(res);
+        this.loadEmployeesForTasks();
       },
     });
+  }
+
+  loadEmployeesForTasks(): void {
+    const tasks = this.tasks();
+
+    // Для каждой тренировки загружаем данные сотрудника, если они еще не загружены
+    tasks.forEach(task => {
+      if (task.employee?.id && !this.loadedEmployees()[task.employee.id]) {
+        this.employeeService.find(task.employee.id).subscribe({
+          next: (response: HttpResponse<IEmployee>) => {
+            if (response.body) {
+              // Обновляем кэш сотрудников
+              this.loadedEmployees.update(data => ({
+                ...data,
+                [response.body!.id!]: response.body,
+              }));
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            console.error('Error loading employee:', error);
+          },
+        });
+      }
+    });
+  }
+
+  // Метод для получения полного имени сотрудника
+  getEmployeeFullName(employeeId: number | null | undefined): string {
+    if (!employeeId) return '';
+
+    const employee = this.loadedEmployees()[employeeId];
+    return employee ? `${employee.firstName || ''} ${employee.lastName || ''}`.trim() : `Employee ${employeeId}`;
   }
 
   navigateToWithComponentValues(event: SortState): void {

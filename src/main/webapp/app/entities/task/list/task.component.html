@@ -110,7 +110,7 @@
               <td>
                 @if (task.employee) {
                   <div>
-                    <a [routerLink]="['/employee', task.employee.id, 'view']">{{ task.employee.id }}</a>
+                    <a [routerLink]="['/employee', task.employee.id, 'view']">{{ getEmployeeFullName(task.employee.id) }}</a>
                   </div>
                 }
               </td>
