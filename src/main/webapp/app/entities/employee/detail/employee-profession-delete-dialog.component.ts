@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
     <div class="modal-body">
       <p>
         {{
-          'theForgeApp.employee.profession.delete.question'
+          'theForgeApp.employee.profession_update.delete.question'
             | translate: { lastName: employee.lastName, professionName: profession.professionName }
         }}
       </p>

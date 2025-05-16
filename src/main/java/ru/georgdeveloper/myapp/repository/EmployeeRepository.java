@@ -35,15 +35,6 @@ public interface EmployeeRepository extends EmployeeRepositoryWithBagRelationshi
         return this.fetchBagRelationships(this.findAll());
     }
 
-    //    /**
-    //     * Находит всех сотрудников с eagerly загруженными связанными сущностями (с пагинацией).
-    //     * @param pageable параметры пагинации
-    //     * @return страница сотрудников с загруженными связями
-    //     */
-    //    default Page<Employee> findAllWithEagerRelationships(Pageable pageable) {
-    //        return this.fetchBagRelationships(this.findAll(pageable));
-    //    }
-
     /**
      * Находит всех сотрудников из команд текущего пользователя (с пагинацией).
      *

@@ -1,5 +1,6 @@
 package ru.georgdeveloper.myapp.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.georgdeveloper.myapp.domain.Employee;
+import ru.georgdeveloper.myapp.domain.Profession;
 import ru.georgdeveloper.myapp.repository.EmployeeRepository;
+import ru.georgdeveloper.myapp.repository.ProfessionRepository;
 import ru.georgdeveloper.myapp.service.EmployeeService;
 
 /**
@@ -25,17 +28,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     private final EmployeeRepository employeeRepository;
+    private final ProfessionRepository professionRepository;
 
     /**
      * Конструктор с внедрением зависимости репозитория.
+     *
      * @param employeeRepository репозиторий для работы с Employee
      */
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ProfessionRepository professionRepository) {
         this.employeeRepository = employeeRepository;
+        this.professionRepository = professionRepository;
     }
 
     /**
      * Сохраняет нового сотрудника.
+     *
      * @param employee сущность для сохранения
      * @return сохраненная сущность сотрудника
      */
@@ -47,6 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * Обновляет существующего сотрудника.
+     *
      * @param employee сущность с обновленными данными
      * @return обновленная сущность сотрудника
      */
@@ -58,6 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * Частично обновляет данные сотрудника.
+     *
      * @param employee сущность с обновляемыми полями
      * @return Optional с обновленным сотрудником, если он существует
      */
@@ -92,6 +101,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * Получает всех сотрудников с пагинацией (без eager-загрузки связей).
+     *
      * @param pageable параметры пагинации
      * @return страница с сотрудниками
      */
@@ -104,6 +114,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * Получает всех сотрудников с eager-загрузкой связанных сущностей.
+     *
      * @param pageable параметры пагинации
      * @return страница с сотрудниками и загруженными связями
      */
@@ -124,6 +135,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * Находит сотрудника по ID с eager-загрузкой связанных сущностей.
+     *
      * @param id идентификатор сотрудника
      * @return Optional с найденным сотрудником
      */
@@ -136,6 +148,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * Удаляет сотрудника по ID.
+     *
      * @param id идентификатор сотрудника для удаления
      */
     @Override
@@ -166,5 +179,34 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Optional<Employee> findOneForCurrentUser(Long employeeId, String currentUserLogin) {
         return employeeRepository.findOneForCurrentUser(employeeId, currentUserLogin);
+    }
+
+    @Override
+    public Optional<Employee> findOneWithProfessions(Long id) {
+        return employeeRepository.findOneWithEagerRelationships(id);
+    }
+
+    @Override
+    public void deleteProfessionFromEmployee(Employee employee, Long professionsId) {
+        // Получасе профессию
+        Profession savedProfession = professionRepository.getReferenceById(professionsId);
+
+        // Затем обновляем связи с сотрудниками
+        if (savedProfession.getEmployees() != null) {
+            Employee managedEmployee = employeeRepository.findById(employee.getId()).orElseThrow();
+
+            // Инициализируем коллекции, если нужно
+            if (managedEmployee.getProfessions() == null) {
+                managedEmployee.setProfessions(new HashSet<>());
+            }
+
+            // Добавляем профессию сотруднику
+            managedEmployee.getProfessions().remove(savedProfession);
+            employeeRepository.save(managedEmployee);
+
+            savedProfession.getEmployees().remove(employee);
+
+            professionRepository.save(savedProfession);
+        }
     }
 }

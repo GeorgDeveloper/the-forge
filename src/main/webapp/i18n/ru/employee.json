@@ -28,7 +28,7 @@
       "position": "Должность",
       "profession": "Профессия",
       "team": "Команда",
-      "profession": {
+      "profession_update": {
         "delete": {
           "question": "Вы уверены, что хотите удалить профессию {{ professionName }} для сотрудника {{ lastName }}?"
         }

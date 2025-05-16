@@ -18,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.georgdeveloper.myapp.domain.Employee;
+import ru.georgdeveloper.myapp.domain.Team;
 import ru.georgdeveloper.myapp.domain.User;
+import ru.georgdeveloper.myapp.domain.UserTeamAccess;
 import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.service.EmployeeService;
 import ru.georgdeveloper.myapp.service.UserService;
@@ -197,5 +199,31 @@ public class EmployeeResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * Возвращает сотрудника со списком профессий.
+     *
+     * @param id ID сотрудника
+     * @return ResponseEntity со списком профессий
+     */
+    @GetMapping("/{id}/with-professions")
+    public ResponseEntity<Employee> getEmployeeswithProfessions(@PathVariable("id") Long id) {
+        LOG.debug("Запрос на получение сотрудника: ID {}", id);
+        Optional<Employee> employee = employeeService.findOneWithProfessions(id);
+        return ResponseUtil.wrapOrNotFound(employee);
+    }
+
+    @DeleteMapping("/{employeeId}/professions/{professionsId}")
+    public ResponseEntity<Void> removeProfessionsFromEmployee(@PathVariable Long employeeId, @PathVariable Long professionsId) {
+        LOG.debug("REST request удаление профессии {} у сотрудника {}", professionsId, employeeId);
+
+        Optional<Employee> employee = employeeService.findOne(employeeId);
+        if (employee.isPresent()) {
+            employeeService.deleteProfessionFromEmployee(employee.get(), professionsId);
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }

@@ -83,4 +83,8 @@ public interface EmployeeService {
      * Находит одного сотрудника с проверкой доступа текущего пользователя
      */
     Optional<Employee> findOneForCurrentUser(@Param("employeeId") Long employeeId, @Param("currentUserLogin") String currentUserLogin);
+
+    Optional<Employee> findOneWithProfessions(Long id);
+
+    void deleteProfessionFromEmployee(Employee employee, Long professionsId);
 }

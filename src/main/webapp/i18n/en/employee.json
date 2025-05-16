@@ -28,7 +28,7 @@
       "position": "Position",
       "profession": "Profession",
       "team": "Team",
-      "profession": {
+      "profession_update": {
         "delete": {
           "question": "Are you sure you want to delete the profession {{professionName }} for the employee {{lastName }}?"
         }
