@@ -27,7 +27,12 @@
       "task": "Задачи",
       "position": "Должность",
       "profession": "Профессия",
-      "team": "Команда"
+      "team": "Команда",
+      "profession": {
+        "delete": {
+          "question": "Вы уверены, что хотите удалить профессию {{ professionName }} для сотрудника {{ lastName }}?"
+        }
+      }
     }
   }
 }

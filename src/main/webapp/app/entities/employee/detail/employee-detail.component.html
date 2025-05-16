@@ -11,6 +11,14 @@
         <jhi-alert></jhi-alert>
 
         <dl class="row-md jh-entity-details">
+          <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+          </button>
+
+          <button type="button" [routerLink]="['/employee', employeeRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+          </button>
+
           <dt><span jhiTranslate="global.field.id">ID</span></dt>
           <dd>
             <span>{{ employeeRef.id }}</span>
@@ -45,15 +53,6 @@
               </div>
             }
           </dd>
-          <dt><span jhiTranslate="theForgeApp.employee.profession">Profession</span></dt>
-          <dd>
-            @for (profession of employeeRef.professions; track $index; let last = $last) {
-              <span>
-                <a [routerLink]="['/profession', profession.id, 'view']">{{ profession?.professionName }}</a
-                >{{ last ? '' : ', ' }}
-              </span>
-            }
-          </dd>
           <dt><span jhiTranslate="theForgeApp.employee.team">Team</span></dt>
           <dd>
             @if (teamName) {
@@ -64,15 +63,76 @@
               </div>
             }
           </dd>
+
+          <dt><span jhiTranslate="theForgeApp.employee.profession">Profession</span></dt>
+          <!--          <dd>-->
+          <!--            @for (profession of employeeRef.professions; track $index; let last = $last) {-->
+          <!--              <span>-->
+          <!--                <a [routerLink]="['/profession', profession.id, 'view']">{{ profession?.professionName }}</a-->
+          <!--                >{{ last ? '' : ', ' }}-->
+          <!--              </span>-->
+          <!--            }-->
+          <!--          </dd>-->
         </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
-        </button>
-
-        <button type="button" [routerLink]="['/employee', employeeRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
-        </button>
+        <dd>
+          <!-- Таблица с профессиями -->
+          <div class="table-responsive table-professions" id="professions">
+            <table class="table table-striped" aria-describedby="page-heading">
+              <thead>
+                <!-- Заголовки таблицы с возможностью сортировки -->
+                <tr>
+                  <!-- Колонка ID с сортировкой -->
+                  <th scope="col">
+                    <div class="d-flex">
+                      <span jhiTranslate="global.field.id">ID</span>
+                      <fa-icon class="p-1" icon="sort"></fa-icon>
+                    </div>
+                  </th>
+                  <!-- Колонка названия профессии с сортировкой -->
+                  <th scope="col">
+                    <div class="d-flex">
+                      <span jhiTranslate="theForgeApp.employee.profession">Profession</span>
+                      <fa-icon class="p-1" icon="sort"></fa-icon>
+                    </div>
+                  </th>
+                  <!-- Колонка для действий -->
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <!-- Тело таблицы с бесконечным скроллом -->
+              <tbody>
+                <!-- Цикл по командам -->
+                @for (profession of employeeRef.professions; track $index; let last = $last) {
+                  <tr data-cy="professionTable">
+                    <!-- Ячейка с ID и ссылкой на просмотр -->
+                    <td>
+                      <a [routerLink]="['/profession', profession.id, 'view']">{{ profession?.id }}</a
+                      >{{ last ? '' : ', ' }}
+                    </td>
+                    <!-- Ячейка с названием профессии -->
+                    <td>{{ profession?.professionName }}</td>
+                    <!-- Ячейка с кнопками действий -->
+                    <td class="text-end">
+                      <div class="btn-group">
+                        <!-- Кнопка удаления -->
+                        <button
+                          type="submit"
+                          (click)="deleteProfessionFromEmployee(profession)"
+                          class="btn btn-danger btn-sm"
+                          data-cy="professionDeleteButton"
+                        >
+                          <fa-icon icon="times"></fa-icon>
+                          <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </dd>
       </div>
     }
   </div>

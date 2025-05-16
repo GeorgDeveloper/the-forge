@@ -60,6 +60,15 @@ export class EmployeeService {
       .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
+  /**
+   * Поиск сотрудников с профессиями по ID
+   * @param id - идентификатор сотрудника
+   * @returns Observable с ответом сервера, содержащим сотрудника с профессиям
+   */
+  findWithProfessions(id: number): Observable<EntityResponseType> {
+    return this.http.get<IEmployee>(`${this.resourceUrl}/${id}/with-professions`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
@@ -125,5 +134,9 @@ export class EmployeeService {
     return res.clone({
       body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
     });
+  }
+
+  removeProfessionFromEmployee(employeeId: number, professionId: number): Observable<HttpResponse<void>> {
+    return this.http.delete<void>(`${this.resourceUrl}/${employeeId}/professions/${professionId}`, { observe: 'response' });
   }
 }

@@ -27,7 +27,12 @@
       "task": "Task",
       "position": "Position",
       "profession": "Profession",
-      "team": "Team"
+      "team": "Team",
+      "profession": {
+        "delete": {
+          "question": "Are you sure you want to delete the profession {{professionName }} for the employee {{lastName }}?"
+        }
+      }
     }
   }
 }
