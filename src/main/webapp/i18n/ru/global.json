@@ -8,6 +8,7 @@
       "entities": {
         "main": "Сущности",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "calendar": "Календарь",
         "team": "Команда",
         "employee": "Сотрудники",
         "training": "Инструктажи",

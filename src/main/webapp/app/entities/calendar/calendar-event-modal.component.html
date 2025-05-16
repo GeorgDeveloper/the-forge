@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ isEditMode ? 'Редактирование события' : 'Новое событие' }}</h4>
+  <button type="button" class="btn-close" (click)="cancel()"></button>
+</div>
+
+<div class="modal-body">
+  <form (ngSubmit)="save()">
+    <div class="mb-3">
+      <label class="form-label">Название</label>
+      <input type="text" class="form-control" [(ngModel)]="newEvent.title" name="title" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Описание</label>
+      <textarea class="form-control" [(ngModel)]="newEvent.description" name="description" rows="3"></textarea>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Дата</label>
+        <input type="date" class="form-control" [(ngModel)]="newEvent.date" name="date" required />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Время начала</label>
+        <input type="time" class="form-control" [(ngModel)]="newEvent.startTime" name="startTime" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Время окончания</label>
+        <input type="time" class="form-control" [(ngModel)]="newEvent.endTime" name="endTime" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Тип события</label>
+      <select class="form-select" [(ngModel)]="newEvent.type" name="type">
+        @for (type of eventTypes; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Место проведения</label>
+      <input type="text" class="form-control" [(ngModel)]="newEvent.location" name="location" />
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" [(ngModel)]="newEvent.reminder" name="reminder" />
+      <label class="form-check-label">Напомнить</label>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="cancel()">Отмена</button>
+  <button type="button" class="btn btn-primary" (click)="save()">Сохранить</button>
+</div>

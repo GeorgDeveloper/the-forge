@@ -1,0 +1,47 @@
+<!-- calendar.component.html -->
+<div class="calendar-container">
+  <!-- Заголовок с навигацией -->
+  <div class="calendar-header">
+    <button class="btn btn-outline-primary" (click)="previousMonth()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <h2>{{ currentDate() | date: 'MMMM yyyy' }}</h2>
+    <button class="btn btn-outline-primary" (click)="nextMonth()">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    <button class="btn btn-primary ms-auto" (click)="openAddEventModal()"><i class="fas fa-plus"></i> Добавить событие</button>
+  </div>
+
+  <div class="calendar-body">
+    <!-- Левая часть - календарь -->
+    <div class="calendar-grid">
+      <!-- Заголовки дней недели -->
+      <div class="calendar-weekdays">
+        <div *ngFor="let day of ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']" class="weekday">
+          {{ day }}
+        </div>
+      </div>
+
+      <!-- Дни месяца -->
+      <div class="calendar-days">
+        <jhi-calendar-day
+          *ngFor="let day of getDaysInMonth()"
+          [date]="day.date"
+          [isCurrentDate]="isToday(day.date)"
+          [isSelected]="isSelectedDate(day.date)"
+          [hasEvents]="hasEventsOnDate(day.date)"
+          [isOtherMonth]="day.isOtherMonth"
+          (click)="selectDate(day.date)"
+        >
+          {{ day.date.getDate() }}
+        </jhi-calendar-day>
+      </div>
+    </div>
+
+    <!-- Правая часть - список событий -->
+    <div class="calendar-events">
+      <h3>События на {{ selectedDate() | date: 'dd MMMM yyyy' }}</h3>
+      <jhi-calendar-event-list [date]="selectedDate()" [events]="getEventsForDate(selectedDate())"></jhi-calendar-event-list>
+    </div>
+  </div>
+</div>

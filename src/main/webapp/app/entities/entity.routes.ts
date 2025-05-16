@@ -73,6 +73,13 @@ const routes: Routes = [
     loadChildren: () => import('./position/position.routes'),
   },
 
+  // Маршрут для календаря
+  {
+    path: 'calendar',
+    data: { pageTitle: 'Календарь событий' },
+    loadChildren: () => import('./calendar/calendar.routes'),
+  },
+
   // Маршрут для должностных инструкций
   {
     path: 'job-description',

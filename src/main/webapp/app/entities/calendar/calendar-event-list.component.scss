@@ -1,0 +1,59 @@
+.event-list {
+  margin-top: 1rem;
+}
+
+.event-item {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    background-color: #e9ecef;
+  }
+
+  .event-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+
+  .event-title {
+    font-weight: 500;
+    margin: 0.25rem 0;
+  }
+
+  .event-description {
+    font-size: 0.9rem;
+    color: #495057;
+  }
+
+  &.event-type-task {
+    border-left-color: #0d6efd;
+  }
+
+  &.event-type-instruction {
+    border-left-color: #fd7e14;
+  }
+
+  &.event-type-meeting {
+    border-left-color: #20c997;
+  }
+
+  &.event-type-training {
+    border-left-color: #6f42c1;
+  }
+
+  &.event-type-other {
+    border-left-color: #6c757d;
+  }
+}
+
+.no-events {
+  padding: 1rem;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}

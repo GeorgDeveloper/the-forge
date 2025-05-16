@@ -1,0 +1,20 @@
+@if (events.length > 0) {
+  <div class="event-list">
+    @for (event of events; track event.id) {
+      <div class="event-item" [class]="'event-type-' + event.type.toLowerCase()" (click)="openEventModal(event)">
+        <div class="event-time">
+          @if (event.startTime) {
+            {{ event.startTime }}
+            @if (event.endTime) {
+              - {{ event.endTime }}
+            }
+          }
+        </div>
+        <div class="event-title">{{ event.title }}</div>
+        <div class="event-description">{{ event.description }}</div>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="no-events">Нет событий на эту дату</div>
+}
