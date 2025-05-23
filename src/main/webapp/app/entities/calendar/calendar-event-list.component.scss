@@ -1,3 +1,4 @@
+/* Стили списка событий */
 .event-list {
   margin-top: 1rem;
 }
@@ -15,23 +16,64 @@
     background-color: #e9ecef;
   }
 
+  .event-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .event-title {
+    font-weight: 500;
+    flex-grow: 1;
+  }
+
   .event-time {
     font-size: 0.8rem;
     color: #6c757d;
   }
 
-  .event-title {
-    font-weight: 500;
-    margin: 0.25rem 0;
-  }
-
   .event-description {
     font-size: 0.9rem;
     color: #495057;
+    margin: 0.25rem 0;
   }
 
+  .event-status {
+    font-style: italic;
+    color: #5a5c69;
+    font-size: 0.8rem;
+  }
+
+  .event-priority {
+    display: inline-block;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+
+    &.HIGH {
+      background-color: #e74a3b;
+      color: white;
+    }
+    &.MEDIUM {
+      background-color: #f6c23e;
+      color: #2c3e50;
+    }
+    &.LOW {
+      background-color: #1cc88a;
+      color: white;
+    }
+  }
+
+  /* Стили для разных типов событий */
   &.event-type-task {
-    border-left-color: #0d6efd;
+    border-left-color: #4e73df;
+    background-color: #f8f9fc;
+
+    .event-title::before {
+      content: 'Задача: ';
+      font-weight: bold;
+    }
   }
 
   &.event-type-instruction {

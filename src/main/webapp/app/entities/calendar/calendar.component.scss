@@ -1,4 +1,4 @@
-// calendar.component.scss
+/* Основные стили календаря */
 .calendar-container {
   display: flex;
   flex-direction: column;
@@ -47,80 +47,8 @@
   gap: 0.5rem;
 }
 
-.day {
+.weekday {
   padding: 0.5rem;
-  border-radius: 4px;
   text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    background-color: #f0f0f0;
-  }
-
-  &.current {
-    font-weight: bold;
-    color: #0d6efd;
-  }
-
-  &.selected {
-    background-color: #0d6efd;
-    color: white;
-  }
-
-  &.other-month {
-    color: #adb5bd;
-  }
-
-  &.has-events::after {
-    content: '';
-    display: block;
-    width: 6px;
-    height: 6px;
-    background-color: #dc3545;
-    border-radius: 50%;
-    margin: 0.2rem auto 0;
-  }
-}
-
-.event-item {
-  padding: 0.75rem;
-  margin-bottom: 0.5rem;
-  border-radius: 4px;
-  background-color: #f8f9fa;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    background-color: #e9ecef;
-  }
-
-  .event-time {
-    font-size: 0.8rem;
-    color: #6c757d;
-  }
-
-  .event-title {
-    font-weight: 500;
-  }
-
-  &.event-type-task {
-    border-left: 4px solid #0d6efd;
-  }
-
-  &.event-type-instruction {
-    border-left: 4px solid #fd7e14;
-  }
-
-  &.event-type-meeting {
-    border-left: 4px solid #20c997;
-  }
-
-  &.event-type-training {
-    border-left: 4px solid #6f42c1;
-  }
-
-  &.event-type-other {
-    border-left: 4px solid #6c757d;
-  }
+  font-weight: bold;
 }

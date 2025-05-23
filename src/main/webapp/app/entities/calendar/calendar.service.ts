@@ -1,44 +1,75 @@
-// calendar.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CalendarEvent } from './calendar-event.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { combineLatest, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { CalendarEvent, EventType } from './calendar-event.model';
+import { ITask } from '../../entities/task/task.model';
+import dayjs from 'dayjs/esm';
 
 @Injectable({ providedIn: 'root' })
 export class CalendarService {
-  private resourceUrl = 'api/calendar/events';
+  private resourceUrl = 'api/calendar-tasks/events';
+  private tasksUrl = 'api/calendar-tasks';
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Получает все события календаря
-   */
   getEvents(): Observable<CalendarEvent[]> {
-    return this.http.get<CalendarEvent[]>(this.resourceUrl);
+    return this.http.get<CalendarEvent[]>(this.resourceUrl).pipe(
+      map(response => (Array.isArray(response) ? response : [])),
+      catchError(error => {
+        console.error('Error loading events:', error);
+        return of([]);
+      }),
+    );
   }
 
-  /**
-   * Добавляет новое событие
-   * @param event Событие для добавления
-   */
-  addEvent(event: CalendarEvent): Observable<CalendarEvent> {
-    return this.http.post<CalendarEvent>(this.resourceUrl, event);
+  getTasksAsEvents(): Observable<CalendarEvent[]> {
+    return this.http.get<any>(this.tasksUrl).pipe(
+      map(response => {
+        // Преобразуем ответ в массив, если это необходимо
+        const tasks = Array.isArray(response) ? response : [];
+        return tasks.map(task => this.convertTaskToEvent(task));
+      }),
+      catchError(error => {
+        console.error('Error loading tasks:', error);
+        return of([]);
+      }),
+    );
   }
 
-  /**
-   * Получает события для указанной даты
-   * @param date Дата для фильтрации
-   */
-  getEventsByDate(date: Date): Observable<CalendarEvent[]> {
-    const dateStr = date.toISOString().split('T')[0];
-    return this.http.get<CalendarEvent[]>(`${this.resourceUrl}/date/${dateStr}`);
-  }
+  private convertTaskToEvent(task: ITask): CalendarEvent {
+    try {
+      let dateStr = '';
+      const plannedDate = task.plannedCompletionDate;
 
-  /**
-   * Удаляет событие
-   * @param id ID события
-   */
-  deleteEvent(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.resourceUrl}/${id}`);
+      if (plannedDate) {
+        const dateObj = typeof plannedDate === 'string' ? dayjs(plannedDate) : plannedDate;
+
+        dateStr = dateObj.isValid() ? dateObj.format('YYYY-MM-DD') : '';
+      }
+
+      return {
+        id: task.id,
+        title: task.taskName || 'Без названия',
+        description: task.body || '',
+        date: dateStr,
+        type: EventType.TASK,
+        priority: task.priority || 'MEDIUM',
+        status: task.status || 'UNKNOWN',
+        startTime: '09:00',
+        endTime: '10:00',
+      };
+    } catch (e) {
+      console.error('Error converting task to event:', e);
+      return {
+        id: task.id,
+        title: task.taskName || 'Без названия',
+        description: task.body || '',
+        date: '',
+        type: EventType.TASK,
+        priority: task.priority || 'MEDIUM',
+        status: task.status || 'UNKNOWN',
+      };
+    }
   }
 }

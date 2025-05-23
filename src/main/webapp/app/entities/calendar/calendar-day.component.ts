@@ -1,34 +1,19 @@
-// calendar-day.component.ts
-import { Component, Input, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { CalendarEvent } from './calendar-event.model';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'jhi-calendar-day',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './calendar-day.component.html',
   styleUrls: ['./calendar-day.component.scss'],
 })
 export class CalendarDayComponent {
-  // Дата для отображения
-  @Input() date: Date | null = null;
+  @Input() date: Date | null = null; // Дата для отображения
+  @Input() hasEvents: boolean = false; // Есть ли события
+  @Input() isCurrentDate: boolean = false; // Текущая дата
+  @Input() isSelected: boolean = false; // Выбранная дата
+  @Input() isOtherMonth: boolean = false; // День из другого месяца
 
-  // Флаг, что на этот день есть события
-  @Input() hasEvents: boolean = false;
-
-  // Флаг, что это текущая дата
-  @Input() isCurrentDate: boolean = false;
-
-  // Флаг, что это выбранная дата
-  @Input() isSelected: boolean = false;
-
-  // Флаг, что это день из другого месяца
-  @Input() isOtherMonth: boolean = false;
-
-  /**
-   * Получает классы для дня календаря
-   */
+  // Формирование классов для дня
   getDayClasses(): string {
     let classes = 'day';
     if (this.isCurrentDate) classes += ' current';

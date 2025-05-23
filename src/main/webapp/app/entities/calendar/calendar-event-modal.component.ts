@@ -1,9 +1,8 @@
-// calendar-event-modal.component.ts
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { CalendarEvent, EventType } from './calendar-event.model';
 import { CommonModule } from '@angular/common';
+import { CalendarEvent, EventType } from './calendar-event.model';
 
 @Component({
   selector: 'jhi-calendar-event-modal',
@@ -13,42 +12,28 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./calendar-event-modal.component.scss'],
 })
 export class CalendarEventModalComponent {
-  // Режим редактирования (true) или создания (false)
-  @Input() isEditMode: boolean = false;
+  @Input() isEditMode: boolean = false; // Режим редактирования
+  @Input() date?: Date; // Дата для нового события
+  @Input() event?: CalendarEvent; // Событие для редактирования
 
-  // Дата для нового события
-  @Input() date?: Date;
-
-  // Событие для редактирования
-  @Input() event?: CalendarEvent;
-
-  // Типы событий для выпадающего списка
-  eventTypes = Object.values(EventType);
-
-  // Новое событие
-  newEvent: CalendarEvent = {
-    title: '',
-    description: '',
-    date: this.date?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
-    type: EventType.TASK,
-  };
+  eventTypes = Object.values(EventType); // Доступные типы событий
+  newEvent: CalendarEvent; // Новое/редактируемое событие
 
   constructor(public activeModal: NgbActiveModal) {
-    if (this.event) {
-      this.newEvent = { ...this.event };
-    }
+    this.newEvent = this.event || {
+      title: '',
+      description: '',
+      date: this.date?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
+      type: EventType.TASK,
+    };
   }
 
-  /**
-   * Сохраняет событие
-   */
+  // Сохранение события
   save(): void {
     this.activeModal.close(this.newEvent);
   }
 
-  /**
-   * Отменяет редактирование
-   */
+  // Отмена
   cancel(): void {
     this.activeModal.dismiss('cancel');
   }

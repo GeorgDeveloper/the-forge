@@ -1,7 +1,17 @@
+<!-- Шаблон списка событий -->
 @if (events.length > 0) {
   <div class="event-list">
     @for (event of events; track event.id) {
-      <div class="event-item" [class]="'event-type-' + event.type.toLowerCase()" (click)="openEventModal(event)">
+      <div class="event-item" [class]="getEventTypeClass(event.type)" (click)="openEventModal(event)">
+        <div class="event-header">
+          <span class="event-title">{{ event.title }}</span>
+          @if (event.priority) {
+            <span class="event-priority" [class]="event.priority">
+              {{ event.priority }}
+            </span>
+          }
+        </div>
+
         <div class="event-time">
           @if (event.startTime) {
             {{ event.startTime }}
@@ -10,8 +20,12 @@
             }
           }
         </div>
-        <div class="event-title">{{ event.title }}</div>
+
         <div class="event-description">{{ event.description }}</div>
+
+        @if (event.status) {
+          <div class="event-status">Статус: {{ event.status }}</div>
+        }
       </div>
     }
   </div>

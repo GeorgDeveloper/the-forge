@@ -1,34 +1,30 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { combineLatest, Observable, of } from 'rxjs';
 
 import { CalendarEvent, EventType } from './calendar-event.model';
 import { CalendarService } from './calendar.service';
-import { CalendarEventModalComponent } from './calendar-event-modal.component';
 import { CalendarDayComponent } from './calendar-day.component';
 import { CalendarEventListComponent } from './calendar-event-list.component';
+import { CalendarEventModalComponent } from './calendar-event-modal.component';
+
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-calendar',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, CalendarDayComponent, CalendarEventListComponent],
+  imports: [CommonModule, RouterModule, FormsModule, CalendarDayComponent, CalendarEventListComponent, DatePipe],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent implements OnInit {
-  // Текущая дата
-  currentDate = signal<Date>(new Date());
-
-  // Выбранная дата
-  selectedDate = signal<Date>(new Date());
-
-  // События календаря
-  events = signal<CalendarEvent[]>([]);
-
-  // Загрузка данных
-  isLoading = signal<boolean>(false);
+  currentDate = signal<Date>(new Date()); // Текущий месяц
+  selectedDate = signal<Date>(new Date()); // Выбранная дата
+  events = signal<CalendarEvent[]>([]); // Все события
+  isLoading = signal<boolean>(false); // Флаг загрузки
 
   constructor(
     private calendarService: CalendarService,
@@ -36,114 +32,61 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadEvents();
+    this.loadAllEvents();
   }
 
-  /**
-   * Загружает события из API
-   */
-  loadEvents(): void {
+  // Загрузка всех событий (календарных + задач)
+  loadAllEvents(): void {
     this.isLoading.set(true);
-    this.calendarService.getEvents().subscribe({
-      next: events => {
-        this.events.set(events);
+
+    combineLatest([
+      this.calendarService.getEvents().pipe(catchError(() => of([] as CalendarEvent[]))),
+      this.calendarService.getTasksAsEvents().pipe(catchError(() => of([] as CalendarEvent[]))),
+    ]).subscribe({
+      next: ([events, taskEvents]) => {
+        // Убеждаемся, что оба значения - массивы
+        const safeEvents = Array.isArray(events) ? events : [];
+        const safeTaskEvents = Array.isArray(taskEvents) ? taskEvents : [];
+
+        this.events.set([...safeEvents, ...safeTaskEvents]);
         this.isLoading.set(false);
       },
       error: err => {
-        console.error('Error loading events:', err);
+        console.error('Error loading data:', err);
+        this.events.set([]);
         this.isLoading.set(false);
       },
     });
   }
 
-  /**
-   * Изменяет выбранную дату
-   * @param date Новая выбранная дата
-   */
+  // Выбор даты
   selectDate(date: Date): void {
     this.selectedDate.set(date);
   }
 
-  /**
-   * Переход к предыдущему месяцу
-   */
+  // Переход к предыдущему месяцу
   previousMonth(): void {
     const newDate = new Date(this.currentDate());
     newDate.setMonth(newDate.getMonth() - 1);
     this.currentDate.set(newDate);
+    this.loadAllEvents();
   }
 
-  /**
-   * Переход к следующему месяцу
-   */
+  // Переход к следующему месяцу
   nextMonth(): void {
     const newDate = new Date(this.currentDate());
     newDate.setMonth(newDate.getMonth() + 1);
     this.currentDate.set(newDate);
+    this.loadAllEvents();
   }
 
-  /**
-   * Открывает модальное окно для создания нового события
-   */
-  openAddEventModal(): void {
-    const modalRef = this.modalService.open(CalendarEventModalComponent, {
-      size: 'lg',
-      backdrop: 'static',
-    });
-
-    modalRef.componentInstance.date = this.selectedDate();
-
-    modalRef.closed.subscribe((result: CalendarEvent) => {
-      if (result) {
-        this.addEvent(result);
-      }
-    });
-  }
-
-  /**
-   * Добавляет новое событие
-   * @param event Новое событие
-   */
-  addEvent(event: CalendarEvent): void {
-    this.calendarService.addEvent(event).subscribe({
-      next: newEvent => {
-        this.events.update(events => [...events, newEvent]);
-      },
-      error: err => {
-        console.error('Error adding event:', err);
-      },
-    });
-  }
-
-  /**
-   * Получает события для указанной даты
-   * @param date Дата для фильтрации событий
-   * @returns Массив событий на указанную дату
-   */
-  getEventsForDate(date: Date): CalendarEvent[] {
-    return this.events().filter(event => new Date(event.date).toDateString() === date.toDateString());
-  }
-
-  /**
-   * Проверяет, есть ли события на указанную дату
-   * @param date Дата для проверки
-   * @returns true, если есть события на эту дату
-   */
-  hasEventsOnDate(date: Date): boolean {
-    return this.getEventsForDate(date).length > 0;
-  }
-
-  /**
-   * Проверяет, является ли дата сегодняшней
-   */
+  // Проверка, является ли дата сегодняшней
   isToday(date: Date): boolean {
     const today = new Date();
     return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
   }
 
-  /**
-   * Проверяет, является ли дата выбранной
-   */
+  // Проверка, является ли дата выбранной
   isSelectedDate(date: Date): boolean {
     const selected = this.selectedDate();
     return (
@@ -151,9 +94,7 @@ export class CalendarComponent implements OnInit {
     );
   }
 
-  /**
-   * Возвращает массив дней для отображения в текущем месяце
-   */
+  // Получение дней для отображения в месяце
   getDaysInMonth(): { date: Date; isOtherMonth: boolean }[] {
     const date = this.currentDate();
     const year = date.getFullYear();
@@ -162,11 +103,9 @@ export class CalendarComponent implements OnInit {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
-    // Начинаем с понедельника перед первым числом месяца
     const startDay = new Date(firstDay);
     startDay.setDate(firstDay.getDate() - (firstDay.getDay() || 7) + 1);
 
-    // Заканчиваем в воскресенье после последнего числа месяца
     const endDay = new Date(lastDay);
     endDay.setDate(lastDay.getDate() + (7 - (lastDay.getDay() || 7)));
 
@@ -182,5 +121,30 @@ export class CalendarComponent implements OnInit {
     }
 
     return days;
+  }
+
+  // Проверка наличия событий на дату
+  hasEventsOnDate(date: Date): boolean {
+    return this.getEventsForDate(date).length > 0;
+  }
+
+  // Получение событий для конкретной даты
+  getEventsForDate(date: Date): CalendarEvent[] {
+    return this.events().filter(event => new Date(event.date).toDateString() === date.toDateString());
+  }
+
+  // Открытие модального окна для добавления события
+  openAddEventModal(): void {
+    const modalRef = this.modalService.open(CalendarEventModalComponent, {
+      size: 'lg',
+      backdrop: 'static',
+    });
+
+    modalRef.componentInstance.date = this.selectedDate();
+
+    modalRef.closed.subscribe((result: CalendarEvent) => {
+      if (result) {
+      }
+    });
   }
 }

@@ -1,6 +1,5 @@
-<!-- calendar.component.html -->
 <div class="calendar-container">
-  <!-- Заголовок с навигацией -->
+  <!-- Шапка календаря с навигацией -->
   <div class="calendar-header">
     <button class="btn btn-outline-primary" (click)="previousMonth()">
       <i class="fas fa-chevron-left"></i>
@@ -12,33 +11,35 @@
     <button class="btn btn-primary ms-auto" (click)="openAddEventModal()"><i class="fas fa-plus"></i> Добавить событие</button>
   </div>
 
+  <!-- Основное тело календаря -->
   <div class="calendar-body">
-    <!-- Левая часть - календарь -->
+    <!-- Сетка календаря -->
     <div class="calendar-grid">
-      <!-- Заголовки дней недели -->
+      <!-- Дни недели -->
       <div class="calendar-weekdays">
-        <div *ngFor="let day of ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']" class="weekday">
-          {{ day }}
-        </div>
+        @for (day of ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; track $index) {
+          <div class="weekday">{{ day }}</div>
+        }
       </div>
 
       <!-- Дни месяца -->
       <div class="calendar-days">
-        <jhi-calendar-day
-          *ngFor="let day of getDaysInMonth()"
-          [date]="day.date"
-          [isCurrentDate]="isToday(day.date)"
-          [isSelected]="isSelectedDate(day.date)"
-          [hasEvents]="hasEventsOnDate(day.date)"
-          [isOtherMonth]="day.isOtherMonth"
-          (click)="selectDate(day.date)"
-        >
-          {{ day.date.getDate() }}
-        </jhi-calendar-day>
+        @for (day of getDaysInMonth(); track $index) {
+          <jhi-calendar-day
+            [date]="day.date"
+            [isCurrentDate]="isToday(day.date)"
+            [isSelected]="isSelectedDate(day.date)"
+            [hasEvents]="hasEventsOnDate(day.date)"
+            [isOtherMonth]="day.isOtherMonth"
+            (click)="selectDate(day.date)"
+          >
+            {{ day.date.getDate() }}
+          </jhi-calendar-day>
+        }
       </div>
     </div>
 
-    <!-- Правая часть - список событий -->
+    <!-- Список событий -->
     <div class="calendar-events">
       <h3>События на {{ selectedDate() | date: 'dd MMMM yyyy' }}</h3>
       <jhi-calendar-event-list [date]="selectedDate()" [events]="getEventsForDate(selectedDate())"></jhi-calendar-event-list>

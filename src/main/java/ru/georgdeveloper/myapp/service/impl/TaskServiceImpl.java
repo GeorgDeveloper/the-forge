@@ -1,5 +1,6 @@
 package ru.georgdeveloper.myapp.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +103,11 @@ public class TaskServiceImpl implements TaskService {
     public Page<Task> findAll(Pageable pageable) {
         LOG.debug("Запрос на получение всех задач");
         return taskRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Task> findAll() {
+        return taskRepository.findAll();
     }
 
     /**

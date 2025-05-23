@@ -1,5 +1,6 @@
 package ru.georgdeveloper.myapp.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,13 @@ public interface TaskService {
      * @return список задач.
      */
     Page<Task> findAll(Pageable pageable);
+
+    /**
+     * Получить все задачи.
+     *
+     * @return список задач.
+     */
+    List<Task> findAll();
 
     /**
      * Получить задачу по идентификатору.
