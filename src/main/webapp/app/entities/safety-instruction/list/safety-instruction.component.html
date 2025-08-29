@@ -80,14 +80,16 @@
               <td>
                 @if (safetyInstruction.profession) {
                   <div>
-                    <a [routerLink]="['/profession', safetyInstruction.profession.id, 'view']">{{ safetyInstruction.profession.id }}</a>
+                    <a [routerLink]="['/profession', safetyInstruction.profession.id, 'view']">{{
+                      safetyInstruction.profession.professionName
+                    }}</a>
                   </div>
                 }
               </td>
               <td>
                 @if (safetyInstruction.position) {
                   <div>
-                    <a [routerLink]="['/position', safetyInstruction.position.id, 'view']">{{ safetyInstruction.position.id }}</a>
+                    <a [routerLink]="['/position', safetyInstruction.position.id, 'view']">{{ safetyInstruction.position.positionName }}</a>
                   </div>
                 }
               </td>

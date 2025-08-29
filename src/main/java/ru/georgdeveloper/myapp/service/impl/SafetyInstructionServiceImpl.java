@@ -90,7 +90,7 @@ public class SafetyInstructionServiceImpl implements SafetyInstructionService {
     @Transactional(readOnly = true) // Оптимизация для операций чтения
     public Page<SafetyInstruction> findAll(Pageable pageable) {
         LOG.debug("Запрос на получение всех инструкций по безопасности");
-        return safetyInstructionRepository.findAll(pageable);
+        return safetyInstructionRepository.findAllWithProfessionAndPosition(pageable);
     }
 
     /**
@@ -102,7 +102,7 @@ public class SafetyInstructionServiceImpl implements SafetyInstructionService {
     @Transactional(readOnly = true)
     public Optional<SafetyInstruction> findOne(Long id) {
         LOG.debug("Запрос на получение инструкции по ID: {}", id);
-        return safetyInstructionRepository.findById(id);
+        return safetyInstructionRepository.findWithProfessionAndPositionById(id);
     }
 
     /**

@@ -1,0 +1,83 @@
+USER at 2025-08-27T07:35:42.424555700:
+
+в safety-instruction испрвь отображение profession и position. необходимо выводить в таблице 
+имена вместо id
+
+ASSISTANT at 2025-08-27T07:35:49.151099400:
+
+Чтобы отобразить `profession` и `position` в виде названий (а не ID) в таблице, необходимо связать эти поля с соответствующими справочными данными. Предположим, у вас есть модели `Profession` и `Position`, которые содержат имена профессий и должностей.
+
+Вот как можно изменить код представления и шаблон:
+
+---
+
+### 1. **models.py**
+Убедитесь, что у вас есть модели для справочных данных:
+
+```python
+# models.py
+class Profession(models.Model):
+    name = models.CharField(max_length=100)
+
+class Position(models.Model):
+    name = models.CharField(max_length=100)
+```
+
+---
+
+### 2. **views.py**
+Измените представление, чтобы передавать имена профессий и должностей вместо ID:
+
+```python
+# views.py
+from django.shortcuts import render
+from .models import SafetyInstruction, Profession, Position
+
+def safety_instruction_list(request):
+    instructions = SafetyInstruction.objects.all()
+    professions = {p.id: p.name for p in Profession.objects.all()}
+    positions = {p.id: p.name for p in Position.objects.all()}
+    
+    context = {
+        'instructions': instructions,
+        'professions': professions,
+        'positions': positions,
+    }
+    return render(request, 'your_template.html', context)
+```
+
+---
+
+### 3. **your_template.html**
+Обновите HTML-шаблон, чтобы отображать имена профессий и должностей:
+
+```html
+<!-- your_template.html -->
+<table>
+  <thead>
+    <tr>
+      <th>Имя</th>
+      <th>Профессия</th>
+      <th>Должность</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for instruction in instructions %}
+    <tr>
+      <td>{{ instruction.name }}</td>
+      <td>{{ professions[instruction.profession_id] }}</td>
+      <td>{{ positions[instruction.position_id] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+```
+
+---
+
+### Объяснение:
+- Мы получаем все профессии и должности один раз и сохраняем их в словарях.
+- В шаблоне мы используем эти словари, чтобы выводить имя вместо ID.
+- Это делает таблицу более читаемой и удобной для пользователя.
+
+Если у тебя есть дополнительные детали, например, имена полей или структура модели `SafetyInstruction`, я могу адаптировать пример под твой случай.

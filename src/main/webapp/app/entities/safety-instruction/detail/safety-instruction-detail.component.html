@@ -29,7 +29,9 @@
           <dd>
             @if (safetyInstruction()!.profession) {
               <div>
-                <a [routerLink]="['/profession', safetyInstruction()!.profession?.id, 'view']">{{ safetyInstructionRef.profession?.id }}</a>
+                <a [routerLink]="['/profession', safetyInstruction()!.profession?.id, 'view']">{{
+                  safetyInstructionRef.profession?.professionName
+                }}</a>
               </div>
             }
           </dd>
@@ -37,7 +39,9 @@
           <dd>
             @if (safetyInstruction()!.position) {
               <div>
-                <a [routerLink]="['/position', safetyInstruction()!.position?.id, 'view']">{{ safetyInstructionRef.position?.id }}</a>
+                <a [routerLink]="['/position', safetyInstruction()!.position?.id, 'view']">{{
+                  safetyInstructionRef.position?.positionName
+                }}</a>
               </div>
             }
           </dd>
