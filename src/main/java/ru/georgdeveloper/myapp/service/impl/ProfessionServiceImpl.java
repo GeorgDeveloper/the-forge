@@ -112,7 +112,18 @@ public class ProfessionServiceImpl implements ProfessionService {
     @Transactional(readOnly = true) // Только для чтения, без изменений в БД
     public Page<Profession> findAll(Pageable pageable) {
         LOG.debug("Request to get all Professions");
-        return professionRepository.findAll(pageable);
+        Page<Profession> professionsPage = professionRepository.findAllWithEmployees(pageable);
+
+        // Загружаем связанные данные для каждой профессии
+        professionsPage
+            .getContent()
+            .forEach(profession -> {
+                if (profession.getEmployees() != null) {
+                    profession.getEmployees().size(); // Инициализируем коллекцию
+                }
+            });
+
+        return professionsPage;
     }
 
     /**
