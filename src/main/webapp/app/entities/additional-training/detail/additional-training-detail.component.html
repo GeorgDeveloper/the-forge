@@ -38,7 +38,7 @@
             @if (additionalTraining()!.profession) {
               <div>
                 <a [routerLink]="['/profession', additionalTraining()!.profession?.id, 'view']">{{
-                  additionalTrainingRef.profession?.id
+                  additionalTrainingRef.profession?.professionName
                 }}</a>
               </div>
             }

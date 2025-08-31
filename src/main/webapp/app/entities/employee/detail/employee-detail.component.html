@@ -107,7 +107,7 @@
                   <tr data-cy="professionTable">
                     <!-- Ячейка с ID и ссылкой на просмотр -->
                     <td>
-                      <a [routerLink]="['/profession', profession.id, 'view']">{{ profession?.id }}</a
+                      <a [routerLink]="['/profession', profession.id, 'view']">{{ profession?.professionName }}</a
                       >{{ last ? '' : ', ' }}
                     </td>
                     <!-- Ячейка с названием профессии -->

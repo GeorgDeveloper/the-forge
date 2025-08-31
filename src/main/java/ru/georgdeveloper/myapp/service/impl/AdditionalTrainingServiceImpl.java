@@ -93,7 +93,7 @@ public class AdditionalTrainingServiceImpl implements AdditionalTrainingService 
     @Transactional(readOnly = true)
     public Page<AdditionalTraining> findAll(Pageable pageable) {
         LOG.debug("Запрос на получение всех AdditionalTrainings");
-        return additionalTrainingRepository.findAll(pageable);
+        return additionalTrainingRepository.findAllWithEagerRelationships(pageable);
     }
 
     /**
@@ -105,7 +105,7 @@ public class AdditionalTrainingServiceImpl implements AdditionalTrainingService 
     @Transactional(readOnly = true)
     public Optional<AdditionalTraining> findOne(Long id) {
         LOG.debug("Запрос на получение AdditionalTraining : {}", id);
-        return additionalTrainingRepository.findById(id);
+        return additionalTrainingRepository.findOneWithEagerRelationships(id);
     }
 
     /**

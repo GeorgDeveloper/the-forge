@@ -90,7 +90,9 @@
               <td>
                 @if (additionalTraining.profession) {
                   <div>
-                    <a [routerLink]="['/profession', additionalTraining.profession.id, 'view']">{{ additionalTraining.profession.id }}</a>
+                    <a [routerLink]="['/profession', additionalTraining.profession.id, 'view']">{{
+                      additionalTraining.profession.professionName
+                    }}</a>
                   </div>
                 }
               </td>

@@ -34,7 +34,7 @@
             @if (protectiveEquipment()!.profession) {
               <div>
                 <a [routerLink]="['/profession', protectiveEquipment()!.profession?.id, 'view']">{{
-                  protectiveEquipmentRef.profession?.id
+                  protectiveEquipmentRef.profession?.professionName
                 }}</a>
               </div>
             }

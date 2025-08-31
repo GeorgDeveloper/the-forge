@@ -89,7 +89,7 @@ public class ProtectiveEquipmentServiceImpl implements ProtectiveEquipmentServic
     @Transactional(readOnly = true) // Только для чтения, без изменений в БД
     public Page<ProtectiveEquipment> findAll(Pageable pageable) {
         LOG.debug("Запрос на получение всех средств защиты");
-        return protectiveEquipmentRepository.findAll(pageable);
+        return protectiveEquipmentRepository.findAllWithEagerRelationships(pageable);
     }
 
     /**
@@ -101,7 +101,7 @@ public class ProtectiveEquipmentServiceImpl implements ProtectiveEquipmentServic
     @Transactional(readOnly = true)
     public Optional<ProtectiveEquipment> findOne(Long id) {
         LOG.debug("Запрос на получение средства защиты по ID: {}", id);
-        return protectiveEquipmentRepository.findById(id);
+        return protectiveEquipmentRepository.findOneWithEagerRelationships(id);
     }
 
     /**

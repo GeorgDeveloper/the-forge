@@ -176,3 +176,9 @@ task cleanResources(type: Delete) {
 
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
+
+compileJava {
+    options.compilerArgs += [
+        '-Ahibernate.jpamodelgen.directory=build/generated/sources/annotationProcessor/java/main'
+    ]
+}
