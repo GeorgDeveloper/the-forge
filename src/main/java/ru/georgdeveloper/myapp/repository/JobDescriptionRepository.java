@@ -7,6 +7,5 @@ import ru.georgdeveloper.myapp.domain.JobDescription;
 /**
  * Репозиторий Spring Data JPA для объекта JobDescription.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface JobDescriptionRepository extends JpaRepository<JobDescription, Long> {}

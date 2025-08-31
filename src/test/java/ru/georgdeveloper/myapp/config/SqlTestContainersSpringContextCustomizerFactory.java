@@ -7,6 +7,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.test.context.ContextConfigurationAttributes;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
@@ -19,10 +20,16 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
     private static SqlTestContainer prodTestContainer;
 
     @Override
-    public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
+    public ContextCustomizer createContextCustomizer(
+        @NonNull Class<?> testClass,
+        @NonNull List<ContextConfigurationAttributes> configAttributes
+    ) {
         return new ContextCustomizer() {
             @Override
-            public void customizeContext(ConfigurableApplicationContext context, MergedContextConfiguration mergedConfig) {
+            public void customizeContext(
+                @NonNull ConfigurableApplicationContext context,
+                @NonNull MergedContextConfiguration mergedConfig
+            ) {
                 ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
                 TestPropertyValues testValues = TestPropertyValues.empty();
                 EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
@@ -31,6 +38,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                     log.info("Warming up the sql database");
                     if (null == prodTestContainer) {
                         try {
+                            @SuppressWarnings("unchecked")
                             Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(
                                 this.getClass().getPackageName() + ".PostgreSqlTestContainer"
                             );

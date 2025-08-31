@@ -7,6 +7,5 @@ import ru.georgdeveloper.myapp.domain.Position;
 /**
  * Репозиторий Spring Data JPA для объекта Position.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Long> {}

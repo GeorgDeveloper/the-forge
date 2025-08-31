@@ -182,3 +182,47 @@ compileJava {
         '-Ahibernate.jpamodelgen.directory=build/generated/sources/annotationProcessor/java/main'
     ]
 }
+
+// Задача для исправления raw types в сгенерированных файлах
+task fixGeneratedMetamodel {
+    description = 'Исправляет raw types в сгенерированных JPA metamodel файлах'
+    
+    doLast {
+        def generatedDirs = [
+            'build/generated/sources/annotationProcessor/java/main',
+            'bin/generated-sources/annotations'
+        ]
+        
+        generatedDirs.each { dirPath ->
+            def dir = file(dirPath)
+            if (dir.exists()) {
+                fileTree(dir) {
+                    include '**/*AbstractAuditingEntity_.java'
+                }.each { file ->
+                    def content = file.text
+                    def originalContent = content
+                    
+                    // Исправляем SingularAttribute с raw types
+                    content = content.replaceAll(
+                        /SingularAttribute<(AbstractAuditingEntity), ([^>]+)>/,
+                        'SingularAttribute<$1<?>, $2>'
+                    )
+                    
+                    // Исправляем MappedSuperclassType с raw types
+                    content = content.replaceAll(
+                        /MappedSuperclassType<(AbstractAuditingEntity)>/,
+                        'MappedSuperclassType<$1<?>>'
+                    )
+                    
+                    if (content != originalContent) {
+                        file.text = content
+                        println "Исправлены raw types в файле: ${file.path}"
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Автоматически запускаем исправление после компиляции
+compileJava.finalizedBy fixGeneratedMetamodel

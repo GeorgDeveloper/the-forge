@@ -18,12 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.georgdeveloper.myapp.domain.Employee;
-import ru.georgdeveloper.myapp.domain.Team;
-import ru.georgdeveloper.myapp.domain.User;
-import ru.georgdeveloper.myapp.domain.UserTeamAccess;
 import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.service.EmployeeService;
-import ru.georgdeveloper.myapp.service.UserService;
+// Removed unused import
 import ru.georgdeveloper.myapp.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -46,18 +43,15 @@ public class EmployeeResource {
     private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
 
-    private final UserService userService;
-
     /**
      * Конструктор контроллера.
      *
      * @param employeeService сервис для работы с сотрудниками
      * @param employeeRepository репозиторий сотрудников
      */
-    public EmployeeResource(EmployeeService employeeService, EmployeeRepository employeeRepository, UserService userService) {
+    public EmployeeResource(EmployeeService employeeService, EmployeeRepository employeeRepository) {
         this.employeeService = employeeService;
         this.employeeRepository = employeeRepository;
-        this.userService = userService;
     }
 
     /**

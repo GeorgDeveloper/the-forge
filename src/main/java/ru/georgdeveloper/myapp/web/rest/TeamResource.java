@@ -47,7 +47,6 @@ public class TeamResource {
 
     private final TeamService teamService;
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
     private final TeamAccessService teamAccessService;
     private final UserTeamAccessRepository userTeamAccessRepository;
 
@@ -70,7 +69,6 @@ public class TeamResource {
     ) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
-        this.userRepository = userRepository;
         this.teamAccessService = teamAccessService;
         this.userTeamAccessRepository = userTeamAccessRepository;
         this.userService = userService;

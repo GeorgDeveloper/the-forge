@@ -1,41 +1,45 @@
 package ru.georgdeveloper.myapp.config;
 
-import java.util.Collections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.utility.DockerImageName;
 
-public class PostgreSqlTestContainer implements SqlTestContainer {
+public class PostgreSqlTestContainer implements SqlTestContainer, AutoCloseable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PostgreSqlTestContainer.class);
+    private static class ContainerHolder {
 
-    private PostgreSQLContainer<?> postgreSQLContainer;
+        static final PostgreSQLContainer<?> INSTANCE = createContainer();
 
-    @Override
-    public void destroy() {
-        if (null != postgreSQLContainer && postgreSQLContainer.isRunning()) {
-            postgreSQLContainer.stop();
+        private static PostgreSQLContainer<?> createContainer() {
+            @SuppressWarnings("resource")
+            PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("postgres:13"))
+                .withDatabaseName("testdb")
+                .withUsername("testuser")
+                .withPassword("testpass");
+            container.start();
+            return container;
         }
     }
 
     @Override
-    public void afterPropertiesSet() {
-        if (null == postgreSQLContainer) {
-            postgreSQLContainer = new PostgreSQLContainer<>("postgres:17.2")
-                .withDatabaseName("theForge")
-                .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
-                .withLogConsumer(new Slf4jLogConsumer(LOG))
-                .withReuse(true);
-        }
-        if (!postgreSQLContainer.isRunning()) {
-            postgreSQLContainer.start();
+    public void afterPropertiesSet() throws Exception {
+        // Контейнер инициализируется лениво при первом обращении
+        // через механизм класс-холдера
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        close();
+    }
+
+    @Override
+    public void close() {
+        if (ContainerHolder.INSTANCE != null && ContainerHolder.INSTANCE.isRunning()) {
+            ContainerHolder.INSTANCE.close();
         }
     }
 
     @Override
-    public JdbcDatabaseContainer<?> getTestContainer() {
-        return postgreSQLContainer;
+    public PostgreSQLContainer<?> getTestContainer() {
+        return ContainerHolder.INSTANCE;
     }
 }

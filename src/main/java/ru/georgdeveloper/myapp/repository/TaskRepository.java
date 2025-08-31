@@ -7,6 +7,5 @@ import ru.georgdeveloper.myapp.domain.Task;
 /**
  * Репозиторий Spring Data JPA для объекта Task entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {}

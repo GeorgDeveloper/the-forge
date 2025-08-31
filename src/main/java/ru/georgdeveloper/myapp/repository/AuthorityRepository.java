@@ -7,6 +7,5 @@ import ru.georgdeveloper.myapp.domain.Authority;
 /**
  *  Репозиторий Spring Data JPA для Authority.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, String> {}

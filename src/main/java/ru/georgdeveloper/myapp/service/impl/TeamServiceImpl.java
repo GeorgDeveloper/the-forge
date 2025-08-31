@@ -28,7 +28,6 @@ public class TeamServiceImpl implements TeamService {
 
     // Репозиторий для работы с данными команд в БД
     private final TeamRepository teamRepository;
-    private final UserTeamAccessRepository userTeamAccessRepository;
     private final EmployeeRepository employeeRepository;
     private final TeamAccessServiceImpl teamAccessService;
 
@@ -46,7 +45,6 @@ public class TeamServiceImpl implements TeamService {
         TeamAccessServiceImpl teamAccessService
     ) {
         this.teamRepository = teamRepository;
-        this.userTeamAccessRepository = userTeamAccessRepository;
         this.employeeRepository = employeeRepository;
         this.teamAccessService = teamAccessService;
     }

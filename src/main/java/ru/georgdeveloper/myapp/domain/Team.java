@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import ru.georgdeveloper.myapp.domain.enumeration.AccessLevel;
 
 /**
  * Сущность "Команда/Отдел".
@@ -67,18 +66,18 @@ public class Team implements Serializable {
         //        updateUserAccesses(users);
     }
 
-    private void updateUserAccesses(Set<User> users) {
-        this.userAccesses.clear();
-        if (users != null) {
-            users.forEach(user -> {
-                UserTeamAccess access = new UserTeamAccess();
-                access.setUser(user);
-                access.setTeam(this);
-                access.setAccessLevel(AccessLevel.VIEWER);
-                this.userAccesses.add(access);
-            });
-        }
-    }
+    // private void updateUserAccesses(Set<User> users) {
+    //     this.userAccesses.clear();
+    //     if (users != null) {
+    //         users.forEach(user -> {
+    //             UserTeamAccess access = new UserTeamAccess();
+    //             access.setUser(user);
+    //             access.setTeam(this);
+    //             access.setAccessLevel(AccessLevel.VIEWER);
+    //             this.userAccesses.add(access);
+    //         });
+    //     }
+    // }
 
     // Методы доступа с fluent-интерфейсом
     public Long getId() {

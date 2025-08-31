@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
 import java.util.*;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -66,9 +65,6 @@ class UserResourceIT {
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     private MockMvc restUserMockMvc;

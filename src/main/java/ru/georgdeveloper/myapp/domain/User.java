@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
@@ -22,7 +21,7 @@ import ru.georgdeveloper.myapp.config.Constants;
  */
 @Entity
 @Table(name = "jhi_user") // Специальное имя таблицы для совместимости с JHipster
-public class User extends AbstractAuditingEntity<Long> implements Serializable {
+public class User extends AbstractAuditingEntity<Long> {
 
     private static final long serialVersionUID = 1L; // Идентификатор версии для сериализации
 

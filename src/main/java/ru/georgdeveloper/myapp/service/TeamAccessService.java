@@ -1,6 +1,5 @@
 package ru.georgdeveloper.myapp.service;
 
-import java.security.Principal;
 import java.util.Set;
 import ru.georgdeveloper.myapp.domain.Team;
 import ru.georgdeveloper.myapp.domain.User;

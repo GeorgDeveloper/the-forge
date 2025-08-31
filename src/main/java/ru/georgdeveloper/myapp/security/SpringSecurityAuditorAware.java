@@ -2,6 +2,7 @@ package ru.georgdeveloper.myapp.security;
 
 import java.util.Optional;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import ru.georgdeveloper.myapp.config.Constants;
 
@@ -20,6 +21,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
      * @return Optional с именем текущего пользователя или системного пользователя
      */
     @Override
+    @NonNull
     public Optional<String> getCurrentAuditor() {
         return Optional.of(
             SecurityUtils.getCurrentUserLogin() // Получаем текущего пользователя

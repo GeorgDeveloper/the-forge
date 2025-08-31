@@ -7,6 +7,5 @@ import ru.georgdeveloper.myapp.domain.Training;
 /**
  * Репозиторий Spring Data JPA для обучающего объекта.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface TrainingRepository extends JpaRepository<Training, Long> {}
