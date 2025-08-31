@@ -22,7 +22,8 @@
       "protectiveEquipment": "Protective Equipment",
       "additionalTraining": "Additional Training",
       "safetyInstruction": "Safety Instruction",
-      "employee": "Employee"
+      "employee": "Employee",
+      "noEmployees": "No employees assigned to this profession"
     }
   }
 }

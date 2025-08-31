@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module.Feature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,15 @@ public class JacksonConfiguration {
             new JsonSerializer<LocalTime>() {
                 @Override
                 public void serialize(LocalTime value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+                    gen.writeString(value.toString());
+                }
+            }
+        );
+        javaTime.addSerializer(
+            LocalDate.class,
+            new JsonSerializer<LocalDate>() {
+                @Override
+                public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
                     gen.writeString(value.toString());
                 }
             }

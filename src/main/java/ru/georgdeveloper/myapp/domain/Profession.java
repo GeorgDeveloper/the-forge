@@ -47,7 +47,7 @@ public class Profession implements Serializable {
 
     // Многие-ко-многим: Сотрудники
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "professions")
-    @JsonIgnoreProperties(value = { "trainings", "tasks", "position", "team" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "professions" }, allowSetters = true)
     private Set<Employee> employees = new HashSet<>();
 
     // Методы доступа и управления связями:

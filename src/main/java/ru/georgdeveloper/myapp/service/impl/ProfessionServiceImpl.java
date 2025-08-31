@@ -136,7 +136,28 @@ public class ProfessionServiceImpl implements ProfessionService {
     public Optional<Profession> findOne(Long id) {
         LOG.debug("Request to get Profession : {}", id);
 
-        return professionRepository.findWithEmployeesById(id);
+        Optional<Profession> professionOpt = professionRepository.findWithEmployeesById(id);
+
+        if (professionOpt.isPresent()) {
+            Profession profession = professionOpt.get();
+            // Инициализируем связи с работниками
+            if (profession.getEmployees() != null) {
+                profession.getEmployees().size(); // Инициализируем коллекцию
+                // Также инициализируем связанные данные работников
+                profession
+                    .getEmployees()
+                    .forEach(employee -> {
+                        if (employee.getPosition() != null) {
+                            employee.getPosition().getPositionName(); // Инициализируем должность
+                        }
+                        if (employee.getTeam() != null) {
+                            employee.getTeam().getTeamName(); // Инициализируем команду
+                        }
+                    });
+            }
+        }
+
+        return professionOpt;
     }
 
     /**

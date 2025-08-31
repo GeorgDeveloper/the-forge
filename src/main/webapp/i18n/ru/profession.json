@@ -22,7 +22,8 @@
       "protectiveEquipment": "Норма выдачи СИЗ",
       "additionalTraining": "Дополнительное обучение",
       "safetyInstruction": "Инструкции по ОТ",
-      "employee": "Сотрудники"
+      "employee": "Сотрудники",
+      "noEmployees": "К данной профессии не назначены сотрудники"
     }
   }
 }

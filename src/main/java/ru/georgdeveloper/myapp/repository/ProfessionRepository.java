@@ -14,7 +14,7 @@ import ru.georgdeveloper.myapp.domain.Profession;
  */
 @Repository
 public interface ProfessionRepository extends JpaRepository<Profession, Long> {
-    @Query("SELECT p FROM Profession p LEFT JOIN FETCH p.employees WHERE p.id = :id")
+    @Query("SELECT p FROM Profession p LEFT JOIN FETCH p.employees e LEFT JOIN FETCH e.position LEFT JOIN FETCH e.team WHERE p.id = :id")
     Optional<Profession> findWithEmployeesById(@Param("id") Long id);
 
     // Убираем JOIN FETCH для пагинированного запроса

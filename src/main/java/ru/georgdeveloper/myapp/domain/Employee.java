@@ -1,5 +1,6 @@
 package ru.georgdeveloper.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -35,6 +36,7 @@ public class Employee implements Serializable {
 
     @NotNull
     @Column(name = "birth_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate; // Дата рождения
 
     @NotNull
@@ -43,6 +45,7 @@ public class Employee implements Serializable {
 
     @NotNull
     @Column(name = "hire_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate hireDate; // Дата приема на работу
 
     // Связь один-ко-многим с Training (обучения сотрудника)
@@ -67,7 +70,7 @@ public class Employee implements Serializable {
         joinColumns = @JoinColumn(name = "employee_id"), // Колонка для текущей сущности
         inverseJoinColumns = @JoinColumn(name = "profession_id") // Колонка для связанной сущности
     )
-    @JsonIgnoreProperties(value = { "protectiveEquipments", "additionalTrainings", "safetyInstructions", "employees" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "employees" }, allowSetters = true)
     private Set<Profession> professions = new HashSet<>();
 
     // Связь многие-к-одному с Team (команда/отдел)
