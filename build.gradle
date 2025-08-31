@@ -189,8 +189,7 @@ task fixGeneratedMetamodel {
     
     doLast {
         def generatedDirs = [
-            'build/generated/sources/annotationProcessor/java/main',
-            'bin/generated-sources/annotations'
+            'build/generated/sources/annotationProcessor/java/main'
         ]
         
         generatedDirs.each { dirPath ->
