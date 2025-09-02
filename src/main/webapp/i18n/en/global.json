@@ -96,7 +96,20 @@
     "ribbon": {
       "dev": "Development"
     },
-    "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+    "item-count": "Showing {{first}} - {{second}} of {{total}} items.",
+    "TaskStatus": {
+      "null": "",
+      "TODO": "TODO",
+      "IN_PROGRESS": "IN PROGRESS",
+      "DONE": "DONE"
+    },
+    "TaskPriority": {
+      "null": "",
+      "LOW": "LOW",
+      "MEDIUM": "MEDIUM",
+      "HIGH": "HIGH",
+      "CRITICAL": "CRITICAL"
+    }
   },
   "entity": {
     "action": {

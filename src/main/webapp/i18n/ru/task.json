@@ -25,6 +25,19 @@
       "priority": "Приоритет",
       "body": "Содержание",
       "employee": "Сотрудники"
+    },
+    "TaskStatus": {
+      "null": "",
+      "TODO": "К ВЫПОЛНЕНИЮ",
+      "IN_PROGRESS": "В ПРОЦЕССЕ",
+      "DONE": "ВЫПОЛНЕНО"
+    },
+    "TaskPriority": {
+      "null": "",
+      "LOW": "НИЗКИЙ",
+      "MEDIUM": "СРЕДНИЙ",
+      "HIGH": "ВЫСОКИЙ",
+      "CRITICAL": "КРИТИЧЕСКИЙ"
     }
   }
 }

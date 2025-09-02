@@ -29,15 +29,11 @@
           </dd>
           <dt><span jhiTranslate="theForgeApp.task.status">Status</span></dt>
           <dd>
-            <span [jhiTranslate]="'theForgeApp.TaskStatus.' + (taskRef.status ?? 'null')">{{
-              { null: '', TODO: 'TODO', IN_PROGRESS: 'IN_PROGRESS', DONE: 'DONE' }[taskRef.status ?? 'null']
-            }}</span>
+            <span [jhiTranslate]="'global.TaskStatus.' + (taskRef.status ?? 'null')"></span>
           </dd>
           <dt><span jhiTranslate="theForgeApp.task.priority">Priority</span></dt>
           <dd>
-            <span [jhiTranslate]="'theForgeApp.TaskPriority.' + (taskRef.priority ?? 'null')">{{
-              { null: '', LOW: 'LOW', MEDIUM: 'MEDIUM', HIGH: 'HIGH', CRITICAL: 'CRITICAL' }[taskRef.priority ?? 'null']
-            }}</span>
+            <span [jhiTranslate]="'global.TaskPriority.' + (taskRef.priority ?? 'null')"></span>
           </dd>
           <dt><span jhiTranslate="theForgeApp.task.body">Body</span></dt>
           <dd>

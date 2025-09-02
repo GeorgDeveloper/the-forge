@@ -100,12 +100,8 @@
               <td>{{ task.taskName }}</td>
               <td>{{ task.creationDate | formatMediumDate }}</td>
               <td>{{ task.plannedCompletionDate | formatMediumDate }}</td>
-              <td [jhiTranslate]="'theForgeApp.TaskStatus.' + (task.status ?? 'null')">
-                {{ { null: '', TODO: 'TODO', IN_PROGRESS: 'IN_PROGRESS', DONE: 'DONE' }[task.status ?? 'null'] }}
-              </td>
-              <td [jhiTranslate]="'theForgeApp.TaskPriority.' + (task.priority ?? 'null')">
-                {{ { null: '', LOW: 'LOW', MEDIUM: 'MEDIUM', HIGH: 'HIGH', CRITICAL: 'CRITICAL' }[task.priority ?? 'null'] }}
-              </td>
+              <td [jhiTranslate]="'global.TaskStatus.' + (task.status ?? 'null')"></td>
+              <td [jhiTranslate]="'global.TaskPriority.' + (task.priority ?? 'null')"></td>
               <td>{{ task.body }}</td>
               <td>
                 @if (task.employee) {

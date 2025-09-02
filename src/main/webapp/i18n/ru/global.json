@@ -96,7 +96,20 @@
     "ribbon": {
       "dev": "Разработка"
     },
-    "item-count": "Показываем {{first}} - {{second}} из {{total}}."
+    "item-count": "Показываем {{first}} - {{second}} из {{total}}.",
+    "TaskStatus": {
+      "null": "",
+      "TODO": "К ВЫПОЛНЕНИЮ",
+      "IN_PROGRESS": "В ПРОЦЕССЕ",
+      "DONE": "ВЫПОЛНЕНО"
+    },
+    "TaskPriority": {
+      "null": "",
+      "LOW": "НИЗКИЙ",
+      "MEDIUM": "СРЕДНИЙ",
+      "HIGH": "ВЫСОКИЙ",
+      "CRITICAL": "КРИТИЧЕСКИЙ"
+    }
   },
   "entity": {
     "action": {

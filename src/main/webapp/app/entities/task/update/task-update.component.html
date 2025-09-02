@@ -88,9 +88,9 @@
         <div class="mb-3">
           <label class="form-label" for="field_status" jhiTranslate="theForgeApp.task.status">Status</label>
           <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
-            <option [ngValue]="null">{{ 'theForgeApp.TaskStatus.null' | translate }}</option>
+            <option [ngValue]="null">{{ 'global.TaskStatus.null' | translate }}</option>
             @for (taskStatus of taskStatusValues; track $index) {
-              <option [value]="taskStatus">{{ 'theForgeApp.TaskStatus.' + taskStatus | translate }}</option>
+              <option [value]="taskStatus">{{ 'global.TaskStatus.' + taskStatus | translate }}</option>
             }
           </select>
           @if (statusRef.invalid && (statusRef.dirty || statusRef.touched)) {
@@ -106,9 +106,9 @@
         <div class="mb-3">
           <label class="form-label" for="field_priority" jhiTranslate="theForgeApp.task.priority">Priority</label>
           <select class="form-control" name="priority" formControlName="priority" id="field_priority" data-cy="priority">
-            <option [ngValue]="null">{{ 'theForgeApp.TaskPriority.null' | translate }}</option>
+            <option [ngValue]="null">{{ 'global.TaskPriority.null' | translate }}</option>
             @for (taskPriority of taskPriorityValues; track $index) {
-              <option [value]="taskPriority">{{ 'theForgeApp.TaskPriority.' + taskPriority | translate }}</option>
+              <option [value]="taskPriority">{{ 'global.TaskPriority.' + taskPriority | translate }}</option>
             }
           </select>
           @if (priorityRef.invalid && (priorityRef.dirty || priorityRef.touched)) {
