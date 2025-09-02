@@ -6,6 +6,11 @@
   cursor: pointer;
   transition: all 0.2s;
   border: 1px solid #dee2e6;
+  position: relative;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &:hover {
     background-color: #f0f0f0;
@@ -34,5 +39,43 @@
     background-color: #dc3545;
     border-radius: 50%;
     margin: 0.2rem auto 0;
+  }
+
+  &.has-instructions {
+    background-color: #fff3cd;
+    border-color: #fd7e14;
+
+    &:hover {
+      background-color: #ffeaa7;
+    }
+  }
+
+  .day-number {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .instruction-indicator {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    color: #fd7e14;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    .instruction-count {
+      background-color: #fd7e14;
+      color: white;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      font-weight: bold;
+    }
   }
 }

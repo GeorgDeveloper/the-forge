@@ -1,5 +1,12 @@
 <!-- Шаблон дня календаря -->
 <div class="day" [class]="getDayClasses()">
-  {{ date?.getDate() }}
-  <!-- Отображаем число месяца -->
+  <div class="day-number">{{ date?.getDate() }}</div>
+  @if (hasInstructions()) {
+    <div class="instruction-indicator">
+      <i class="fas fa-graduation-cap"></i>
+      @if (getInstructionCount() > 1) {
+        <span class="instruction-count">{{ getInstructionCount() }}</span>
+      }
+    </div>
+  }
 </div>

@@ -35,20 +35,32 @@ export class CalendarComponent implements OnInit {
     this.loadAllEvents();
   }
 
-  // Загрузка всех событий (календарных + задач)
+  // Загрузка всех событий (календарных + задач + инструктажи)
   loadAllEvents(): void {
     this.isLoading.set(true);
 
     combineLatest([
       this.calendarService.getEvents().pipe(catchError(() => of([] as CalendarEvent[]))),
       this.calendarService.getTasksAsEvents().pipe(catchError(() => of([] as CalendarEvent[]))),
+      this.calendarService.getTrainingsAsEvents().pipe(catchError(() => of([] as CalendarEvent[]))),
+      this.calendarService.getAdditionalTrainingsAsEvents().pipe(catchError(() => of([] as CalendarEvent[]))),
+      this.calendarService.getSafetyInstructionsAsEvents().pipe(catchError(() => of([] as CalendarEvent[]))),
     ]).subscribe({
-      next: ([events, taskEvents]) => {
-        // Убеждаемся, что оба значения - массивы
+      next: ([events, taskEvents, trainingEvents, additionalTrainingEvents, safetyInstructionEvents]) => {
+        // Убеждаемся, что все значения - массивы
         const safeEvents = Array.isArray(events) ? events : [];
         const safeTaskEvents = Array.isArray(taskEvents) ? taskEvents : [];
+        const safeTrainingEvents = Array.isArray(trainingEvents) ? trainingEvents : [];
+        const safeAdditionalTrainingEvents = Array.isArray(additionalTrainingEvents) ? additionalTrainingEvents : [];
+        const safeSafetyInstructionEvents = Array.isArray(safetyInstructionEvents) ? safetyInstructionEvents : [];
 
-        this.events.set([...safeEvents, ...safeTaskEvents]);
+        this.events.set([
+          ...safeEvents,
+          ...safeTaskEvents,
+          ...safeTrainingEvents,
+          ...safeAdditionalTrainingEvents,
+          ...safeSafetyInstructionEvents,
+        ]);
         this.isLoading.set(false);
       },
       error: err => {

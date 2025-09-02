@@ -11,6 +11,22 @@
     <button class="btn btn-primary ms-auto" (click)="openAddEventModal()"><i class="fas fa-plus"></i> Добавить событие</button>
   </div>
 
+  <!-- Легенда календаря -->
+  <div class="calendar-legend">
+    <div class="legend-item">
+      <div class="legend-color instruction-color"></div>
+      <span><i class="fas fa-graduation-cap"></i> Инструктажи</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color task-color"></div>
+      <span><i class="fas fa-tasks"></i> Задачи</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color event-color"></div>
+      <span><i class="fas fa-calendar"></i> События</span>
+    </div>
+  </div>
+
   <!-- Основное тело календаря -->
   <div class="calendar-body">
     <!-- Сетка календаря -->
@@ -31,9 +47,9 @@
             [isSelected]="isSelectedDate(day.date)"
             [hasEvents]="hasEventsOnDate(day.date)"
             [isOtherMonth]="day.isOtherMonth"
+            [events]="getEventsForDate(day.date)"
             (click)="selectDate(day.date)"
           >
-            {{ day.date.getDate() }}
           </jhi-calendar-day>
         }
       </div>

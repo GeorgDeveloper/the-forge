@@ -10,6 +10,9 @@
               {{ event.priority }}
             </span>
           }
+          @if (event.type === 'INSTRUCTION') {
+            <span class="event-type-badge instruction-badge"> <i class="fas fa-graduation-cap"></i> Инструктаж </span>
+          }
         </div>
 
         <div class="event-time">
@@ -22,6 +25,24 @@
         </div>
 
         <div class="event-description">{{ event.description }}</div>
+
+        <!-- Дополнительная информация для инструктажей -->
+        @if (event.type === 'INSTRUCTION') {
+          <div class="instruction-details">
+            @if (event.employeeName) {
+              <div class="instruction-info"><i class="fas fa-user"></i> Сотрудник: {{ event.employeeName }}</div>
+            }
+            @if (event.professionName) {
+              <div class="instruction-info"><i class="fas fa-briefcase"></i> Профессия: {{ event.professionName }}</div>
+            }
+            @if (event.positionName) {
+              <div class="instruction-info"><i class="fas fa-id-card"></i> Должность: {{ event.positionName }}</div>
+            }
+            @if (event.validityPeriod) {
+              <div class="instruction-info"><i class="fas fa-clock"></i> Период действия: {{ event.validityPeriod }} дней</div>
+            }
+          </div>
+        }
 
         @if (event.status) {
           <div class="event-status">Статус: {{ event.status }}</div>
