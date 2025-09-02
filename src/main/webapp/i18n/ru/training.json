@@ -20,7 +20,7 @@
       "id": "ID",
       "trainingName": "Наименование",
       "lastTrainingDate": "Дата последнего инструктажа",
-      "validityPeriod": "Периодичность",
+      "validityPeriod": "Периодичность в месяцах",
       "nextTrainingDate": "Дата следующего инструктажа",
       "employee": "Сотрудники"
     }

@@ -20,7 +20,7 @@
       "id": "ID",
       "equipmentName": "Наименование",
       "quantity": "Количество",
-      "issuanceFrequency": "Периодичность",
+      "issuanceFrequency": "Периодичность в месяцах",
       "profession": "Профессия"
     }
   }
