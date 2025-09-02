@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -66,7 +67,24 @@ public class PositionResource {
         if (position.getId() != null) {
             throw new BadRequestAlertException("Новая должность не может иметь ID", ENTITY_NAME, "idexists");
         }
-        position = positionService.save(position);
+        try {
+            position = positionService.save(position);
+        } catch (DataIntegrityViolationException e) {
+            final String message = e.getMostSpecificCause() != null ? e.getMostSpecificCause().getMessage() : e.getMessage();
+            if (
+                message != null &&
+                (message.contains("ux_position__job_description_id") ||
+                    message.contains("duplicate key value") ||
+                    message.contains("23505"))
+            ) {
+                throw new BadRequestAlertException(
+                    "Данная должностная инструкция уже закреплена за другой должностью",
+                    ENTITY_NAME,
+                    "jobDescriptionInUse"
+                );
+            }
+            throw e;
+        }
         return ResponseEntity.created(new URI("/api/positions/" + position.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, position.getId().toString()))
             .body(position);
@@ -98,7 +116,24 @@ public class PositionResource {
             throw new BadRequestAlertException("Должность не найдена", ENTITY_NAME, "idnotfound");
         }
 
-        position = positionService.update(position);
+        try {
+            position = positionService.update(position);
+        } catch (DataIntegrityViolationException e) {
+            final String message = e.getMostSpecificCause() != null ? e.getMostSpecificCause().getMessage() : e.getMessage();
+            if (
+                message != null &&
+                (message.contains("ux_position__job_description_id") ||
+                    message.contains("duplicate key value") ||
+                    message.contains("23505"))
+            ) {
+                throw new BadRequestAlertException(
+                    "Данная должностная инструкция уже закреплена за другой должностью",
+                    ENTITY_NAME,
+                    "jobDescriptionInUse"
+                );
+            }
+            throw e;
+        }
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, position.getId().toString()))
             .body(position);

@@ -6,6 +6,7 @@ import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AlertService } from 'app/core/util/alert.service';
 
 import { IJobDescription } from 'app/entities/job-description/job-description.model';
 import { JobDescriptionService } from 'app/entities/job-description/service/job-description.service';
@@ -28,6 +29,7 @@ export class PositionUpdateComponent implements OnInit {
   protected positionFormService = inject(PositionFormService);
   protected jobDescriptionService = inject(JobDescriptionService);
   protected activatedRoute = inject(ActivatedRoute);
+  protected alertService = inject(AlertService);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: PositionFormGroup = this.positionFormService.createPositionFormGroup();
@@ -63,7 +65,7 @@ export class PositionUpdateComponent implements OnInit {
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPosition>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: () => this.onSaveSuccess(),
-      error: () => this.onSaveError(),
+      error: err => this.onSaveError(err),
     });
   }
 
@@ -71,8 +73,20 @@ export class PositionUpdateComponent implements OnInit {
     this.previousState();
   }
 
-  protected onSaveError(): void {
-    // Api for inheritance.
+  protected onSaveError(error?: unknown): void {
+    const errorPayload = typeof error === 'string' ? error : JSON.stringify(error ?? {});
+    const isUniqueViolation =
+      errorPayload.includes('ux_position__job_description_id') ||
+      errorPayload.includes('duplicate key value') ||
+      errorPayload.includes('ConstraintViolationException') ||
+      errorPayload.includes('SQLState: 23505');
+
+    if (isUniqueViolation) {
+      this.alertService.addAlert({ type: 'danger', message: 'Данная должностная инструкция уже закреплена за другой должностью.' });
+      return;
+    }
+
+    this.alertService.addAlert({ type: 'danger', message: 'Не удалось сохранить должность. Попробуйте позже.' });
   }
 
   protected onSaveFinalize(): void {
@@ -91,7 +105,7 @@ export class PositionUpdateComponent implements OnInit {
 
   protected loadRelationshipsOptions(): void {
     this.jobDescriptionService
-      .query({ filter: 'position-is-null' })
+      .query()
       .pipe(map((res: HttpResponse<IJobDescription[]>) => res.body ?? []))
       .pipe(
         map((jobDescriptions: IJobDescription[]) =>

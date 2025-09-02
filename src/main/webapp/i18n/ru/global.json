@@ -148,6 +148,7 @@
     "idnull": "Неверный ID",
     "idinvalid": "Invalid Id",
     "idnotfound": "ID cannot be found",
+    "jobDescriptionInUse": "Данная должностная инструкция уже закреплена за другой должностью",
     "file": {
       "could.not.extract": "Не удалось извлечь файл",
       "not.image": "Файл должен был быть изображением, но было установлено, что \"{{ fileType }}\""
