@@ -8,22 +8,24 @@
     <button class="btn btn-outline-primary" (click)="nextMonth()">
       <i class="fas fa-chevron-right"></i>
     </button>
-    <button class="btn btn-primary ms-auto" (click)="openAddEventModal()"><i class="fas fa-plus"></i> Добавить событие</button>
+    <button class="btn btn-primary ms-auto" (click)="openAddEventModal()">
+      <i class="fas fa-plus"></i> {{ 'calendar.addEvent' | translate }}
+    </button>
   </div>
 
   <!-- Легенда календаря -->
   <div class="calendar-legend">
     <div class="legend-item">
       <div class="legend-color instruction-color"></div>
-      <span><i class="fas fa-graduation-cap"></i> Инструктажи</span>
+      <span><i class="fas fa-graduation-cap"></i> {{ 'calendar.legend.instructions' | translate }}</span>
     </div>
     <div class="legend-item">
       <div class="legend-color task-color"></div>
-      <span><i class="fas fa-tasks"></i> Задачи</span>
+      <span><i class="fas fa-tasks"></i> {{ 'calendar.legend.tasks' | translate }}</span>
     </div>
     <div class="legend-item">
       <div class="legend-color event-color"></div>
-      <span><i class="fas fa-calendar"></i> События</span>
+      <span><i class="fas fa-calendar"></i> {{ 'calendar.legend.events' | translate }}</span>
     </div>
   </div>
 
@@ -33,7 +35,18 @@
     <div class="calendar-grid">
       <!-- Дни недели -->
       <div class="calendar-weekdays">
-        @for (day of ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; track $index) {
+        @for (
+          day of [
+            'calendar.weekdays.monShort' | translate,
+            'calendar.weekdays.tueShort' | translate,
+            'calendar.weekdays.wedShort' | translate,
+            'calendar.weekdays.thuShort' | translate,
+            'calendar.weekdays.friShort' | translate,
+            'calendar.weekdays.satShort' | translate,
+            'calendar.weekdays.sunShort' | translate,
+          ];
+          track $index
+        ) {
           <div class="weekday">{{ day }}</div>
         }
       </div>
@@ -57,7 +70,7 @@
 
     <!-- Список событий -->
     <div class="calendar-events">
-      <h3>События на {{ selectedDate() | date: 'dd MMMM yyyy' }}</h3>
+      <h3>{{ 'calendar.eventsOn' | translate }} {{ selectedDate() | date: 'dd MMMM yyyy' }}</h3>
       <jhi-calendar-event-list [date]="selectedDate()" [events]="getEventsForDate(selectedDate())"></jhi-calendar-event-list>
     </div>
   </div>

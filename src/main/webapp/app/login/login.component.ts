@@ -12,7 +12,7 @@ import { AccountService } from 'app/core/auth/account.service';
   templateUrl: './login.component.html',
 })
 export default class LoginComponent implements OnInit, AfterViewInit {
-  username = viewChild.required<ElementRef>('username');
+  username = viewChild<ElementRef>('username');
 
   authenticationError = signal(false);
 
@@ -36,7 +36,10 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.username().nativeElement.focus();
+    const usernameRef = this.username();
+    if (usernameRef) {
+      usernameRef.nativeElement.focus();
+    }
   }
 
   login(): void {

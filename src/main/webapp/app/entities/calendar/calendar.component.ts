@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { combineLatest, Observable, of } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { CalendarEvent, EventType } from './calendar-event.model';
 import { CalendarService } from './calendar.service';
@@ -16,7 +17,7 @@ import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'jhi-calendar',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, CalendarDayComponent, CalendarEventListComponent, DatePipe],
+  imports: [CommonModule, RouterModule, FormsModule, CalendarDayComponent, CalendarEventListComponent, DatePipe, TranslateModule],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })

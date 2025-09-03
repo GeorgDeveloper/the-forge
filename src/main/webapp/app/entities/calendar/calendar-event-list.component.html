@@ -11,7 +11,9 @@
             </span>
           }
           @if (event.type === 'INSTRUCTION') {
-            <span class="event-type-badge instruction-badge"> <i class="fas fa-graduation-cap"></i> Инструктаж </span>
+            <span class="event-type-badge instruction-badge">
+              <i class="fas fa-graduation-cap"></i> {{ 'calendar.badge.instruction' | translate }}
+            </span>
           }
         </div>
 
@@ -30,26 +32,34 @@
         @if (event.type === 'INSTRUCTION') {
           <div class="instruction-details">
             @if (event.employeeName) {
-              <div class="instruction-info"><i class="fas fa-user"></i> Сотрудник: {{ event.employeeName }}</div>
+              <div class="instruction-info">
+                <i class="fas fa-user"></i> {{ 'calendar.fields.employee' | translate }}: {{ event.employeeName }}
+              </div>
             }
             @if (event.professionName) {
-              <div class="instruction-info"><i class="fas fa-briefcase"></i> Профессия: {{ event.professionName }}</div>
+              <div class="instruction-info">
+                <i class="fas fa-briefcase"></i> {{ 'calendar.fields.profession' | translate }}: {{ event.professionName }}
+              </div>
             }
             @if (event.positionName) {
-              <div class="instruction-info"><i class="fas fa-id-card"></i> Должность: {{ event.positionName }}</div>
+              <div class="instruction-info">
+                <i class="fas fa-id-card"></i> {{ 'calendar.fields.position' | translate }}: {{ event.positionName }}
+              </div>
             }
             @if (event.validityPeriod) {
-              <div class="instruction-info"><i class="fas fa-clock"></i> Период действия: {{ event.validityPeriod }} дней</div>
+              <div class="instruction-info">
+                <i class="fas fa-clock"></i> {{ 'calendar.fields.validityDays' | translate: { days: event.validityPeriod } }}
+              </div>
             }
           </div>
         }
 
         @if (event.status) {
-          <div class="event-status">Статус: {{ event.status }}</div>
+          <div class="event-status">{{ 'calendar.fields.status' | translate }}: {{ event.status }}</div>
         }
       </div>
     }
   </div>
 } @else {
-  <div class="no-events">Нет событий на эту дату</div>
+  <div class="no-events">{{ 'calendar.noEvents' | translate }}</div>
 }

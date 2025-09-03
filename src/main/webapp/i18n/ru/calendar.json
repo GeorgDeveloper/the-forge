@@ -1,0 +1,32 @@
+{
+  "calendar": {
+    "titleMonthYear": "{{month}} {{year}}",
+    "addEvent": "Добавить событие",
+    "legend": {
+      "instructions": "Инструктажи",
+      "tasks": "Задачи",
+      "events": "События"
+    },
+    "weekdays": {
+      "monShort": "Пн",
+      "tueShort": "Вт",
+      "wedShort": "Ср",
+      "thuShort": "Чт",
+      "friShort": "Пт",
+      "satShort": "Сб",
+      "sunShort": "Вс"
+    },
+    "eventsOn": "События на",
+    "noEvents": "Нет событий на эту дату",
+    "badge": {
+      "instruction": "Инструктаж"
+    },
+    "fields": {
+      "employee": "Сотрудник",
+      "profession": "Профессия",
+      "position": "Должность",
+      "validityDays": "Период действия: {{days}} дней",
+      "status": "Статус"
+    }
+  }
+}

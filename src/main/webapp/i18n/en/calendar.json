@@ -1,0 +1,32 @@
+{
+  "calendar": {
+    "titleMonthYear": "{{month}} {{year}}",
+    "addEvent": "Add event",
+    "legend": {
+      "instructions": "Instructions",
+      "tasks": "Tasks",
+      "events": "Events"
+    },
+    "weekdays": {
+      "monShort": "Mon",
+      "tueShort": "Tue",
+      "wedShort": "Wed",
+      "thuShort": "Thu",
+      "friShort": "Fri",
+      "satShort": "Sat",
+      "sunShort": "Sun"
+    },
+    "eventsOn": "Events on",
+    "noEvents": "No events for this date",
+    "badge": {
+      "instruction": "Instruction"
+    },
+    "fields": {
+      "employee": "Employee",
+      "profession": "Profession",
+      "position": "Position",
+      "validityDays": "Validity: {{days}} days",
+      "status": "Status"
+    }
+  }
+}
