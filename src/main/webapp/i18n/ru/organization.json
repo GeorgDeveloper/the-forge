@@ -1,0 +1,56 @@
+{
+  "theForgeApp": {
+    "organization": {
+      "home": {
+        "title": "Организации",
+        "createLabel": "Создать новую организацию",
+        "editLabel": "Редактировать организацию",
+        "notFound": "Организации не найдены",
+        "refreshListLabel": "Обновить список"
+      },
+      "fullName": "Полное наименование",
+      "shortName": "Краткое наименование",
+      "activityAreas": "Сферы деятельности",
+      "tagline": "Краткое описание",
+      "legalAddress": "Юридический адрес",
+      "actualAddress": "Фактический адрес",
+      "inn": "ИНН",
+      "kpp": "КПП",
+      "ogrn": "ОГРН",
+      "okpo": "ОКПО",
+      "bankName": "Наименование банка",
+      "bankBik": "БИК банка",
+      "bankCorrAccount": "Корреспондентский счёт",
+      "bankSettlementAccount": "Расчётный счёт",
+      "phoneMain": "Телефон (общий)",
+      "phoneSales": "Телефон отдела продаж",
+      "phoneSupport": "Телефон поддержки",
+      "emailMain": "Email (общий)",
+      "emailPartners": "Email для коммерческих предложений",
+      "emailSupport": "Email поддержки",
+      "website": "Официальный сайт",
+      "foundedYear": "Год основания",
+      "employeesCountRange": "Количество сотрудников",
+      "employeesCountRange.UP_TO_10": "До 10",
+      "employeesCountRange.UP_TO_50": "11-50",
+      "employeesCountRange.UP_TO_200": "51-200",
+      "employeesCountRange.MORE_THAN_200": "200+",
+      "keyPersons": "Ключевые лица",
+      "products": "Продукты/услуги",
+      "partners": "Клиенты/партнёры",
+      "basicInfo": "Основная информация",
+      "legalInfo": "Юридические и контактные реквизиты",
+      "contactInfo": "Контакты для связи",
+      "additionalInfo": "Дополнительная информация"
+    }
+  },
+  "entity": {
+    "action": {
+      "view": "Просмотр",
+      "edit": "Редактировать",
+      "delete": "Удалить",
+      "back": "Назад",
+      "save": "Сохранить"
+    }
+  }
+}

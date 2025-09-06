@@ -25,6 +25,16 @@
           <dd>
             <span>{{ teamRef.teamName }}</span>
           </dd>
+          <dt><span jhiTranslate="theForgeApp.team.organization">Organization</span></dt>
+          <dd>
+            @if (teamRef.organization) {
+              <a [routerLink]="['/organization', teamRef.organization.id, 'view']">{{
+                teamRef.organization.shortName || teamRef.organization.fullName
+              }}</a>
+            } @else {
+              <span>-</span>
+            }
+          </dd>
           <dt><span jhiTranslate="theForgeApp.team.employee">Employee</span></dt>
           <dd>
             @for (employee of team()?.employees; track $index; let last = $last) {

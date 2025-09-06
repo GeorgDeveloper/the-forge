@@ -8,6 +8,7 @@ export interface ITask {
   taskName?: string | null;
   creationDate?: dayjs.Dayjs | null;
   plannedCompletionDate?: dayjs.Dayjs | null;
+  actualCompletionDate?: dayjs.Dayjs | null;
   status?: keyof typeof TaskStatus | null;
   priority?: keyof typeof TaskPriority | null;
   body?: string | null;

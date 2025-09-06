@@ -133,6 +133,10 @@ public class TeamServiceImpl implements TeamService {
                 if (team.getTeamName() != null) {
                     existingTeam.setTeamName(team.getTeamName());
                 }
+                // Обновляем организацию, если она указана
+                if (team.getOrganization() != null) {
+                    existingTeam.setOrganization(team.getOrganization());
+                }
                 if (team.getEmployees() != null) {
                     Set<Employee> employees = (Set<Employee>) team.getEmployees();
                     for (Employee employee : employees) {

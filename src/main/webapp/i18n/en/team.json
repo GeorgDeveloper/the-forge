@@ -19,6 +19,7 @@
       },
       "id": "ID",
       "teamName": "Team Name",
+      "organization": "Organization",
       "employee": "Employee",
       "user": {
         "delete": {

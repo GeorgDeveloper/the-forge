@@ -1,6 +1,27 @@
-# myTeamsJhipster
+# The Forge - Система управления персоналом и задачами
 
-Это приложение было создано с использованием JHipster 8.9.0. Документацию и помощь можно найти по адресу [https://www.jhipster.tech/documentation-archive/v8.9.0](https://www.jhipster.tech/documentation-archive/v8.9.0).
+**The Forge** - это веб-приложение для управления персоналом, задачами, обучением и безопасностью на производстве. Приложение создано с использованием JHipster 8.9.0 и включает в себя современный Angular frontend и Spring Boot backend.
+
+## 🎯 Функциональность приложения
+
+- **Управление сотрудниками** - ведение кадрового учета, должности, профессии
+- **Система задач** - постановка, отслеживание и контроль выполнения задач
+- **Обучение и инструктажи** - управление обязательными и дополнительными обучениями
+- **Безопасность труда** - учет средств защиты и инструктажей по безопасности
+- **Командная работа** - управление командами и доступом сотрудников
+- **Календарь событий** - планирование и отслеживание важных дат
+- **Отчетность** - аналитика и мониторинг процессов
+
+## 🏗️ Технологический стек
+
+- **Backend**: Spring Boot 3.x, Java 17, PostgreSQL
+- **Frontend**: Angular 19, TypeScript, Bootstrap 5
+- **База данных**: PostgreSQL 17.2
+- **Сборка**: Gradle, Webpack
+- **Контейнеризация**: Docker, Docker Compose
+- **Мониторинг**: Spring Boot Actuator, Prometheus
+
+Документацию и помощь можно найти по адресу [https://www.jhipster.tech/documentation-archive/v8.9.0](https://www.jhipster.tech/documentation-archive/v8.9.0).
 
 ## Структура проекта
 
@@ -20,25 +41,51 @@
   JHipster по умолчанию устанавливает Node и npm локально с использованием инструмента сборки. Эта обёртка гарантирует, что npm установлен локально и использует его, избегая различий, которые могут вызвать разные версии. Используя `./npmw` вместо традиционного `npm`, вы можете настроить среду без Node для разработки или тестирования вашего приложения.
 - `/src/main/docker` - Docker-конфигурации для приложения и сервисов, от которых зависит приложение.
 
-## Разработка
+## 🚀 Быстрый старт
+
+### Предварительные требования
+
+- **Java 17** или выше
+- **Node.js 22.13.1** или выше
+- **PostgreSQL 17.2** или выше
+- **Docker** и **Docker Compose** (опционально)
+
+### Установка зависимостей
 
 Система сборки автоматически установит рекомендуемую версию Node и npm.
 
-Мы предоставляем обертку для запуска npm.
-Вам нужно будет запускать эту команду только при изменении зависимостей в файле [package.json](package.json).
-
-```
+```bash
+# Установка зависимостей (только при первом запуске или изменении package.json)
 ./npmw install
 ```
 
+## 💻 Разработка
+
 Мы используем npm-скрипты и [Angular CLI][] вместе с [Webpack][] в качестве нашей системы сборки.
 
-Запустите следующие команды в двух отдельных терминалах, чтобы создать комфортную среду разработки, где ваш браузер
-автоматически обновляется при изменении файлов на вашем жестком диске.
+### Запуск в режиме разработки
 
-```
+Запустите следующие команды в двух отдельных терминалах для создания комфортной среды разработки:
+
+**Терминал 1 - Backend:**
+
+```bash
 ./gradlew -x webapp
+```
+
+**Терминал 2 - Frontend:**
+
+```bash
 ./npmw start
+```
+
+Приложение будет доступно по адресу: [http://localhost:8098](http://localhost:8098)
+
+### Альтернативный запуск (все в одном терминале)
+
+```bash
+# Запуск backend и frontend одновременно
+./npmw run watch
 ```
 
 Npm также используется для управления зависимостями CSS и JavaScript, используемыми в этом приложении. Вы можете обновить зависимости, указав
@@ -106,33 +153,272 @@ create src/main/webapp/app/my-component/my-component.component.ts
 update src/main/webapp/app/app.config.ts
 ```
 
-## Сборка для production
+## 🏭 Сборка для production
 
-### Упаковка в jar
+### Сборка JAR файла (рекомендуется)
 
-Чтобы собрать финальный jar-файл и оптимизировать приложение myTeamsJhipster для production, выполните:
+Для создания готового к деплою JAR файла выполните:
 
-```
+```bash
+# Полная сборка с оптимизацией
 ./gradlew -Pprod clean bootJar
+
+# Быстрая сборка без тестов
+./gradlew -Pprod clean bootJar -x test -x integrationTest
 ```
 
-Эта команда объединит и минифицирует CSS и JavaScript файлы клиентской части. Также она изменит `index.html`, чтобы он ссылался на эти новые файлы.
-Чтобы убедиться, что всё работает, выполните:
+Эта команда:
 
-```
-java -jar build/libs/*.jar
-```
+- Объединит и минифицирует CSS и JavaScript файлы клиентской части
+- Скомпилирует и оптимизирует backend код
+- Создаст единый исполняемый JAR файл
 
-Затем перейдите в браузере по адресу [http://localhost:8098](http://localhost:8098).
+**Результат:** `build/libs/the-forge-0.0.1-SNAPSHOT.jar`
 
-Для получения дополнительной информации обратитесь к [Using JHipster in production][].
+### Сборка WAR файла
 
-### Упаковка в war
+Для развертывания на сервере приложений (Tomcat, JBoss и т.д.):
 
-Чтобы упаковать ваше приложение в war-файл для развертывания на сервере приложений, выполните:
-
-```
+```bash
 ./gradlew -Pprod -Pwar clean bootWar
+```
+
+**Результат:** `build/libs/the-forge-0.0.1-SNAPSHOT.war`
+
+### Сборка Docker образа
+
+```bash
+# Создание Docker образа
+npm run java:docker:prod
+
+# Для ARM64 архитектуры (Apple M1/M2)
+npm run java:docker:arm64
+```
+
+## 🖥️ Развертывание на сервере
+
+### Вариант 1: JAR файл (рекомендуется)
+
+#### 1. Подготовка сервера
+
+**Требования к серверу:**
+
+- Java 17 или выше
+- PostgreSQL 17.2 или выше
+- Минимум 2GB RAM
+- 10GB свободного места
+
+#### 2. Установка PostgreSQL
+
+**Ubuntu/Debian:**
+
+```bash
+# Установка PostgreSQL
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+
+# Создание базы данных и пользователя
+sudo -u postgres psql
+CREATE DATABASE theForge;
+CREATE USER theForge WITH PASSWORD 'theForge';
+GRANT ALL PRIVILEGES ON DATABASE theForge TO theForge;
+\q
+```
+
+**CentOS/RHEL:**
+
+```bash
+# Установка PostgreSQL
+sudo yum install postgresql-server postgresql-contrib
+sudo postgresql-setup initdb
+sudo systemctl enable postgresql
+sudo systemctl start postgresql
+
+# Создание базы данных
+sudo -u postgres psql
+CREATE DATABASE theForge;
+CREATE USER theForge WITH PASSWORD 'your_secure_password';
+GRANT ALL PRIVILEGES ON DATABASE theForge TO theForge;
+\q
+```
+
+#### 3. Настройка приложения
+
+Создайте файл конфигурации `application-prod.yml`:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/theForge
+    username: theForge
+    password: your_secure_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    contexts: prod
+
+jhipster:
+  mail:
+    base-url: https://your-domain.com
+  security:
+    authentication:
+      jwt:
+        base64-secret: your_base64_secret_key_here
+
+server:
+  port: 8098
+```
+
+#### 4. Запуск приложения
+
+```bash
+# Загрузка JAR файла на сервер
+scp build/libs/the-forge-0.0.1-SNAPSHOT.jar user@server:/opt/theforge/
+
+# Запуск приложения
+java -jar the-forge-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+
+# Запуск в фоновом режиме с логированием
+nohup java -jar the-forge-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > app.log 2>&1 &
+
+# Запуск как systemd сервис
+sudo systemctl start theforge
+```
+
+#### 5. Настройка systemd сервиса
+
+Создайте файл `/etc/systemd/system/theforge.service`:
+
+```ini
+[Unit]
+Description=The Forge Application
+After=postgresql.service
+
+[Service]
+Type=simple
+User=theforge
+WorkingDirectory=/opt/theforge
+ExecStart=/usr/bin/java -jar the-forge-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+# Активация сервиса
+sudo systemctl daemon-reload
+sudo systemctl enable theforge
+sudo systemctl start theforge
+```
+
+### Вариант 2: Docker Compose (рекомендуется для контейнеризации)
+
+#### 1. Подготовка Docker Compose файла
+
+Создайте `docker-compose.prod.yml`:
+
+```yaml
+version: '3.8'
+services:
+  postgresql:
+    image: postgres:17.2
+    environment:
+      - POSTGRES_DB=theForge
+      - POSTGRES_USER=theForge
+      - POSTGRES_PASSWORD=your_secure_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    restart: unless-stopped
+
+  app:
+    image: theforge:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/theForge
+      - SPRING_DATASOURCE_USERNAME=theForge
+      - SPRING_DATASOURCE_PASSWORD=your_secure_password
+    ports:
+      - '8098:8098'
+    depends_on:
+      - postgresql
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+```
+
+#### 2. Запуск с Docker Compose
+
+```bash
+# Сборка и запуск
+docker-compose -f docker-compose.prod.yml up -d
+
+# Просмотр логов
+docker-compose -f docker-compose.prod.yml logs -f
+
+# Остановка
+docker-compose -f docker-compose.prod.yml down
+```
+
+### Вариант 3: WAR файл на сервере приложений
+
+#### Tomcat
+
+```bash
+# Копирование WAR файла
+sudo cp build/libs/the-forge-0.0.1-SNAPSHOT.war /var/lib/tomcat9/webapps/theforge.war
+
+# Перезапуск Tomcat
+sudo systemctl restart tomcat9
+```
+
+Приложение будет доступно по адресу: `http://your-server:8080/theforge`
+
+### Настройка Nginx (опционально)
+
+Создайте конфигурацию `/etc/nginx/sites-available/theforge`:
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    location / {
+        proxy_pass http://localhost:8098;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+```bash
+# Активация конфигурации
+sudo ln -s /etc/nginx/sites-available/theforge /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### Мониторинг и логи
+
+```bash
+# Просмотр логов приложения
+tail -f /opt/theforge/app.log
+
+# Проверка статуса сервиса
+sudo systemctl status theforge
+
+# Проверка здоровья приложения
+curl http://localhost:8098/management/health
+
+# Мониторинг метрик
+curl http://localhost:8098/management/prometheus
 ```
 
 ### JHipster Control Center
@@ -190,21 +476,46 @@ sonar.password=admin
 
 Для получения дополнительной информации обратитесь к [странице анализа качества кода][].
 
-### Поддержка Docker Compose
+## 🐳 Работа с Docker
+
+### Локальная разработка с Docker
 
 JHipster генерирует несколько файлов конфигурации Docker Compose в папке [src/main/docker/](src/main/docker/) для запуска необходимых сторонних сервисов.
 
-Например, чтобы запустить необходимые сервисы в контейнерах Docker, выполните:
+#### Запуск только базы данных
 
+```bash
+# Запуск PostgreSQL в Docker
+docker compose -f src/main/docker/postgresql.yml up -d
+
+# Остановка
+docker compose -f src/main/docker/postgresql.yml down
 ```
+
+#### Запуск всех сервисов
+
+```bash
+# Запуск всех необходимых сервисов
 docker compose -f src/main/docker/services.yml up -d
-```
 
-Чтобы остановить и удалить контейнеры, выполните:
-
-```
+# Остановка
 docker compose -f src/main/docker/services.yml down
 ```
+
+#### Полная контейнеризация приложения
+
+```bash
+# Создание Docker образа приложения
+npm run java:docker:prod
+
+# Для ARM64 архитектуры (Apple M1/M2)
+npm run java:docker:arm64
+
+# Запуск приложения с базой данных
+docker compose -f src/main/docker/app.yml up -d
+```
+
+### Отключение Docker Compose интеграции
 
 [Интеграция Spring с Docker Compose](https://docs.spring.io/spring-boot/reference/features/dev-services.html) включена по умолчанию. Её можно отключить в файле application.yml:
 
@@ -215,26 +526,248 @@ spring:
       enabled: false
 ```
 
-Вы также можете полностью "докеризировать" ваше приложение и все зависящие от него сервисы.
-Для этого сначала создайте Docker-образ вашего приложения, выполнив:
+## 🗄️ Работа с базой данных
 
-```sh
-npm run java:docker
+### Настройка PostgreSQL
+
+#### Локальная установка
+
+**Windows:**
+
+1. Скачайте PostgreSQL с [официального сайта](https://www.postgresql.org/download/windows/)
+2. Установите с настройками по умолчанию
+3. Создайте базу данных:
+
+```sql
+CREATE DATABASE theForge;
+CREATE USER theForge WITH PASSWORD 'password';
+GRANT ALL PRIVILEGES ON DATABASE theForge TO theForge;
 ```
 
-Или создайте Docker-образ для архитектуры arm64, если используете процессор на базе arm64, например, MacOS с процессором семейства M1
+**macOS:**
 
-```sh
-npm run java:docker:arm64
+```bash
+# Установка через Homebrew
+brew install postgresql
+brew services start postgresql
+
+# Создание базы данных
+createdb theForge
+psql theForge
+CREATE USER theForge WITH PASSWORD 'password';
+GRANT ALL PRIVILEGES ON DATABASE theForge TO theForge;
 ```
 
-Затем выполните:
+**Linux (Ubuntu/Debian):**
 
-```sh
-docker compose -f src/main/docker/app.yml up -d
+```bash
+# Установка
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+
+# Создание базы данных
+sudo -u postgres psql
+CREATE DATABASE theForge;
+CREATE USER theForge WITH PASSWORD 'password';
+GRANT ALL PRIVILEGES ON DATABASE theForge TO theForge;
+\q
+```
+
+#### Docker (рекомендуется для разработки)
+
+```bash
+# Запуск PostgreSQL в Docker
+docker run --name postgres-theforge \
+  -e POSTGRES_DB=theForge \
+  -e POSTGRES_USER=theForge \
+  -e POSTGRES_PASSWORD=password \
+  -p 5432:5432 \
+  -d postgres:17.2
+
+# Подключение к базе данных
+docker exec -it postgres-theforge psql -U theForge -d theForge
+```
+
+### Миграции базы данных
+
+Приложение использует Liquibase для управления миграциями базы данных. Миграции автоматически выполняются при запуске приложения.
+
+**Конфигурация миграций:**
+
+- Файлы миграций: `src/main/resources/config/liquibase/`
+- Главный файл: `src/main/resources/config/liquibase/master.xml`
+- Контексты: `dev` (разработка), `prod` (production)
+
+**Ручное выполнение миграций:**
+
+```bash
+# Выполнение миграций
+./gradlew liquibaseUpdate
+
+# Откат миграций
+./gradlew liquibaseRollback
+
+# Генерация новой миграции
+./gradlew liquibaseDiffChangeLog
+```
+
+### Резервное копирование
+
+```bash
+# Создание резервной копии
+pg_dump -h localhost -U theForge -d theForge > backup_$(date +%Y%m%d_%H%M%S).sql
+
+# Восстановление из резервной копии
+psql -h localhost -U theForge -d theForge < backup_20240120_120000.sql
+```
+
+### Мониторинг базы данных
+
+```bash
+# Подключение к базе данных
+psql -h localhost -U theForge -d theForge
+
+# Просмотр таблиц
+\dt
+
+# Просмотр размера базы данных
+SELECT pg_size_pretty(pg_database_size('theForge'));
+
+# Просмотр активных подключений
+SELECT * FROM pg_stat_activity WHERE datname = 'theForge';
 ```
 
 Для получения дополнительной информации обратитесь к [странице использования Docker и Docker-Compose][], где также содержится информация о суб-генераторе Docker Compose (jhipster docker-compose), который может генерировать конфигурации Docker для одного или нескольких JHipster-приложений.
+
+## 🛠️ Полезные команды
+
+### Разработка
+
+```bash
+# Установка зависимостей
+./npmw install
+
+# Запуск в режиме разработки
+./gradlew -x webapp          # Backend
+./npmw start                 # Frontend
+
+# Запуск тестов
+./gradlew test               # Backend тесты
+./npmw test                  # Frontend тесты
+
+# Линтинг и форматирование
+./npmw lint                  # Проверка кода
+./npmw lint:fix              # Автоисправление
+./npmw prettier:format       # Форматирование кода
+
+# Сборка
+./gradlew bootJar            # JAR для разработки
+./gradlew -Pprod bootJar     # JAR для production
+```
+
+### База данных
+
+```bash
+# Запуск PostgreSQL в Docker
+docker compose -f src/main/docker/postgresql.yml up -d
+
+# Выполнение миграций
+./gradlew liquibaseUpdate
+
+# Создание резервной копии
+pg_dump -h localhost -U theForge -d theForge > backup.sql
+```
+
+### Docker
+
+```bash
+# Сборка образа
+npm run java:docker:prod
+
+# Запуск приложения с базой данных
+docker compose -f src/main/docker/app.yml up -d
+
+# Просмотр логов
+docker compose -f src/main/docker/app.yml logs -f
+```
+
+### Мониторинг
+
+```bash
+# Проверка здоровья приложения
+curl http://localhost:8098/management/health
+
+# Просмотр метрик
+curl http://localhost:8098/management/prometheus
+
+# Просмотр информации о приложении
+curl http://localhost:8098/management/info
+```
+
+## 🔧 Устранение неполадок
+
+### Частые проблемы
+
+**1. Ошибка подключения к базе данных:**
+
+```bash
+# Проверьте, запущена ли PostgreSQL
+sudo systemctl status postgresql
+
+# Проверьте подключение
+psql -h localhost -U theForge -d theForge
+```
+
+**2. Порт 8098 уже занят:**
+
+```bash
+# Найдите процесс, использующий порт
+sudo netstat -tulpn | grep :8098
+
+# Остановите процесс
+sudo kill -9 <PID>
+```
+
+**3. Ошибки сборки:**
+
+```bash
+# Очистка и пересборка
+./gradlew clean
+./gradlew bootJar
+
+# Очистка npm кэша
+./npmw cache clean --force
+```
+
+**4. Проблемы с Docker:**
+
+```bash
+# Очистка Docker
+docker system prune -a
+
+# Пересборка образов
+docker-compose build --no-cache
+```
+
+### Логи и отладка
+
+```bash
+# Просмотр логов приложения
+tail -f logs/the-forge.log
+
+# Включение debug режима
+java -jar the-forge-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod --debug
+
+# Просмотр логов Docker
+docker logs <container_name>
+```
+
+## 📚 Дополнительные ресурсы
+
+- [JHipster Documentation](https://www.jhipster.tech/documentation-archive/v8.9.0/)
+- [Spring Boot Reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
+- [Angular Documentation](https://angular.io/docs)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 
 ## Непрерывная интеграция (опционально)
 

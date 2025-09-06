@@ -1,4 +1,17 @@
 {
+  "java.project.sourcePaths": ["src/main/java", "src/test/java"],
+  "java.project.outputPath": "build",
+  "java.project.referencedLibraries": ["build/generated/sources/annotationProcessor/java/main"],
+  "files.exclude": {
+    "**/bin": true,
+    "**/bin/**": true
+  },
+  "files.watcherExclude": {
+    "**/bin/**": true
+  },
+  "search.exclude": {
+    "**/bin/**": true
+  },
   "java.compile.nullAnalysis.mode": "automatic",
   "java.configuration.updateBuildConfiguration": "interactive"
 }

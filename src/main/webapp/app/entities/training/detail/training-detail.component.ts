@@ -7,6 +7,9 @@ import { ITraining } from '../training.model';
 import { IEmployee } from '../../employee/employee.model';
 import { EmployeeService } from '../../employee/service/employee.service';
 import { FormatMediumDatePipe } from 'app/shared/date';
+import { TrainingService } from '../service/training.service';
+import dayjs from 'dayjs/esm';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-training-detail',
@@ -19,7 +22,11 @@ export class TrainingDetailComponent {
     employees: Record<number, IEmployee | null>;
   }>({ employees: {} });
 
-  constructor(private employeeService: EmployeeService) {}
+  constructor(
+    private employeeService: EmployeeService,
+    private trainingService: TrainingService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     const training = this.training();
@@ -50,5 +57,39 @@ export class TrainingDetailComponent {
 
   previousState(): void {
     window.history.back();
+  }
+
+  conductTraining(): void {
+    const training = this.training();
+    if (!training) {
+      return;
+    }
+
+    const now = dayjs();
+    const periodMonths = training.validityPeriod ?? 0;
+    const next = now.add(periodMonths, 'month');
+
+    const confirmMsg = `Провести инструктаж сейчас?\nПоследний: ${now.format('YYYY-MM-DD')}\nСледующий: ${next.format('YYYY-MM-DD')}`;
+    if (!window.confirm(confirmMsg)) {
+      return;
+    }
+
+    const updated: ITraining = {
+      ...training,
+      lastTrainingDate: now,
+      nextTrainingDate: next,
+    };
+
+    this.trainingService.update(updated).subscribe({
+      next: (res: HttpResponse<ITraining>) => {
+        // Перенаправим на эту же страницу для обновления данных
+        const id = res.body?.id ?? training.id;
+        this.router.navigate(['/training', id, 'view']);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error updating training:', error);
+        alert('Не удалось сохранить изменения инструктажа');
+      },
+    });
   }
 }

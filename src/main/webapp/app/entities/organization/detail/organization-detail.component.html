@@ -1,0 +1,106 @@
+<div *ngIf="organization">
+  <h2>{{ organization.fullName }}</h2>
+
+  <!-- Блок 1: Основная информация -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0" jhiTranslate="theForgeApp.organization.basicInfo">Основная информация</h5>
+    </div>
+    <div class="card-body">
+      <dl class="row jh-entity-details">
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.fullName' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.fullName }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.shortName' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.shortName }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.activityAreas' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.activityAreas }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.tagline' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.tagline }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Блок 2: Юридические и контактные реквизиты -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0" jhiTranslate="theForgeApp.organization.legalInfo">Юридические и контактные реквизиты</h5>
+    </div>
+    <div class="card-body">
+      <dl class="row jh-entity-details">
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.legalAddress' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.legalAddress }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.actualAddress' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.actualAddress }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.inn' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.inn }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.kpp' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.kpp }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.ogrn' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.ogrn }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.okpo' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.okpo }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.bankName' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.bankName }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.bankBik' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.bankBik }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.bankCorrAccount' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.bankCorrAccount }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.bankSettlementAccount' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.bankSettlementAccount }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Блок 3: Контакты для связи -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0" jhiTranslate="theForgeApp.organization.contactInfo">Контакты для связи</h5>
+    </div>
+    <div class="card-body">
+      <dl class="row jh-entity-details">
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.phoneMain' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.phoneMain }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.phoneSales' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.phoneSales }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.phoneSupport' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.phoneSupport }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.emailMain' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.emailMain }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.emailPartners' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.emailPartners }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.emailSupport' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.emailSupport }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.website' | translate }}</dt>
+        <dd class="col-sm-9">
+          <a [href]="organization.website" target="_blank">{{ organization.website }}</a>
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Блок 4: Дополнительная информация -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0" jhiTranslate="theForgeApp.organization.additionalInfo">Дополнительная информация</h5>
+    </div>
+    <div class="card-body">
+      <dl class="row jh-entity-details">
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.foundedYear' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.foundedYear }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.employeesCountRange' | translate }}</dt>
+        <dd class="col-sm-9">{{ 'theForgeApp.organization.employeesCountRange.' + organization.employeesCountRange | translate }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.keyPersons' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.keyPersons }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.products' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.products }}</dd>
+        <dt class="col-sm-3">{{ 'theForgeApp.organization.partners' | translate }}</dt>
+        <dd class="col-sm-9">{{ organization.partners }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <a class="btn btn-secondary" routerLink="/organization">{{ 'entity.action.back' | translate }}</a>
+    <a class="btn btn-primary" [routerLink]="['/organization', organization.id, 'edit']">{{ 'entity.action.edit' | translate }}</a>
+  </div>
+</div>

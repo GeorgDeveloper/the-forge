@@ -21,6 +21,7 @@
       "taskName": "Task Name",
       "creationDate": "Creation Date",
       "plannedCompletionDate": "Planned Completion Date",
+      "actualCompletionDate": "Actual Completion Date",
       "status": "Status",
       "priority": "Priority",
       "body": "Body",

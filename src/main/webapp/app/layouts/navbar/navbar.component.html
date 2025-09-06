@@ -107,6 +107,18 @@
               <li>
                 <a
                   class="dropdown-item"
+                  routerLink="/organization"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.entities.organization">Организации</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
                   routerLink="/profession"
                   routerLinkActive="active"
                   [routerLinkActiveOptions]="{ exact: true }"

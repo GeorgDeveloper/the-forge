@@ -51,6 +51,9 @@ public class Task implements Serializable {
     @Column(name = "body", nullable = false)
     private String body; // Подробное описание задачи
 
+    @Column(name = "actual_completion_date")
+    private LocalDate actualCompletionDate; // Фактическая дата выполнения задачи
+
     // Связь многие-к-одному с Employee (исполнитель задачи)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -151,6 +154,19 @@ public class Task implements Serializable {
         this.body = body;
     }
 
+    public LocalDate getActualCompletionDate() {
+        return this.actualCompletionDate;
+    }
+
+    public Task actualCompletionDate(LocalDate actualCompletionDate) {
+        this.setActualCompletionDate(actualCompletionDate);
+        return this;
+    }
+
+    public void setActualCompletionDate(LocalDate actualCompletionDate) {
+        this.actualCompletionDate = actualCompletionDate;
+    }
+
     public Employee getEmployee() {
         return this.employee;
     }
@@ -191,6 +207,9 @@ public class Task implements Serializable {
             "'" +
             ", запланированная дата выполнения='" +
             getPlannedCompletionDate() +
+            "'" +
+            ", фактическая дата выполнения='" +
+            getActualCompletionDate() +
             "'" +
             ", статус='" +
             getStatus() +

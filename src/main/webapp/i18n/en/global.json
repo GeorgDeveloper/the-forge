@@ -18,7 +18,8 @@
         "additionalTraining": "Additional Training",
         "safetyInstruction": "Safety Instruction",
         "position": "Position",
-        "jobDescription": "Job Description"
+        "jobDescription": "Job Description",
+        "organization": "Organization"
       },
       "account": {
         "main": "Account",

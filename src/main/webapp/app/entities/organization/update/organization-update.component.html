@@ -1,0 +1,138 @@
+<div>
+  <h2 id="jhi-organization-heading">
+    {{
+      organization?.id ? ('theForgeApp.organization.home.editLabel' | translate) : ('theForgeApp.organization.home.createLabel' | translate)
+    }}
+  </h2>
+  <form [formGroup]="editForm" (ngSubmit)="save()">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label" for="field_fullName">{{ 'theForgeApp.organization.fullName' | translate }}</label>
+          <input id="field_fullName" class="form-control" formControlName="fullName" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_shortName">{{ 'theForgeApp.organization.shortName' | translate }}</label>
+          <input id="field_shortName" class="form-control" formControlName="shortName" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_tagline">{{ 'theForgeApp.organization.tagline' | translate }}</label>
+          <textarea id="field_tagline" class="form-control" formControlName="tagline" rows="2" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_activityAreas">{{ 'theForgeApp.organization.activityAreas' | translate }}</label>
+          <input id="field_activityAreas" class="form-control" formControlName="activityAreas" placeholder="IT, строительство, ..." />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_legalAddress">{{ 'theForgeApp.organization.legalAddress' | translate }}</label>
+          <input id="field_legalAddress" class="form-control" formControlName="legalAddress" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_actualAddress">{{ 'theForgeApp.organization.actualAddress' | translate }}</label>
+          <input id="field_actualAddress" class="form-control" formControlName="actualAddress" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label" for="field_inn">{{ 'theForgeApp.organization.inn' | translate }}</label>
+          <input id="field_inn" class="form-control" formControlName="inn" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_kpp">{{ 'theForgeApp.organization.kpp' | translate }}</label>
+          <input id="field_kpp" class="form-control" formControlName="kpp" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_ogrn">{{ 'theForgeApp.organization.ogrn' | translate }}</label>
+          <input id="field_ogrn" class="form-control" formControlName="ogrn" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_okpo">{{ 'theForgeApp.organization.okpo' | translate }}</label>
+          <input id="field_okpo" class="form-control" formControlName="okpo" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_bankName">{{ 'theForgeApp.organization.bankName' | translate }}</label>
+          <input id="field_bankName" class="form-control" formControlName="bankName" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_bankBik">{{ 'theForgeApp.organization.bankBik' | translate }}</label>
+          <input id="field_bankBik" class="form-control" formControlName="bankBik" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_bankCorrAccount">{{ 'theForgeApp.organization.bankCorrAccount' | translate }}</label>
+          <input id="field_bankCorrAccount" class="form-control" formControlName="bankCorrAccount" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_bankSettlementAccount">{{
+            'theForgeApp.organization.bankSettlementAccount' | translate
+          }}</label>
+          <input id="field_bankSettlementAccount" class="form-control" formControlName="bankSettlementAccount" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label" for="field_phoneMain">{{ 'theForgeApp.organization.phoneMain' | translate }}</label>
+          <input id="field_phoneMain" class="form-control" formControlName="phoneMain" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_phoneSales">{{ 'theForgeApp.organization.phoneSales' | translate }}</label>
+          <input id="field_phoneSales" class="form-control" formControlName="phoneSales" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_phoneSupport">{{ 'theForgeApp.organization.phoneSupport' | translate }}</label>
+          <input id="field_phoneSupport" class="form-control" formControlName="phoneSupport" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_emailMain">{{ 'theForgeApp.organization.emailMain' | translate }}</label>
+          <input id="field_emailMain" class="form-control" formControlName="emailMain" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_emailPartners">{{ 'theForgeApp.organization.emailPartners' | translate }}</label>
+          <input id="field_emailPartners" class="form-control" formControlName="emailPartners" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_emailSupport">{{ 'theForgeApp.organization.emailSupport' | translate }}</label>
+          <input id="field_emailSupport" class="form-control" formControlName="emailSupport" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label" for="field_website">{{ 'theForgeApp.organization.website' | translate }}</label>
+          <input id="field_website" class="form-control" formControlName="website" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_foundedYear">{{ 'theForgeApp.organization.foundedYear' | translate }}</label>
+          <input id="field_foundedYear" type="number" class="form-control" formControlName="foundedYear" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_employeesCountRange">{{ 'theForgeApp.organization.employeesCountRange' | translate }}</label>
+          <select id="field_employeesCountRange" class="form-select" formControlName="employeesCountRange">
+            <option [ngValue]="null">-</option>
+            <option value="UP_TO_10">до 10</option>
+            <option value="FROM_11_TO_50">11-50</option>
+            <option value="FROM_51_TO_200">51-200</option>
+            <option value="OVER_200">200+</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_keyPersons">{{ 'theForgeApp.organization.keyPersons' | translate }}</label>
+          <textarea id="field_keyPersons" class="form-control" rows="3" formControlName="keyPersons"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_products">{{ 'theForgeApp.organization.products' | translate }}</label>
+          <textarea id="field_products" class="form-control" rows="3" formControlName="products"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_partners">{{ 'theForgeApp.organization.partners' | translate }}</label>
+          <textarea id="field_partners" class="form-control" rows="3" formControlName="partners"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-secondary" routerLink="/organization">{{ 'entity.action.back' | translate }}</button>
+      <button class="btn btn-primary" type="submit" [disabled]="isSaving">{{ 'entity.action.save' | translate }}</button>
+    </div>
+  </form>
+</div>

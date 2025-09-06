@@ -1,0 +1,111 @@
+<div>
+  <h2 id="page-heading" data-cy="OrganizationHeading">
+    <span jhiTranslate="theForgeApp.organization.home.title">Организации</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="refreshList()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="theForgeApp.organization.home.refreshListLabel">Обновить список</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-organization"
+        [routerLink]="['/organization/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="theForgeApp.organization.home.createLabel">Создать новую организацию</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+  @if (organizations().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>{{ 'theForgeApp.organization.home.notFound' | translate }}</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>{{ 'global.field.id' | translate }}</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fullName">
+              <div class="d-flex">
+                <span>{{ 'theForgeApp.organization.fullName' | translate }}</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="shortName">
+              <div class="d-flex">
+                <span>{{ 'theForgeApp.organization.shortName' | translate }}</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tagline">
+              <div class="d-flex">
+                <span>{{ 'theForgeApp.organization.tagline' | translate }}</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (org of organizations(); track org.id) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/organization', org.id, 'view']">{{ org.id }}</a>
+              </td>
+              <td>{{ org.fullName }}</td>
+              <td>{{ org.shortName }}</td>
+              <td>{{ org.tagline }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/organization', org.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">{{ 'entity.action.view' | translate }}</span>
+                  </a>
+                  <a [routerLink]="['/organization', org.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">{{ 'entity.action.edit' | translate }}</span>
+                  </a>
+                  <button type="button" (click)="delete(org)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">{{ 'entity.action.delete' | translate }}</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (organizations().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

@@ -12,9 +12,10 @@ import { ITask, NewTask } from '../task.model';
 
 export type PartialUpdateTask = Partial<ITask> & Pick<ITask, 'id'>;
 
-type RestOf<T extends ITask | NewTask> = Omit<T, 'creationDate' | 'plannedCompletionDate'> & {
+type RestOf<T extends ITask | NewTask> = Omit<T, 'creationDate' | 'plannedCompletionDate' | 'actualCompletionDate'> & {
   creationDate?: string | null;
   plannedCompletionDate?: string | null;
+  actualCompletionDate?: string | null;
 };
 
 export type RestTask = RestOf<ITask>;
@@ -102,6 +103,7 @@ export class TaskService {
       ...task,
       creationDate: task.creationDate?.format(DATE_FORMAT) ?? null,
       plannedCompletionDate: task.plannedCompletionDate?.format(DATE_FORMAT) ?? null,
+      actualCompletionDate: task.actualCompletionDate?.format(DATE_FORMAT) ?? null,
     };
   }
 
@@ -110,6 +112,7 @@ export class TaskService {
       ...restTask,
       creationDate: restTask.creationDate ? dayjs(restTask.creationDate) : undefined,
       plannedCompletionDate: restTask.plannedCompletionDate ? dayjs(restTask.plannedCompletionDate) : undefined,
+      actualCompletionDate: restTask.actualCompletionDate ? dayjs(restTask.actualCompletionDate) : undefined,
     };
   }
 

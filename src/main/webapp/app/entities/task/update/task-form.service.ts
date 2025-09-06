@@ -21,6 +21,7 @@ type TaskFormGroupContent = {
   taskName: FormControl<ITask['taskName']>;
   creationDate: FormControl<ITask['creationDate']>;
   plannedCompletionDate: FormControl<ITask['plannedCompletionDate']>;
+  actualCompletionDate: FormControl<ITask['actualCompletionDate']>;
   status: FormControl<ITask['status']>;
   priority: FormControl<ITask['priority']>;
   body: FormControl<ITask['body']>;
@@ -53,6 +54,7 @@ export class TaskFormService {
       plannedCompletionDate: new FormControl(taskRawValue.plannedCompletionDate, {
         validators: [Validators.required],
       }),
+      actualCompletionDate: new FormControl(taskRawValue.actualCompletionDate),
       status: new FormControl(taskRawValue.status, {
         validators: [Validators.required],
       }),

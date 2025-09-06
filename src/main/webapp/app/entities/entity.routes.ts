@@ -38,6 +38,13 @@ const routes: Routes = [
     loadChildren: () => import('./task/task.routes'),
   },
 
+  // Маршрут для организаций
+  {
+    path: 'organization',
+    data: { pageTitle: 'theForgeApp.organization.home.title' },
+    loadChildren: () => import('./organization/organization.routes'),
+  },
+
   // Маршрут для профессий
   {
     path: 'profession',

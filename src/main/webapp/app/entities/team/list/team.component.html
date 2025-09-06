@@ -55,6 +55,13 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <!-- Колонка организации с сортировкой -->
+            <th scope="col" jhiSortBy="organization">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.team.organization">Organization</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <!-- Колонка для действий -->
             <th scope="col"></th>
           </tr>
@@ -70,6 +77,8 @@
               </td>
               <!-- Ячейка с названием команды -->
               <td>{{ team.teamName }}</td>
+              <!-- Ячейка с организацией -->
+              <td>{{ team.organization?.shortName || team.organization?.fullName || '-' }}</td>
               <!-- Ячейка с кнопками действий -->
               <td class="text-end">
                 <div class="btn-group">

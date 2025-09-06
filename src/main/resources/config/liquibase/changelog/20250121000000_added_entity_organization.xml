@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20250121000000-1" author="ai">
+        <createTable tableName="organization">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="short_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activity_areas" type="varchar(2000)"/>
+            <column name="tagline" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="legal_address" type="varchar(1024)"/>
+            <column name="actual_address" type="varchar(1024)"/>
+            <column name="inn" type="varchar(32)"/>
+            <column name="kpp" type="varchar(32)"/>
+            <column name="ogrn" type="varchar(32)"/>
+            <column name="okpo" type="varchar(32)"/>
+            <column name="bank_name" type="varchar(255)"/>
+            <column name="bank_bik" type="varchar(32)"/>
+            <column name="bank_corr_account" type="varchar(64)"/>
+            <column name="bank_settlement_account" type="varchar(64)"/>
+            <column name="phone_main" type="varchar(64)"/>
+            <column name="phone_sales" type="varchar(64)"/>
+            <column name="phone_support" type="varchar(64)"/>
+            <column name="email_main" type="varchar(255)"/>
+            <column name="email_partners" type="varchar(255)"/>
+            <column name="email_support" type="varchar(255)"/>
+            <column name="website" type="varchar(255)"/>
+            <column name="founded_year" type="integer"/>
+            <column name="employees_count_range" type="varchar(32)"/>
+            <column name="key_persons" type="varchar(4000)"/>
+            <column name="products" type="varchar(4000)"/>
+            <column name="partners" type="varchar(4000)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20250121000000-2" author="ai">
+        <addColumn tableName="team">
+            <column name="organization_id" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="team"
+                                  baseColumnNames="organization_id"
+                                  referencedTableName="organization"
+                                  referencedColumnNames="id"
+                                  constraintName="fk_team__organization_id"/>
+    </changeSet>
+
+</databaseChangeLog>
+
+

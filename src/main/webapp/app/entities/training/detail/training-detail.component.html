@@ -50,6 +50,10 @@
         <button type="button" [routerLink]="['/training', trainingRef.id, 'edit']" class="btn btn-primary">
           <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
         </button>
+
+        <button type="button" class="btn btn-success ms-2" (click)="conductTraining()">
+          <fa-icon icon="check"></fa-icon>&nbsp;Провести инструктаж
+        </button>
       </div>
     }
   </div>

@@ -1,0 +1,54 @@
+{
+  "theForgeApp": {
+    "organization": {
+      "home": {
+        "title": "Organizations",
+        "createLabel": "Create a new organization",
+        "editLabel": "Edit organization",
+        "notFound": "No organizations found",
+        "refreshListLabel": "Refresh list"
+      },
+      "detail": {
+        "title": "Organization"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete Organization {{ id }}?"
+      },
+      "id": "ID",
+      "fullName": "Full Name",
+      "shortName": "Short Name",
+      "activityAreas": "Activity Areas",
+      "tagline": "Description",
+      "legalAddress": "Legal Address",
+      "actualAddress": "Actual Address",
+      "inn": "INN",
+      "kpp": "KPP",
+      "ogrn": "OGRN",
+      "okpo": "OKPO",
+      "settlementAccount": "Settlement Account",
+      "correspondentAccount": "Correspondent Account",
+      "bankBic": "Bank BIC",
+      "bankName": "Bank Name",
+      "generalPhone": "General Phone",
+      "salesPhone": "Sales Phone",
+      "supportPhone": "Support Phone",
+      "generalEmail": "General Email",
+      "commercialEmail": "Commercial Email",
+      "supportEmail": "Support Email",
+      "website": "Website",
+      "foundedYear": "Founded Year",
+      "employeesCountRange": "Employees Count Range",
+      "employeesCountRange.UP_TO_10": "Up to 10",
+      "employeesCountRange.UP_TO_50": "11-50",
+      "employeesCountRange.UP_TO_200": "51-200",
+      "employeesCountRange.MORE_THAN_200": "200+",
+      "keyPersons": "Key Persons",
+      "products": "Products/Services",
+      "partners": "Clients/Partners",
+      "basicInfo": "Basic Information",
+      "legalInfo": "Legal and Contact Details",
+      "contactInfo": "Contact Information",
+      "additionalInfo": "Additional Information"
+    }
+  }
+}

@@ -14,6 +14,8 @@ import { IEmployee } from 'app/entities/employee/employee.model'; // Импор�
 import { IUser } from 'app/entities/user/user.model'; // Импорт интерфейса IUser для работы с данными о пользователях
 import { EmployeeService } from 'app/entities/employee/service/employee.service';
 import { UserService } from '../../user/service/user.service'; // Импорт сервиса EmployeeService для получения данных о сотрудниках
+import { IOrganization } from '../../organization/organization.model';
+import { OrganizationService } from '../../organization/service/organization.service';
 
 @Component({
   selector: 'jhi-team-update', // Селектор компонента, используется для вставки компонента в HTML
@@ -25,27 +27,38 @@ export class TeamUpdateComponent implements OnInit {
   team: ITeam | null = null; // Объект команды, который мы редактируем или создаем, может быть null
   employees: IEmployee[] = []; // Массив всех доступных сотрудников для выбора
   users: IUser[] = []; // Массив всех доступных пользователей для выбора
+  organizations: IOrganization[] = [];
 
   protected teamService = inject(TeamService); // Внедрение сервиса TeamService для работы с данными команд
   protected teamFormService = inject(TeamFormService); // Внедрение сервиса TeamFormService для работы с формой команды
   protected activatedRoute = inject(ActivatedRoute); // Внедрение сервиса ActivatedRoute для получения данных из URL
   protected employeeService = inject(EmployeeService); // Внедрение сервиса EmployeeService для работы с данными сотрудников
   protected userService = inject(UserService); // Внедрение сервиса UserService для работы с данными пользователей
+  protected organizationService = inject(OrganizationService);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: TeamFormGroup = this.teamFormService.createTeamFormGroup(); // Создание формы для редактирования команды с помощью TeamFormService
 
   ngOnInit(): void {
+    // Загружаем все необходимые данные параллельно
     this.loadAllEmployees(); // Вызов метода для загрузки всех сотрудников при инициализации компонента
-
     this.loadAllUsers();
+    this.loadOrganizations();
+
     this.activatedRoute.data.subscribe(({ team }) => {
       // Подписка на данные, переданные через маршрут (например, данные команды для редактирования)
       this.team = team;
       if (team) {
-        this.updateForm(team); // Если команда существует, заполняем форму данными команды
+        // Небольшая задержка, чтобы организации успели загрузиться
+        setTimeout(() => {
+          this.updateForm(team); // Если команда существует, заполняем форму данными команды
+        }, 100);
       }
     });
+  }
+
+  loadOrganizations(): void {
+    this.organizationService.query().subscribe({ next: res => (this.organizations = res.body ?? []) });
   }
 
   loadAllEmployees(): void {
@@ -126,6 +139,13 @@ export class TeamUpdateComponent implements OnInit {
     if (team.users) {
       this.editForm.patchValue({
         users: team.users, // Установка выбранных сотрудников в форму
+      });
+    }
+
+    // Устанавливаем выбранную организацию
+    if (team.organization) {
+      this.editForm.patchValue({
+        organization: team.organization, // Установка выбранной организации в форму
       });
     }
   }

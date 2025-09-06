@@ -44,6 +44,10 @@ public class Team implements Serializable {
     @JsonIgnore
     private Set<UserTeamAccess> userAccesses = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "teams" }, allowSetters = true)
+    private Organization organization;
+
     @Transient
     @JsonProperty("users") // Добавляем аннотацию для Jackson
     private Set<User> users;
@@ -112,6 +116,14 @@ public class Team implements Serializable {
 
     public void setUserAccesses(Set<UserTeamAccess> userAccesses) {
         this.userAccesses = userAccesses;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     /**

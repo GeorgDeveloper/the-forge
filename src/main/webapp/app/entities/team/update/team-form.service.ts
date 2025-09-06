@@ -28,6 +28,7 @@ type TeamFormGroupContent = {
   teamName: FormControl<ITeam['teamName']>;
   employees: FormControl<ITeam['employees']>;
   users: FormControl<ITeam['users']>;
+  organization: FormControl<ITeam['organization']>;
 };
 
 /**
@@ -63,6 +64,7 @@ export class TeamFormService {
       }),
       employees: new FormControl(teamRawValue.employees || []), // Сотрудники - массив, по умолчанию пустой
       users: new FormControl(teamRawValue.users || []), // Сотрудники - массив, по умолчанию пустой
+      organization: new FormControl(teamRawValue.organization || null),
     });
   }
 

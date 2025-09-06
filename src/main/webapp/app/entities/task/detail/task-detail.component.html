@@ -27,6 +27,12 @@
           <dd>
             <span>{{ taskRef.plannedCompletionDate | formatMediumDate }}</span>
           </dd>
+          @if (taskRef.actualCompletionDate) {
+            <dt><span jhiTranslate="theForgeApp.task.actualCompletionDate">Actual Completion Date</span></dt>
+            <dd>
+              <span>{{ taskRef.actualCompletionDate | formatMediumDate }}</span>
+            </dd>
+          }
           <dt><span jhiTranslate="theForgeApp.task.status">Status</span></dt>
           <dd>
             <span [jhiTranslate]="'global.TaskStatus.' + (taskRef.status ?? 'null')"></span>
@@ -55,6 +61,10 @@
 
         <button type="button" [routerLink]="['/task', taskRef.id, 'edit']" class="btn btn-primary">
           <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+
+        <button type="button" class="btn btn-success ms-2" (click)="completeTask()" [disabled]="taskRef.status === 'DONE'">
+          <fa-icon icon="check"></fa-icon>&nbsp;Выполнено
         </button>
       </div>
     }

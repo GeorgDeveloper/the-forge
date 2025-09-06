@@ -17,6 +17,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     @Query(
         "SELECT DISTINCT t FROM Team t " +
         "LEFT JOIN FETCH t.employees " +
+        "LEFT JOIN FETCH t.organization " +
         "LEFT JOIN FETCH t.userAccesses ua " +
         "LEFT JOIN FETCH ua.user u " +
         "WHERE t.id = :id"
@@ -26,7 +27,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     //    @EntityGraph(attributePaths = {"employees"})  // ← Явно указываем загрузку сотрудников
     //    Optional<Team> findWithEmployeesById(Long id);
 
-    @Query("SELECT t FROM Team t JOIN UserTeamAccess a ON t.id = a.team.id WHERE a.user.id = :userId")
+    @Query("SELECT t FROM Team t LEFT JOIN FETCH t.organization JOIN UserTeamAccess a ON t.id = a.team.id WHERE a.user.id = :userId")
     Page<Team> findAllByUserId(Pageable pageable, @Param("userId") Long userId);
 
     @EntityGraph(attributePaths = { "userAccesses", "userAccesses.user" })

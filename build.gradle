@@ -57,6 +57,7 @@ if (project.hasProperty("war")) {
 idea {
     module {
         excludeDirs += files("node_modules")
+        excludeDirs += files("bin")
     }
 }
 

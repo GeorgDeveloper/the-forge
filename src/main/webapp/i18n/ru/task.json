@@ -21,6 +21,7 @@
       "taskName": "Наименование",
       "creationDate": "Дата создания",
       "plannedCompletionDate": "Заданная дата выполнения",
+      "actualCompletionDate": "Дата фактического выполнения",
       "status": "Статус",
       "priority": "Приоритет",
       "body": "Содержание",
