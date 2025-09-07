@@ -48,7 +48,7 @@ public interface EmployeeRepository extends EmployeeRepositoryWithBagRelationshi
      *
      * @param employeeIds параметры пагинации
      */
-    @EntityGraph(attributePaths = { "team", "position" }) // Загружаем только то, что нужно
+    @EntityGraph(attributePaths = { "team", "position", "trainings" }) // Загружаем team, position и trainings
     @Query("SELECT e FROM Employee e WHERE e.id IN :employeeIds")
     List<Employee> findAllWithTeamAndPosition(@Param("employeeIds") List<Long> employeeIds);
 

@@ -1,5 +1,6 @@
 package ru.georgdeveloper.myapp.service.impl;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.georgdeveloper.myapp.domain.Employee;
 import ru.georgdeveloper.myapp.domain.Profession;
+import ru.georgdeveloper.myapp.domain.Training;
 import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.repository.ProfessionRepository;
 import ru.georgdeveloper.myapp.service.EmployeeService;
@@ -129,8 +131,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         List<Employee> employeesWithRelationships = employeeRepository.findAllWithTeamAndPosition(employeeIds);
 
+        // Обогащаем сотрудников вычисляемыми полями
+        List<Employee> enrichedEmployees = enrichEmployees(employeesWithRelationships);
+
         // Собираем результат
-        return new PageImpl<>(employeesWithRelationships, pageable, employeePage.getTotalElements());
+        return new PageImpl<>(enrichedEmployees, pageable, employeePage.getTotalElements());
     }
 
     /**
@@ -143,7 +148,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public Optional<Employee> findOne(Long id) {
         LOG.debug("Запрос на получение сотрудника с ID: {}", id);
-        return employeeRepository.findOneWithEagerRelationships(id);
+        return employeeRepository.findOneWithEagerRelationships(id).map(this::enrichEmployee);
     }
 
     /**
@@ -162,7 +167,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public List<Employee> findAllForCurrentUser(String currentUserLogin) {
-        return employeeRepository.findAllForCurrentUser(currentUserLogin);
+        List<Employee> employees = employeeRepository.findAllForCurrentUser(currentUserLogin);
+        return enrichEmployees(employees);
     }
 
     /**
@@ -170,7 +176,9 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public Page<Employee> findAllForCurrentUser(String currentUserLogin, Pageable pageable) {
-        return employeeRepository.findAllForCurrentUser(currentUserLogin, pageable);
+        Page<Employee> employeePage = employeeRepository.findAllForCurrentUser(currentUserLogin, pageable);
+        List<Employee> enrichedEmployees = enrichEmployees(employeePage.getContent());
+        return new PageImpl<>(enrichedEmployees, pageable, employeePage.getTotalElements());
     }
 
     /**
@@ -178,12 +186,12 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public Optional<Employee> findOneForCurrentUser(Long employeeId, String currentUserLogin) {
-        return employeeRepository.findOneForCurrentUser(employeeId, currentUserLogin);
+        return employeeRepository.findOneForCurrentUser(employeeId, currentUserLogin).map(this::enrichEmployee);
     }
 
     @Override
     public Optional<Employee> findOneWithProfessions(Long id) {
-        return employeeRepository.findOneWithEagerRelationships(id);
+        return employeeRepository.findOneWithEagerRelationships(id).map(this::enrichEmployee);
     }
 
     @Override
@@ -208,5 +216,71 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             professionRepository.save(savedProfession);
         }
+    }
+
+    /**
+     * Вычисляет дату последнего инструктажа для сотрудника.
+     * Находит самую позднюю дату среди всех инструктажей сотрудника.
+     *
+     * @param employee сотрудник для которого вычисляется дата
+     * @return дата последнего инструктажа или null, если инструктажей нет
+     */
+    private LocalDate calculateLastInstructionDate(Employee employee) {
+        LOG.debug("Вычисляем дату последнего инструктажа для сотрудника ID: {}", employee.getId());
+
+        if (employee.getTrainings() == null || employee.getTrainings().isEmpty()) {
+            LOG.debug("У сотрудника нет тренировок, возвращаем null");
+            return null;
+        }
+
+        LOG.debug("Найдено тренировок: {}", employee.getTrainings().size());
+
+        // Логируем все даты тренировок
+        employee
+            .getTrainings()
+            .forEach(training -> {
+                LOG.debug("Тренировка ID: {}, дата: {}", training.getId(), training.getLastTrainingDate());
+            });
+
+        LocalDate result = employee
+            .getTrainings()
+            .stream()
+            .map(Training::getLastTrainingDate)
+            .filter(date -> date != null)
+            .max(LocalDate::compareTo)
+            .orElse(null);
+
+        LOG.debug("Результат вычисления даты последнего инструктажа: {}", result);
+        return result;
+    }
+
+    /**
+     * Обогащает сотрудника вычисляемыми полями.
+     * Устанавливает дату последнего инструктажа.
+     *
+     * @param employee сотрудник для обогащения
+     * @return обогащенный сотрудник
+     */
+    private Employee enrichEmployee(Employee employee) {
+        if (employee != null) {
+            LOG.debug("Обогащаем сотрудника ID: {}, имя: {}", employee.getId(), employee.getFirstName());
+            LOG.debug("Количество тренировок: {}", employee.getTrainings() != null ? employee.getTrainings().size() : 0);
+            LOG.debug("Количество профессий: {}", employee.getProfessions() != null ? employee.getProfessions().size() : 0);
+
+            LocalDate lastInstructionDate = calculateLastInstructionDate(employee);
+            LOG.debug("Вычисленная дата последнего инструктажа: {}", lastInstructionDate);
+            employee.setLastInstructionDate(lastInstructionDate);
+        }
+        return employee;
+    }
+
+    /**
+     * Обогащает список сотрудников вычисляемыми полями.
+     *
+     * @param employees список сотрудников для обогащения
+     * @return список обогащенных сотрудников
+     */
+    private List<Employee> enrichEmployees(List<Employee> employees) {
+        return employees.stream().map(this::enrichEmployee).collect(Collectors.toList());
     }
 }

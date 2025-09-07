@@ -34,7 +34,7 @@ public class EmployeeRepositoryWithBagRelationshipsImpl implements EmployeeRepos
      */
     @Override
     public Optional<Employee> fetchBagRelationships(Optional<Employee> employee) {
-        return employee.map(this::fetchProfessions);
+        return employee.map(this::fetchProfessionsAndTrainings);
     }
 
     /**
@@ -58,7 +58,22 @@ public class EmployeeRepositoryWithBagRelationshipsImpl implements EmployeeRepos
      */
     @Override
     public List<Employee> fetchBagRelationships(List<Employee> employees) {
-        return Optional.of(employees).map(this::fetchProfessions).orElse(Collections.emptyList());
+        return Optional.of(employees).map(this::fetchProfessionsAndTrainings).orElse(Collections.emptyList());
+    }
+
+    /**
+     * Загружает профессии и инструктажи для одного сотрудника.
+     * @param result сотрудник, для которого загружаем связи
+     * @return сотрудник с загруженными профессиями и инструктажами
+     */
+    Employee fetchProfessionsAndTrainings(Employee result) {
+        return entityManager
+            .createQuery(
+                "select employee from Employee employee left join fetch employee.professions left join fetch employee.trainings where employee.id = :id",
+                Employee.class
+            )
+            .setParameter(ID_PARAMETER, result.getId())
+            .getSingleResult();
     }
 
     /**
@@ -74,6 +89,31 @@ public class EmployeeRepositoryWithBagRelationshipsImpl implements EmployeeRepos
             )
             .setParameter(ID_PARAMETER, result.getId())
             .getSingleResult();
+    }
+
+    /**
+     * Загружает профессии и инструктажи для списка сотрудников с сохранением исходного порядка.
+     * @param employees список сотрудников
+     * @return список сотрудников с загруженными профессиями и инструктажами в исходном порядке
+     */
+    List<Employee> fetchProfessionsAndTrainings(List<Employee> employees) {
+        // Сохраняем исходный порядок сотрудников в HashMap
+        HashMap<Object, Integer> order = new HashMap<>();
+        IntStream.range(0, employees.size()).forEach(index -> order.put(employees.get(index).getId(), index));
+
+        // Загружаем сотрудников с профессиями и инструктажами
+        List<Employee> result = entityManager
+            .createQuery(
+                "select employee from Employee employee left join fetch employee.professions left join fetch employee.trainings where employee in :employees",
+                Employee.class
+            )
+            .setParameter(EMPLOYEES_PARAMETER, employees)
+            .getResultList();
+
+        // Восстанавливаем исходный порядок
+        Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
+
+        return result;
     }
 
     /**

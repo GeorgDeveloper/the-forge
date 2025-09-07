@@ -9,6 +9,7 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IEmployee, NewEmployee } from '../employee.model';
+import { IEmployeeWithLastInstructionDate } from '../employee-with-last-instruction-date.model';
 
 export type PartialUpdateEmployee = Partial<IEmployee> & Pick<IEmployee, 'id'>;
 
@@ -65,8 +66,21 @@ export class EmployeeService {
    * @param id - идентификатор сотрудника
    * @returns Observable с ответом сервера, содержащим сотрудника с профессиям
    */
-  findWithProfessions(id: number): Observable<EntityResponseType> {
-    return this.http.get<IEmployee>(`${this.resourceUrl}/${id}/with-professions`, { observe: 'response' });
+  findWithProfessions(id: number): Observable<HttpResponse<IEmployeeWithLastInstructionDate>> {
+    return this.http.get<IEmployeeWithLastInstructionDate>(`${this.resourceUrl}/${id}/with-professions`, { observe: 'response' });
+  }
+
+  /**
+   * Получает список сотрудников с датой последнего инструктажа.
+   * @param req параметры запроса
+   * @returns Observable с ответом сервера
+   */
+  queryWithLastInstructionDate(req?: any): Observable<HttpResponse<IEmployeeWithLastInstructionDate[]>> {
+    const options = createRequestOption(req);
+    return this.http.get<IEmployeeWithLastInstructionDate[]>(`${this.resourceUrl}/with-last-instruction-date`, {
+      params: options,
+      observe: 'response',
+    });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

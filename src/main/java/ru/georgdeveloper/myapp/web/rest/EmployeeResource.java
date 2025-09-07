@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.georgdeveloper.myapp.domain.Employee;
 import ru.georgdeveloper.myapp.repository.EmployeeRepository;
 import ru.georgdeveloper.myapp.service.EmployeeService;
+import ru.georgdeveloper.myapp.service.dto.EmployeeWithLastInstructionDateDTO;
 // Removed unused import
 import ru.georgdeveloper.myapp.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
@@ -166,6 +167,33 @@ public class EmployeeResource {
     }
 
     /**
+     * Получает список сотрудников с датой последнего инструктажа.
+     * GET /api/employees/with-last-instruction-date
+     *
+     * @param pageable параметры пагинации
+     * @param principal текущий пользователь
+     * @return ResponseEntity со списком сотрудников с датой последнего инструктажа
+     */
+    @GetMapping("/with-last-instruction-date")
+    public ResponseEntity<List<EmployeeWithLastInstructionDateDTO>> getAllEmployeesWithLastInstructionDate(
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+        Principal principal
+    ) {
+        LOG.debug("REST запрос на получение страницы сотрудников с датой последнего инструктажа");
+        Page<Employee> page = employeeService.findAllWithEagerRelationships(principal.getName(), pageable);
+
+        // Конвертируем Employee в DTO
+        List<EmployeeWithLastInstructionDateDTO> dtos = page
+            .getContent()
+            .stream()
+            .map(EmployeeWithLastInstructionDateDTO::new)
+            .collect(java.util.stream.Collectors.toList());
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(dtos);
+    }
+
+    /**
      * Получает сотрудника по ID.
      * GET /api/employees/{id}
      *
@@ -176,6 +204,9 @@ public class EmployeeResource {
     public ResponseEntity<Employee> getEmployee(@PathVariable("id") Long id) {
         LOG.debug("REST запрос на получение сотрудника: {}", id);
         Optional<Employee> employee = employeeService.findOne(id);
+        if (employee.isPresent()) {
+            LOG.debug("Возвращаем сотрудника с датой последнего инструктажа: {}", employee.get().getLastInstructionDate());
+        }
         return ResponseUtil.wrapOrNotFound(employee);
     }
 
@@ -202,10 +233,26 @@ public class EmployeeResource {
      * @return ResponseEntity со списком профессий
      */
     @GetMapping("/{id}/with-professions")
-    public ResponseEntity<Employee> getEmployeeswithProfessions(@PathVariable("id") Long id) {
-        LOG.debug("Запрос на получение сотрудника: ID {}", id);
+    public ResponseEntity<EmployeeWithLastInstructionDateDTO> getEmployeeswithProfessions(@PathVariable("id") Long id) {
+        LOG.debug("Запрос на получение сотрудника с профессиями: ID {}", id);
         Optional<Employee> employee = employeeService.findOneWithProfessions(id);
-        return ResponseUtil.wrapOrNotFound(employee);
+
+        if (employee.isPresent()) {
+            Employee emp = employee.get();
+            LOG.debug("Найден сотрудник: ID={}, имя={}, фамилия={}", emp.getId(), emp.getFirstName(), emp.getLastName());
+            LOG.debug("Дата последнего инструктажа: {}", emp.getLastInstructionDate());
+            LOG.debug("Количество профессий: {}", emp.getProfessions() != null ? emp.getProfessions().size() : 0);
+            LOG.debug("Количество тренировок: {}", emp.getTrainings() != null ? emp.getTrainings().size() : 0);
+
+            // Создаем DTO с датой последнего инструктажа
+            EmployeeWithLastInstructionDateDTO dto = new EmployeeWithLastInstructionDateDTO(emp);
+            LOG.debug("DTO создан с датой последнего инструктажа: {}", dto.getLastInstructionDate());
+
+            return ResponseEntity.ok(dto);
+        } else {
+            LOG.debug("Сотрудник с ID {} не найден", id);
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{employeeId}/professions/{professionsId}")

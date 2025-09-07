@@ -43,6 +43,10 @@
           <dd>
             <span>{{ employeeRef.hireDate | formatMediumDate }}</span>
           </dd>
+          <dt><span jhiTranslate="theForgeApp.employee.lastInstructionDate">Last Instruction Date</span></dt>
+          <dd>
+            <span>{{ employeeRef.lastInstructionDate | formatMediumDate }}</span>
+          </dd>
           <dt><span jhiTranslate="theForgeApp.employee.position">Position</span></dt>
           <dd>
             @if (positionName) {
@@ -102,7 +106,7 @@
               </thead>
               <!-- Тело таблицы с бесконечным скроллом -->
               <tbody>
-                <!-- Цикл по командам -->
+                <!-- Цикл по профессиям -->
                 @for (profession of employeeRef.professions; track $index; let last = $last) {
                   <tr data-cy="professionTable">
                     <!-- Ячейка с ID и ссылкой на просмотр -->

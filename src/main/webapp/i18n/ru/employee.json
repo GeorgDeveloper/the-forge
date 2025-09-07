@@ -23,6 +23,7 @@
       "birthDate": "День рождения",
       "employeeNumber": "Таб. номер",
       "hireDate": "Дата приема",
+      "lastInstructionDate": "Дата последнего инструктажа",
       "training": "Обучение",
       "task": "Задачи",
       "position": "Должность",

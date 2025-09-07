@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { FormatMediumDatePipe } from 'app/shared/date';
 import { IEmployee } from '../employee.model';
+import { IEmployeeWithLastInstructionDate } from '../employee-with-last-instruction-date.model';
 import { IPosition } from '../../position/position.model';
 import { IProfession } from '../../profession/profession.model';
 import { ITeam } from '../../team/team.model';
@@ -43,19 +44,61 @@ export class EmployeeDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isLoading.set(true);
-      this.employeeService.find(+id).subscribe({
-        next: (response: HttpResponse<IEmployee>) => {
-          this.employee.set(response.body);
+
+      // Используем метод findWithProfessions для загрузки сотрудника с профессиями
+      this.employeeService.findWithProfessions(+id).subscribe({
+        next: (response: HttpResponse<IEmployeeWithLastInstructionDate>) => {
+          // Конвертируем DTO в обычный Employee для совместимости
+          const employeeData: IEmployee = {
+            id: response.body?.id || 0,
+            firstName: response.body?.firstName,
+            lastName: response.body?.lastName,
+            birthDate: response.body?.birthDate,
+            employeeNumber: response.body?.employeeNumber,
+            hireDate: response.body?.hireDate,
+            lastInstructionDate: response.body?.lastInstructionDate,
+            position: null,
+            professions: [],
+            team: null,
+          };
+
+          this.employee.set(employeeData);
           if (response.body) {
-            this.loadPositionAndTeam(response.body);
+            // Загружаем дополнительные данные отдельно
+            this.loadAdditionalData(+id);
           }
           this.isLoading.set(false);
         },
-        error: () => {
+        error: error => {
+          console.error('Error loading employee:', error);
           this.isLoading.set(false);
         },
       });
     }
+  }
+
+  private loadAdditionalData(employeeId: number): void {
+    // Загружаем полные данные сотрудника для получения профессий, позиции и команды
+    this.employeeService.find(employeeId).subscribe({
+      next: (response: HttpResponse<IEmployee>) => {
+        if (response.body) {
+          // Обновляем только дополнительные поля, сохраняя lastInstructionDate
+          const currentEmployee = this.employee();
+          if (currentEmployee) {
+            this.employee.set({
+              ...currentEmployee,
+              position: response.body.position,
+              professions: response.body.professions,
+              team: response.body.team,
+            });
+            this.loadPositionAndTeam(this.employee()!);
+          }
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error loading additional employee data:', error);
+      },
+    });
   }
 
   private loadPositionAndTeam(employee: IEmployee): void {

@@ -2,6 +2,8 @@ package ru.georgdeveloper.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -47,6 +49,13 @@ public class Employee implements Serializable {
     @Column(name = "hire_date", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate hireDate; // Дата приема на работу
+
+    // Вычисляемое поле - дата последнего инструктажа
+    @Transient // Поле не сохраняется в БД, вычисляется динамически
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty("lastInstructionDate")
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    private LocalDate lastInstructionDate;
 
     // Связь один-ко-многим с Training (обучения сотрудника)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
@@ -155,6 +164,19 @@ public class Employee implements Serializable {
 
     public void setHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
+    }
+
+    public LocalDate getLastInstructionDate() {
+        return this.lastInstructionDate;
+    }
+
+    public Employee lastInstructionDate(LocalDate lastInstructionDate) {
+        this.setLastInstructionDate(lastInstructionDate);
+        return this;
+    }
+
+    public void setLastInstructionDate(LocalDate lastInstructionDate) {
+        this.lastInstructionDate = lastInstructionDate;
     }
 
     public Set<Training> getTrainings() {
@@ -299,6 +321,7 @@ public class Employee implements Serializable {
             ", дата рождения='" + getBirthDate() + "'" +
             ", таб номер='" + getEmployeeNumber() + "'" +
             ", дата приема на работу='" + getHireDate() + "'" +
+            ", дата последнего инструктажа='" + getLastInstructionDate() + "'" +
             "}";
     }
 }

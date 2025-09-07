@@ -1,9 +1,8 @@
 import dayjs from 'dayjs/esm';
 import { IPosition } from 'app/entities/position/position.model';
-import { IProfession } from 'app/entities/profession/profession.model';
 import { ITeam } from 'app/entities/team/team.model';
 
-export interface IEmployee {
+export interface IEmployeeWithLastInstructionDate {
   id: number;
   firstName?: string | null;
   lastName?: string | null;
@@ -12,8 +11,7 @@ export interface IEmployee {
   hireDate?: dayjs.Dayjs | null;
   lastInstructionDate?: dayjs.Dayjs | null;
   position?: IPosition | null;
-  professions?: IProfession[] | null;
   team?: ITeam | null;
 }
 
-export type NewEmployee = Omit<IEmployee, 'id'> & { id: null };
+export type NewEmployeeWithLastInstructionDate = Omit<IEmployeeWithLastInstructionDate, 'id'> & { id: null };

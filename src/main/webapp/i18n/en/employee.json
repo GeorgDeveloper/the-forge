@@ -23,6 +23,7 @@
       "birthDate": "Birth Date",
       "employeeNumber": "Employee Number",
       "hireDate": "Hire Date",
+      "lastInstructionDate": "Last Instruction Date",
       "training": "Training",
       "task": "Task",
       "position": "Position",

@@ -75,6 +75,13 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="lastInstructionDate">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.employee.lastInstructionDate">Last Instruction Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="position.id">
               <div class="d-flex">
                 <span jhiTranslate="theForgeApp.employee.position">Position</span>
@@ -101,6 +108,7 @@
               <td>{{ employee.birthDate | formatMediumDate }}</td>
               <td>{{ employee.employeeNumber }}</td>
               <td>{{ employee.hireDate | formatMediumDate }}</td>
+              <td>{{ employee.lastInstructionDate | formatMediumDate }}</td>
               <td>
                 @if (employee.position) {
                   <div>
