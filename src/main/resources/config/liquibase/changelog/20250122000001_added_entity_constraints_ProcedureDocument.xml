@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="now" value="now()" dbms="postgresql"/>
+
+    <changeSet id="20250122000001-4" author="jhipster">
+        <createIndex tableName="procedure_document" indexName="idx_procedure_document__profession_id">
+            <column name="profession_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20250122000001-5" author="jhipster">
+        <createIndex tableName="procedure_document" indexName="idx_procedure_document__position_id">
+            <column name="position_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -19,7 +19,8 @@
         "additionalTraining": "Дополнительное обучение",
         "safetyInstruction": "Инструкции по ОТ",
         "position": "Должности",
-        "jobDescription": "Должностные инструкции"
+        "jobDescription": "Должностные инструкции",
+        "procedureDocument": "Процедуры и Документации"
       },
       "account": {
         "main": "Профиль",

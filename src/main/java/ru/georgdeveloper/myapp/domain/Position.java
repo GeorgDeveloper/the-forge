@@ -39,6 +39,11 @@ public class Position implements Serializable {
     @JsonIgnoreProperties(value = { "profession", "position" }, allowSetters = true)
     private Set<SafetyInstruction> safetyInstructions = new HashSet<>();
 
+    // Связь один-ко-многим с ProcedureDocument (процедуры и документации)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "position")
+    @JsonIgnoreProperties(value = { "profession", "position" }, allowSetters = true)
+    private Set<ProcedureDocument> procedureDocuments = new HashSet<>();
+
     // Связь один-ко-многим с Employee (сотрудники)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "position")
     @JsonIgnoreProperties(value = { "trainings", "tasks", "position", "professions", "team" }, allowSetters = true)
@@ -110,6 +115,37 @@ public class Position implements Serializable {
     public Position removeSafetyInstruction(SafetyInstruction safetyInstruction) {
         this.safetyInstructions.remove(safetyInstruction);
         safetyInstruction.setPosition(null);
+        return this;
+    }
+
+    public Set<ProcedureDocument> getProcedureDocuments() {
+        return this.procedureDocuments;
+    }
+
+    public void setProcedureDocuments(Set<ProcedureDocument> procedureDocuments) {
+        if (this.procedureDocuments != null) {
+            this.procedureDocuments.forEach(i -> i.setPosition(null));
+        }
+        if (procedureDocuments != null) {
+            procedureDocuments.forEach(i -> i.setPosition(this));
+        }
+        this.procedureDocuments = procedureDocuments;
+    }
+
+    public Position procedureDocuments(Set<ProcedureDocument> procedureDocuments) {
+        this.setProcedureDocuments(procedureDocuments);
+        return this;
+    }
+
+    public Position addProcedureDocument(ProcedureDocument procedureDocument) {
+        this.procedureDocuments.add(procedureDocument);
+        procedureDocument.setPosition(this);
+        return this;
+    }
+
+    public Position removeProcedureDocument(ProcedureDocument procedureDocument) {
+        this.procedureDocuments.remove(procedureDocument);
+        procedureDocument.setPosition(null);
         return this;
     }
 

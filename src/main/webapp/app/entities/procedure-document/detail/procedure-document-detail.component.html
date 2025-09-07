@@ -1,0 +1,82 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (procedureDocument(); as procedureDocumentRef) {
+      <div>
+        <h2 data-cy="procedureDocumentDetailsHeading">
+          <span jhiTranslate="theForgeApp.procedureDocument.detail.title">Procedure Document</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ procedureDocumentRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.procedureDocument.documentName">Document Name</span></dt>
+          <dd>
+            <span>{{ procedureDocumentRef.documentName }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.procedureDocument.introductionDate">Introduction Date</span></dt>
+          <dd>
+            <span>{{ procedureDocumentRef.introductionDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.procedureDocument.description">Description</span></dt>
+          <dd>
+            <span>{{ procedureDocumentRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.procedureDocument.profession">Profession</span></dt>
+          <dd>
+            @if (procedureDocument()!.profession) {
+              <div>
+                <a [routerLink]="['/profession', procedureDocument()!.profession?.id, 'view']">{{
+                  procedureDocumentRef.profession?.professionName
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.procedureDocument.position">Position</span></dt>
+          <dd>
+            @if (procedureDocument()!.position) {
+              <div>
+                <a [routerLink]="['/position', procedureDocument()!.position?.id, 'view']">{{
+                  procedureDocumentRef.position?.positionName
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt>PDF-файл документации</dt>
+          <dd>
+            @if (procedureDocument()!.pdfFileName) {
+              <div>
+                <span class="text-info">{{ procedureDocumentRef.pdfFileName }}</span>
+                <div class="mt-2">
+                  <button type="button" class="btn btn-sm btn-primary me-2" (click)="downloadPdf()">
+                    <fa-icon icon="download"></fa-icon> Скачать PDF
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary" (click)="viewPdf()">
+                    <fa-icon icon="eye"></fa-icon> Просмотреть
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <span class="text-muted">PDF-файл не загружен</span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/procedure-document', procedureDocumentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

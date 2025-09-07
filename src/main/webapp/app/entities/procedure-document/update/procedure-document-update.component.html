@@ -1,0 +1,173 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-procedure-document-heading"
+        data-cy="ProcedureDocumentCreateUpdateHeading"
+        jhiTranslate="theForgeApp.procedureDocument.home.createOrEditLabel"
+      >
+        Создать или отредактировать Procedure Document
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="theForgeApp.procedureDocument.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let documentNameRef = editForm.get('documentName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_documentName" jhiTranslate="theForgeApp.procedureDocument.documentName">Document Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="documentName"
+            id="field_documentName"
+            data-cy="documentName"
+            formControlName="documentName"
+          />
+          @if (documentNameRef.invalid && (documentNameRef.dirty || documentNameRef.touched)) {
+            <div>
+              @if (editForm.get('documentName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let introductionDateRef = editForm.get('introductionDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_introductionDate" jhiTranslate="theForgeApp.procedureDocument.introductionDate"
+            >Introduction Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_introductionDate"
+              data-cy="introductionDate"
+              type="text"
+              class="form-control"
+              name="introductionDate"
+              ngbDatepicker
+              #introductionDateDp="ngbDatepicker"
+              formControlName="introductionDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="introductionDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (introductionDateRef.invalid && (introductionDateRef.dirty || introductionDateRef.touched)) {
+            <div>
+              @if (editForm.get('introductionDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Это поле обязательно к заполнению.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_description" jhiTranslate="theForgeApp.procedureDocument.description">Description</label>
+          <textarea
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_profession" jhiTranslate="theForgeApp.procedureDocument.profession">Profession</label>
+          <select
+            class="form-control"
+            id="field_profession"
+            data-cy="profession"
+            name="profession"
+            formControlName="profession"
+            [compareWith]="compareProfession"
+          >
+            <option [ngValue]="null"></option>
+            @for (professionOption of professionsSharedCollection; track $index) {
+              <option [ngValue]="professionOption">{{ professionOption.professionName }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_position" jhiTranslate="theForgeApp.procedureDocument.position">Position</label>
+          <select
+            class="form-control"
+            id="field_position"
+            data-cy="position"
+            name="position"
+            formControlName="position"
+            [compareWith]="comparePosition"
+          >
+            <option [ngValue]="null"></option>
+            @for (positionOption of positionsSharedCollection; track $index) {
+              <option [ngValue]="positionOption">{{ positionOption.positionName }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_pdfFile">PDF-файл документации</label>
+          <div class="input-group">
+            <input
+              type="file"
+              class="form-control"
+              id="field_pdfFile"
+              data-cy="pdfFile"
+              name="pdfFile"
+              accept=".pdf"
+              (change)="onFileSelected($event)"
+              #fileInput
+            />
+            @if (selectedFile) {
+              <button type="button" class="btn btn-outline-secondary" (click)="clearFile()">
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            }
+          </div>
+          <small class="form-text text-muted"> Максимальный размер файла: 50MB. Поддерживаются только PDF-файлы. </small>
+          @if (selectedFile) {
+            <small class="form-text text-success"> Выбран файл: {{ selectedFile.name }} ({{ formatFileSize(selectedFile.size) }}) </small>
+          }
+          @if (procedureDocument && procedureDocument.pdfFileName) {
+            <div class="mt-2">
+              <small class="form-text text-info"> Текущий файл: {{ procedureDocument.pdfFileName }} </small>
+              <div class="mt-1">
+                <button type="button" class="btn btn-sm btn-outline-primary me-2" (click)="downloadPdf()">
+                  <fa-icon icon="download"></fa-icon> Скачать
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="deletePdf()">
+                  <fa-icon icon="trash"></fa-icon> Удалить
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Отмена</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Сохранить</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

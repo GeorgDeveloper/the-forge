@@ -94,6 +94,13 @@ const routes: Routes = [
     loadChildren: () => import('./job-description/job-description.routes'),
   },
 
+  // Маршрут для процедур и документаций
+  {
+    path: 'procedure-document',
+    data: { pageTitle: 'theForgeApp.procedureDocument.home.title' },
+    loadChildren: () => import('./procedure-document/procedure-document.routes'),
+  },
+
   /*
    * Специальный комментарий для JHipster - будет автоматически заменен
    * на сгенерированные маршруты при создании новых сущностей

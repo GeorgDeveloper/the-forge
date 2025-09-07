@@ -45,6 +45,11 @@ public class Profession implements Serializable {
     @JsonIgnoreProperties(value = { "profession", "position" }, allowSetters = true)
     private Set<SafetyInstruction> safetyInstructions = new HashSet<>();
 
+    // Один-ко-многим: Процедуры и документации
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "profession")
+    @JsonIgnoreProperties(value = { "profession", "position" }, allowSetters = true)
+    private Set<ProcedureDocument> procedureDocuments = new HashSet<>();
+
     // Многие-ко-многим: Сотрудники
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "professions")
     @JsonIgnoreProperties(value = { "professions" }, allowSetters = true)
@@ -170,6 +175,37 @@ public class Profession implements Serializable {
     public Profession removeSafetyInstruction(SafetyInstruction safetyInstruction) {
         this.safetyInstructions.remove(safetyInstruction);
         safetyInstruction.setProfession(null);
+        return this;
+    }
+
+    public Set<ProcedureDocument> getProcedureDocuments() {
+        return this.procedureDocuments;
+    }
+
+    public void setProcedureDocuments(Set<ProcedureDocument> procedureDocuments) {
+        if (this.procedureDocuments != null) {
+            this.procedureDocuments.forEach(i -> i.setProfession(null));
+        }
+        if (procedureDocuments != null) {
+            procedureDocuments.forEach(i -> i.setProfession(this));
+        }
+        this.procedureDocuments = procedureDocuments;
+    }
+
+    public Profession procedureDocuments(Set<ProcedureDocument> procedureDocuments) {
+        this.setProcedureDocuments(procedureDocuments);
+        return this;
+    }
+
+    public Profession addProcedureDocument(ProcedureDocument procedureDocument) {
+        this.procedureDocuments.add(procedureDocument);
+        procedureDocument.setProfession(this);
+        return this;
+    }
+
+    public Profession removeProcedureDocument(ProcedureDocument procedureDocument) {
+        this.procedureDocuments.remove(procedureDocument);
+        procedureDocument.setProfession(null);
         return this;
     }
 

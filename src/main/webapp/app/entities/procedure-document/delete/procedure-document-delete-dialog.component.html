@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h4 class="modal-title" jhiTranslate="entity.delete.title">Подтверждение операции удаления</h4>
+
+  <button type="button" class="btn-close" aria-describedby="modal-title" (click)="cancel()"></button>
+</div>
+
+<div class="modal-body">
+  <p id="jhi-delete-procedureDocument-heading" jhiTranslate="theForgeApp.procedureDocument.delete.question">
+    Вы уверены, что хотите удалить Procedure Document {{ procedureDocument?.id }}?
+  </p>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Отмена</span>
+  </button>
+
+  <button
+    id="jhi-confirm-delete-procedureDocument"
+    data-cy="confirmDeleteButton"
+    type="button"
+    class="btn btn-danger"
+    (click)="confirmDelete(procedureDocument!.id!)"
+  >
+    <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Удалить</span>
+  </button>
+</div>
