@@ -8,6 +8,9 @@ export interface ISafetyInstruction {
   introductionDate?: dayjs.Dayjs | null;
   profession?: IProfession | null;
   position?: IPosition | null;
+  pdfFileName?: string | null;
+  pdfFileContentType?: string | null;
+  pdfFile?: string | null;
 }
 
 export type NewSafetyInstruction = Omit<ISafetyInstruction, 'id'> & { id: null };

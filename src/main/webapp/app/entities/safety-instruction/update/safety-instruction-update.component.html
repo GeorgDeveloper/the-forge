@@ -103,6 +103,44 @@
             }
           </select>
         </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_pdfFile">PDF-файл инструкции</label>
+          <div class="input-group">
+            <input
+              type="file"
+              class="form-control"
+              id="field_pdfFile"
+              data-cy="pdfFile"
+              name="pdfFile"
+              accept=".pdf"
+              (change)="onFileSelected($event)"
+              #fileInput
+            />
+            @if (selectedFile) {
+              <button type="button" class="btn btn-outline-secondary" (click)="clearFile()">
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            }
+          </div>
+          <small class="form-text text-muted"> Максимальный размер файла: 50MB. Поддерживаются только PDF-файлы. </small>
+          @if (selectedFile) {
+            <small class="form-text text-success"> Выбран файл: {{ selectedFile.name }} ({{ formatFileSize(selectedFile.size) }}) </small>
+          }
+          @if (safetyInstruction && safetyInstruction.pdfFileName) {
+            <div class="mt-2">
+              <small class="form-text text-info"> Текущий файл: {{ safetyInstruction.pdfFileName }} </small>
+              <div class="mt-1">
+                <button type="button" class="btn btn-sm btn-outline-primary me-2" (click)="downloadPdf()">
+                  <fa-icon icon="download"></fa-icon> Скачать
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="deletePdf()">
+                  <fa-icon icon="trash"></fa-icon> Удалить
+                </button>
+              </div>
+            </div>
+          }
+        </div>
       </div>
 
       <div>

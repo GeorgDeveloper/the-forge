@@ -45,6 +45,24 @@
               </div>
             }
           </dd>
+          <dt>PDF-файл инструкции</dt>
+          <dd>
+            @if (safetyInstruction()!.pdfFileName) {
+              <div>
+                <span class="text-info">{{ safetyInstructionRef.pdfFileName }}</span>
+                <div class="mt-2">
+                  <button type="button" class="btn btn-sm btn-primary me-2" (click)="downloadPdf()">
+                    <fa-icon icon="download"></fa-icon> Скачать PDF
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary" (click)="viewPdf()">
+                    <fa-icon icon="eye"></fa-icon> Просмотреть
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <span class="text-muted">PDF-файл не загружен</span>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

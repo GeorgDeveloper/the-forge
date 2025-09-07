@@ -23,6 +23,7 @@ import { SafetyInstructionFormGroup, SafetyInstructionFormService } from './safe
 export class SafetyInstructionUpdateComponent implements OnInit {
   isSaving = false;
   safetyInstruction: ISafetyInstruction | null = null;
+  selectedFile: File | null = null;
 
   professionsSharedCollection: IProfession[] = [];
   positionsSharedCollection: IPosition[] = [];
@@ -65,6 +66,78 @@ export class SafetyInstructionUpdateComponent implements OnInit {
     }
   }
 
+  onFileSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      const file = target.files[0];
+
+      // Проверка типа файла
+      if (file.type !== 'application/pdf') {
+        alert('Пожалуйста, выберите PDF-файл');
+        target.value = '';
+        return;
+      }
+
+      // Проверка размера файла (50MB = 50 * 1024 * 1024 байт)
+      const maxSize = 50 * 1024 * 1024;
+      if (file.size > maxSize) {
+        alert(`Размер файла не должен превышать 50MB. Текущий размер: ${this.formatFileSize(file.size)}`);
+        target.value = '';
+        return;
+      }
+
+      this.selectedFile = file;
+    }
+  }
+
+  clearFile(): void {
+    this.selectedFile = null;
+    const fileInput = document.getElementById('field_pdfFile') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  downloadPdf(): void {
+    if (this.safetyInstruction?.id) {
+      this.safetyInstructionService.downloadPdfFile(this.safetyInstruction.id).subscribe({
+        next: blob => {
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = this.safetyInstruction?.pdfFileName || 'instruction.pdf';
+          link.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: () => {
+          alert('Ошибка при скачивании файла');
+        },
+      });
+    }
+  }
+
+  deletePdf(): void {
+    if (this.safetyInstruction?.id && confirm('Вы уверены, что хотите удалить PDF-файл?')) {
+      this.safetyInstructionService.deletePdfFile(this.safetyInstruction.id).subscribe({
+        next: response => {
+          this.safetyInstruction = response.body;
+          alert('PDF-файл успешно удален');
+        },
+        error: () => {
+          alert('Ошибка при удалении файла');
+        },
+      });
+    }
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISafetyInstruction>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: () => this.onSaveSuccess(),
@@ -73,7 +146,19 @@ export class SafetyInstructionUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
-    this.previousState();
+    if (this.selectedFile && this.safetyInstruction?.id) {
+      this.safetyInstructionService.uploadPdfFile(this.safetyInstruction.id, this.selectedFile).subscribe({
+        next: () => {
+          this.previousState();
+        },
+        error: () => {
+          alert('Ошибка при загрузке PDF-файла');
+          this.previousState();
+        },
+      });
+    } else {
+      this.previousState();
+    }
   }
 
   protected onSaveError(): void {

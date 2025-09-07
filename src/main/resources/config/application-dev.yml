@@ -30,6 +30,11 @@ spring:
   jackson:
     serialization:
       indent-output: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      enabled: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/theForge
@@ -55,6 +60,14 @@ server:
   port: 8098
   # make sure requests the proxy uri instead of the server one
   forward-headers-strategy: native
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      enabled: true
+  tomcat:
+    max-http-form-post-size: 50MB
+    max-swallow-size: 50MB
 
 # ===================================================================
 # JHipster specific properties

@@ -172,6 +172,13 @@ server:
     session:
       cookie:
         http-only: true
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      enabled: true
+  tomcat:
+    max-http-form-post-size: 50MB
+    max-swallow-size: 50MB
 
 springdoc:
   show-actuator: true

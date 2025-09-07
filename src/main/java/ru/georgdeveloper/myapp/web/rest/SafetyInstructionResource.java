@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.georgdeveloper.myapp.domain.SafetyInstruction;
 import ru.georgdeveloper.myapp.repository.SafetyInstructionRepository;
@@ -173,6 +175,117 @@ public class SafetyInstructionResource {
         LOG.debug("Запрос на получение инструкции по ТБ: ID {}", id);
         Optional<SafetyInstruction> safetyInstruction = safetyInstructionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(safetyInstruction);
+    }
+
+    /**
+     * Загружает PDF-файл для инструкции по технике безопасности.
+     * POST /api/safety-instructions/{id}/pdf
+     *
+     * @param id ID инструкции
+     * @param file загружаемый PDF-файл
+     * @return ResponseEntity с обновленной инструкцией
+     */
+    @PostMapping(value = "/{id}/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SafetyInstruction> uploadPdfFile(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
+        LOG.info("=== НАЧАЛО ЗАГРУЗКИ PDF ===");
+        LOG.info("ID инструкции: {}", id);
+        LOG.info("Имя файла: {}", file.getOriginalFilename());
+        LOG.info("Размер файла: {} bytes ({} MB)", file.getSize(), file.getSize() / (1024.0 * 1024.0));
+        LOG.info("Тип контента: {}", file.getContentType());
+        LOG.info("Пустое: {}", file.isEmpty());
+
+        if (file.isEmpty()) {
+            throw new BadRequestAlertException("Файл не может быть пустым", ENTITY_NAME, "fileempty");
+        }
+
+        if (!"application/pdf".equals(file.getContentType())) {
+            throw new BadRequestAlertException("Поддерживаются только PDF-файлы", ENTITY_NAME, "invalidfiletype");
+        }
+
+        // Проверка размера файла (50MB)
+        long maxSize = 50 * 1024 * 1024;
+        if (file.getSize() > maxSize) {
+            throw new BadRequestAlertException("Размер файла не должен превышать 50MB", ENTITY_NAME, "filesizetoolarge");
+        }
+
+        Optional<SafetyInstruction> safetyInstructionOpt = safetyInstructionService.findOne(id);
+        if (safetyInstructionOpt.isEmpty()) {
+            throw new BadRequestAlertException("Инструкция не найдена", ENTITY_NAME, "idnotfound");
+        }
+
+        SafetyInstruction safetyInstruction = safetyInstructionOpt.get();
+        try {
+            safetyInstruction.setPdfFileName(file.getOriginalFilename());
+            safetyInstruction.setPdfFileContentType(file.getContentType());
+            safetyInstruction.setPdfFile(file.getBytes());
+
+            safetyInstruction = safetyInstructionService.update(safetyInstruction);
+
+            LOG.info("PDF-файл успешно загружен для инструкции ID {}: {}", id, file.getOriginalFilename());
+
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .body(safetyInstruction);
+        } catch (Exception e) {
+            LOG.error("Ошибка при загрузке PDF-файла: {}", e.getMessage(), e);
+            throw new BadRequestAlertException("Ошибка при загрузке файла: " + e.getMessage(), ENTITY_NAME, "uploaderror");
+        }
+    }
+
+    /**
+     * Скачивает PDF-файл инструкции по технике безопасности.
+     * GET /api/safety-instructions/{id}/pdf
+     *
+     * @param id ID инструкции
+     * @return ResponseEntity с PDF-файлом
+     */
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> downloadPdfFile(@PathVariable("id") Long id) {
+        LOG.debug("Запрос на скачивание PDF-файла инструкции по ТБ: ID {}", id);
+
+        Optional<SafetyInstruction> safetyInstructionOpt = safetyInstructionService.findOne(id);
+        if (safetyInstructionOpt.isEmpty()) {
+            throw new BadRequestAlertException("Инструкция не найдена", ENTITY_NAME, "idnotfound");
+        }
+
+        SafetyInstruction safetyInstruction = safetyInstructionOpt.get();
+        if (safetyInstruction.getPdfFile() == null) {
+            throw new BadRequestAlertException("PDF-файл не найден", ENTITY_NAME, "filenotfound");
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(safetyInstruction.getPdfFileContentType()));
+        headers.setContentDispositionFormData("attachment", safetyInstruction.getPdfFileName());
+
+        return ResponseEntity.ok().headers(headers).body(safetyInstruction.getPdfFile());
+    }
+
+    /**
+     * Удаляет PDF-файл инструкции по технике безопасности.
+     * DELETE /api/safety-instructions/{id}/pdf
+     *
+     * @param id ID инструкции
+     * @return ResponseEntity с обновленной инструкцией
+     */
+    @DeleteMapping("/{id}/pdf")
+    public ResponseEntity<SafetyInstruction> deletePdfFile(@PathVariable("id") Long id) {
+        LOG.debug("Запрос на удаление PDF-файла инструкции по ТБ: ID {}", id);
+
+        Optional<SafetyInstruction> safetyInstructionOpt = safetyInstructionService.findOne(id);
+        if (safetyInstructionOpt.isEmpty()) {
+            throw new BadRequestAlertException("Инструкция не найдена", ENTITY_NAME, "idnotfound");
+        }
+
+        SafetyInstruction safetyInstruction = safetyInstructionOpt.get();
+        safetyInstruction.setPdfFileName(null);
+        safetyInstruction.setPdfFileContentType(null);
+        safetyInstruction.setPdfFile(null);
+
+        safetyInstruction = safetyInstructionService.update(safetyInstruction);
+
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .body(safetyInstruction);
     }
 
     /**

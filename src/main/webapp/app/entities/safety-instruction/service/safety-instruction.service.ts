@@ -74,6 +74,25 @@ export class SafetyInstructionService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  uploadPdfFile(id: number, file: File): Observable<EntityResponseType> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http
+      .post<RestSafetyInstruction>(`${this.resourceUrl}/${id}/pdf`, formData, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
+  downloadPdfFile(id: number): Observable<Blob> {
+    return this.http.get(`${this.resourceUrl}/${id}/pdf`, { responseType: 'blob' });
+  }
+
+  deletePdfFile(id: number): Observable<EntityResponseType> {
+    return this.http
+      .delete<RestSafetyInstruction>(`${this.resourceUrl}/${id}/pdf`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
   getSafetyInstructionIdentifier(safetyInstruction: Pick<ISafetyInstruction, 'id'>): number {
     return safetyInstruction.id;
   }

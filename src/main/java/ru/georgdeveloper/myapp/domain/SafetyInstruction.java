@@ -32,6 +32,16 @@ public class SafetyInstruction implements Serializable {
     @Column(name = "introduction_date", nullable = false)
     private LocalDate introductionDate; // Дата введения инструкции
 
+    @Column(name = "pdf_file_name")
+    private String pdfFileName; // Имя PDF-файла инструкции
+
+    @Column(name = "pdf_file_content_type")
+    private String pdfFileContentType; // MIME-тип PDF-файла
+
+    @Lob
+    @Column(name = "pdf_file")
+    private byte[] pdfFile; // Содержимое PDF-файла
+
     // Связь многие-к-одному с Profession (профессия)
     @ManyToOne(fetch = FetchType.LAZY) // Ленивая загрузка
     @JsonIgnoreProperties(
@@ -83,6 +93,45 @@ public class SafetyInstruction implements Serializable {
 
     public void setIntroductionDate(LocalDate introductionDate) {
         this.introductionDate = introductionDate;
+    }
+
+    public String getPdfFileName() {
+        return this.pdfFileName;
+    }
+
+    public SafetyInstruction pdfFileName(String pdfFileName) {
+        this.setPdfFileName(pdfFileName);
+        return this;
+    }
+
+    public void setPdfFileName(String pdfFileName) {
+        this.pdfFileName = pdfFileName;
+    }
+
+    public String getPdfFileContentType() {
+        return this.pdfFileContentType;
+    }
+
+    public SafetyInstruction pdfFileContentType(String pdfFileContentType) {
+        this.setPdfFileContentType(pdfFileContentType);
+        return this;
+    }
+
+    public void setPdfFileContentType(String pdfFileContentType) {
+        this.pdfFileContentType = pdfFileContentType;
+    }
+
+    public byte[] getPdfFile() {
+        return this.pdfFile;
+    }
+
+    public SafetyInstruction pdfFile(byte[] pdfFile) {
+        this.setPdfFile(pdfFile);
+        return this;
+    }
+
+    public void setPdfFile(byte[] pdfFile) {
+        this.pdfFile = pdfFile;
     }
 
     /**
@@ -142,6 +191,9 @@ public class SafetyInstruction implements Serializable {
             "'" +
             ", дата введения инструкции='" +
             getIntroductionDate() +
+            "'" +
+            ", pdf файл='" +
+            getPdfFileName() +
             "'" +
             "}"
         );

@@ -24,6 +24,7 @@
     <include file="config/liquibase/changelog/20250320113044_added_entity_JobDescription.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250120000000_add_actual_completion_date_to_task.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250121000000_added_entity_organization.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250122000000_add_pdf_fields_to_safety_instruction.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250320113036_added_entity_constraints_Employee.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250320113037_added_entity_constraints_Training.xml" relativeToChangelogFile="false"/>

@@ -30,9 +30,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
-import { faTrash, faBan, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import FindLanguageFromKeyPipe from './language/find-language-from-key.pipe';
 import TranslateDirective from './language/translate.directive';
@@ -55,8 +54,4 @@ import { AlertErrorComponent } from './alert/alert-error.component';
     TranslateDirective,
   ],
 })
-export default class SharedModule {
-  constructor(library: FaIconLibrary) {
-    library.addIcons(faTrash, faBan, faTimes);
-  }
-}
+export default class SharedModule {}

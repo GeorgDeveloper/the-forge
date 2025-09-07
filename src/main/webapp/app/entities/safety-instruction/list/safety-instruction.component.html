@@ -66,6 +66,9 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col">
+              <span>PDF-файл</span>
+            </th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -91,6 +94,13 @@
                   <div>
                     <a [routerLink]="['/position', safetyInstruction.position.id, 'view']">{{ safetyInstruction.position.positionName }}</a>
                   </div>
+                }
+              </td>
+              <td>
+                @if (safetyInstruction.pdfFileName) {
+                  <span class="badge bg-success"> <fa-icon icon="file-pdf"></fa-icon> Есть </span>
+                } @else {
+                  <span class="badge bg-secondary"> <fa-icon icon="file-alt"></fa-icon> Нет </span>
                 }
               </td>
               <td class="text-end">
