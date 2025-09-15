@@ -1,37 +1,267 @@
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-
-/* ==========================================================================
-Navbar
-========================================================================== */
-
-.navbar-version {
-  font-size: 0.65em;
-  //color: $navbar-dark-color;
-  color: $navbar-light-color;
+.top-navbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  padding: 0;
+  height: 64px;
 }
 
-.profile-image {
-  height: 1.75em;
-  width: 1.75em;
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-lg);
+  height: 100%;
+  max-width: 100%;
 }
 
-.navbar {
-  padding: 0.2rem 1rem;
+.mobile-menu-toggle {
+  background: none;
+  border: none;
+  color: var(--secondary-color);
+  font-size: 20px;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  transition: all 0.2s ease;
 
-  a.nav-link {
-    font-weight: 400;
+  &:hover {
+    background-color: var(--hover-color);
+    color: var(--text-color);
   }
 }
 
-/* ==========================================================================
-Logo styles
-========================================================================== */
-.logo-img {
-  height: 45px;
-  width: 45px;
+.search-container {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 var(--spacing-lg);
+
+  @media (max-width: 768px) {
+    max-width: 200px;
+    margin: 0 var(--spacing-md);
+  }
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--spacing-md);
+  color: var(--secondary-color);
+  z-index: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) 40px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--background-color);
+  font-size: var(--font-size-base);
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  &::placeholder {
+    color: var(--secondary-color);
+  }
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  color: var(--secondary-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--hover-color);
+  }
+}
+
+.flag {
+  width: 18px;
+  height: 12px;
+  border-radius: 2px;
   display: inline-block;
-  vertical-align: middle;
-  background: url('../../../content/images/logo-forge.png') no-repeat center center;
-  background-size: contain;
+  box-shadow: 0 0 0 1px var(--border-color) inset;
+}
+
+.flag.ru {
+  background: linear-gradient(180deg, #fff 33%, #0039a6 33% 66%, #d52b1e 66%);
+}
+
+.flag.us {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    #b22234 0 9%,
+    #fff 9% 18%,
+    #b22234 18% 27%,
+    #fff 27% 36%,
+    #b22234 36% 45%,
+    #fff 45% 54%,
+    #b22234 54% 63%,
+    #fff 63% 72%,
+    #b22234 72% 81%,
+    #fff 81% 90%,
+    #b22234 90% 100%
+  );
+}
+
+.flag.us::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 50%;
+  background: #3c3b6e;
+}
+
+.lang-label {
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  color: var(--secondary-color);
+}
+// styles for notification bell removed
+
+.user-profile-dropdown {
+  position: relative;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--hover-color);
+    border-color: var(--secondary-color);
+  }
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.profile-image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.profile-name {
+  font-weight: 500;
+  font-size: var(--font-size-small);
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.profile-role {
+  font-size: 11px;
+  color: var(--secondary-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+  color: var(--secondary-color);
+  transition: transform 0.2s ease;
+}
+
+.profile-dropdown-menu {
+  min-width: 200px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-sm) 0;
+
+  .dropdown-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--text-color);
+    font-size: var(--font-size-small);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--hover-color);
+      color: var(--text-color);
+    }
+
+    fa-icon {
+      margin-right: var(--spacing-sm);
+      color: var(--secondary-color);
+    }
+  }
+
+  .dropdown-divider {
+    margin: var(--spacing-sm) 0;
+    border-color: var(--border-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .profile-info {
+    display: none;
+  }
+
+  .search-input {
+    font-size: var(--font-size-small);
+  }
+
+  .profile-button {
+    padding: var(--spacing-xs);
+  }
 }

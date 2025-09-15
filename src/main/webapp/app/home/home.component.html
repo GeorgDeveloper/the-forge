@@ -1,82 +1,165 @@
-<div class="row">
-  <div class="col-md-3">
-    <span class="hipster img-fluid rounded"></span>
+<!-- Новый дашборд The Forge -->
+<div class="dashboard">
+  <!-- Приветствие -->
+  <div class="welcome-section">
+    @if (account(); as accountRef) {
+      <h1 class="welcome-title">Добро пожаловать, {{ accountRef.firstName || accountRef.login }}!</h1>
+      <p class="welcome-subtitle">Система управления персоналом и задачами</p>
+    } @else {
+      <h1 class="welcome-title">The Forge</h1>
+      <p class="welcome-subtitle">Система управления персоналом и задачами</p>
+    }
   </div>
 
-  <div class="col-md-9">
-    <h1 class="display-4"><span jhiTranslate="home.title">Добро пожаловать, Java Hipster!</span> (The Forge)</h1>
-
-    <p class="lead" jhiTranslate="home.subtitle">Это ваша домашняя страница</p>
-
-    <div>
-      @if (account() !== null) {
-        <div class="alert alert-success">
-          @if (account(); as accountRef) {
-            <span id="home-logged-message" jhiTranslate="home.logged.message" [translateValues]="{ username: accountRef.login }"
-              >Вы вошли как пользователь &quot;{{ accountRef.login }}&quot;.</span
-            >
-          }
-        </div>
-      } @else {
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.authenticated.prefix">Если вы хотите </span>
-          <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">авторизироваться</a
-          ><span jhiTranslate="global.messages.info.authenticated.suffix"
-            >, вы можете попробовать аккаунты по умолчанию:<br />- Администратор (логин=&quot;admin&quot; и пароль=&quot;admin&quot;)
-            <br />- Пользователь (логин=&quot;user&quot; и пароль=&quot;user&quot;).</span
-          >
+  @if (account() !== null) {
+    <!-- Статистика за сегодня -->
+    <div class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon success">
+            <fa-icon icon="users"></fa-icon>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">24</div>
+            <div class="stat-label">Активных сотрудников</div>
+          </div>
         </div>
 
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.register.noaccount">У вас нет аккаунта?</span>&nbsp;
-          <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Создать новый аккаунт</a>
+        <div class="stat-card">
+          <div class="stat-icon warning">
+            <fa-icon icon="tasks"></fa-icon>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Активных задач</div>
+          </div>
         </div>
-      }
+
+        <div class="stat-card">
+          <div class="stat-icon info">
+            <fa-icon icon="graduation-cap"></fa-icon>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Предстоящих инструктажей</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon danger">
+            <fa-icon icon="exclamation-triangle"></fa-icon>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Требуют внимания</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <p jhiTranslate="home.question">Если у Вас возникли вопросы по JHipster:</p>
+    <!-- Виджеты дашборда -->
+    <div class="widgets-section">
+      <div class="widgets-grid">
+        <!-- Ближайшие инструктажи -->
+        <div class="widget-card">
+          <div class="widget-header">
+            <h3 class="widget-title">Ближайшие инструктажи</h3>
+            <a routerLink="/safety-instruction" class="widget-link">Все инструктажи</a>
+          </div>
+          <div class="widget-content">
+            <div class="instruction-item">
+              <div class="instruction-info">
+                <div class="instruction-title">Техника безопасности на производстве</div>
+                <div class="instruction-date">Завтра, 10:00</div>
+              </div>
+              <div class="instruction-progress">
+                <div class="progress-bar" style="width: 75%"></div>
+              </div>
+            </div>
 
-    <ul>
-      <li>
-        <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.homepage"
-          >JHipster домашняя страница</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://stackoverflow.com/tags/jhipster/info"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.stackoverflow"
-          >JHipster на Stack Overflow</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/jhipster/generator-jhipster/issues?state=open"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.bugtracker"
-          >JHipster баг трекер</a
-        >
-      </li>
-      <li>
-        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.chat"
-          >JHipster public chat room</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.follow"
-          >пользователь &#64;jhipster в Twitter</a
-        >
-      </li>
-    </ul>
+            <div class="instruction-item">
+              <div class="instruction-info">
+                <div class="instruction-title">Работа с электрооборудованием</div>
+                <div class="instruction-date">15 января, 14:00</div>
+              </div>
+              <div class="instruction-progress">
+                <div class="progress-bar" style="width: 30%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <p>
-      <span jhiTranslate="home.like">Если вам нравится JHipster, не забудьте дать нам звёздочку на</span>
-      <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.github"
-        >GitHub</a
-      >!
-    </p>
-  </div>
+        <!-- Активные задачи -->
+        <div class="widget-card">
+          <div class="widget-header">
+            <h3 class="widget-title">Приоритетные задачи</h3>
+            <a routerLink="/task" class="widget-link">Все задачи</a>
+          </div>
+          <div class="widget-content">
+            <div class="task-item high">
+              <div class="task-priority"></div>
+              <div class="task-info">
+                <div class="task-title">Обновление документации по безопасности</div>
+                <div class="task-assignee">Назначено: Иванов И.И.</div>
+              </div>
+              <div class="task-status high">Высокий</div>
+            </div>
+
+            <div class="task-item medium">
+              <div class="task-priority"></div>
+              <div class="task-info">
+                <div class="task-title">Проверка средств защиты</div>
+                <div class="task-assignee">Назначено: Петров П.П.</div>
+              </div>
+              <div class="task-status medium">Средний</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Календарь -->
+        <div class="widget-card">
+          <div class="widget-header">
+            <h3 class="widget-title">Календарь событий</h3>
+            <a routerLink="/calendar" class="widget-link">Открыть календарь</a>
+          </div>
+          <div class="widget-content">
+            <div class="mini-calendar">
+              <div class="calendar-header">Январь 2024</div>
+              <div class="calendar-events">
+                <div class="event-item training">
+                  <div class="event-date">15</div>
+                  <div class="event-title">Инструктаж по ТБ</div>
+                </div>
+                <div class="event-item task">
+                  <div class="event-date">18</div>
+                  <div class="event-title">Проверка оборудования</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <!-- Страница для неавторизованных пользователей -->
+    <div class="auth-section">
+      <div class="auth-card">
+        <h2>Добро пожаловать в The Forge</h2>
+        <p>Для доступа к системе управления персоналом необходимо авторизоваться.</p>
+
+        <div class="auth-actions">
+          <button class="btn-forge-primary" (click)="login()">Войти в систему</button>
+          <a routerLink="/account/register" class="btn-forge-secondary">Создать аккаунт</a>
+        </div>
+
+        <div class="demo-accounts">
+          <p><strong>Демо-аккаунты:</strong></p>
+          <ul>
+            <li>Администратор: admin / admin</li>
+            <li>Пользователь: user / user</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  }
 </div>

@@ -1,13 +1,25 @@
 <jhi-page-ribbon></jhi-page-ribbon>
 
-<div>
-  <router-outlet name="navbar"></router-outlet>
-</div>
+<!-- Новый макет с сайдбаром -->
+<div class="app-layout">
+  <!-- Левая панель навигации -->
+  <jhi-sidebar></jhi-sidebar>
 
-<div class="container-fluid">
-  <div class="card jh-card">
-    <router-outlet></router-outlet>
+  <!-- Основной контент -->
+  <div class="main-content">
+    <!-- Верхняя панель -->
+    <header class="top-header">
+      <router-outlet name="navbar"></router-outlet>
+    </header>
+
+    <!-- Контентная область -->
+    <main class="content-area">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+
+    <!-- Футер -->
+    <jhi-footer></jhi-footer>
   </div>
-
-  <jhi-footer></jhi-footer>
 </div>

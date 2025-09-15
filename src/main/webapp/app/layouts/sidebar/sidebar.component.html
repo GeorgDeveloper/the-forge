@@ -1,0 +1,180 @@
+<aside class="sidebar">
+  <!-- Логотип и название -->
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <img [src]="getImageUrl()" alt="The Forge" class="logo-image" />
+      <span class="logo-text">The Forge</span>
+    </div>
+  </div>
+
+  <!-- Навигационное меню -->
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <!-- Главная -->
+      <li class="nav-item">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+          <fa-icon [icon]="faHome" class="nav-icon"></fa-icon>
+          <span class="nav-text" jhiTranslate="global.menu.home">Главная</span>
+        </a>
+      </li>
+
+      <!-- Календарь -->
+      <li class="nav-item">
+        <a routerLink="/calendar" routerLinkActive="active" class="nav-link">
+          <fa-icon [icon]="faCalendar" class="nav-icon"></fa-icon>
+          <span class="nav-text" jhiTranslate="global.menu.calendar">Календарь</span>
+        </a>
+      </li>
+
+      <!-- Меню -->
+      <li class="nav-item" *ngIf="account() as account">
+        <button class="nav-link nav-toggle" (click)="toggleMenu('entities')" [class.expanded]="isMenuExpanded('entities')">
+          <fa-icon [icon]="faUsers" class="nav-icon"></fa-icon>
+          <span class="nav-text" jhiTranslate="global.menu.entities.main">Меню</span>
+          <fa-icon [icon]="isMenuExpanded('entities') ? faChevronDown : faChevronRight" class="nav-chevron"> </fa-icon>
+        </button>
+
+        <ul class="nav-submenu" [class.expanded]="isMenuExpanded('entities')">
+          <!-- Сотрудники -->
+          <li class="nav-subitem">
+            <a routerLink="/employee" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faUser" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.employee">Сотрудники</span>
+            </a>
+          </li>
+
+          <!-- Команды -->
+          <li class="nav-subitem">
+            <a routerLink="/team" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faUsers" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.team">Команды</span>
+            </a>
+          </li>
+
+          <!-- Задачи -->
+          <li class="nav-subitem">
+            <a routerLink="/task" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faTasks" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.task">Задачи</span>
+            </a>
+          </li>
+
+          <!-- Инструктажи -->
+          <li class="nav-subitem">
+            <a routerLink="/safety-instruction" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faShield" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.safetyInstruction">Инструктажи по безопасности</span>
+            </a>
+          </li>
+
+          <!-- Обучение -->
+          <li class="nav-subitem">
+            <a routerLink="/training" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faGraduationCap" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.training">Обучение</span>
+            </a>
+          </li>
+
+          <!-- Дополнительное обучение -->
+          <li class="nav-subitem">
+            <a routerLink="/additional-training" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faBook" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.additionalTraining">Дополнительное обучение</span>
+            </a>
+          </li>
+
+          <!-- Должности -->
+          <li class="nav-subitem">
+            <a routerLink="/position" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faList" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.position">Должности</span>
+            </a>
+          </li>
+
+          <!-- Профессии -->
+          <li class="nav-subitem">
+            <a routerLink="/profession" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faUser" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.profession">Профессии</span>
+            </a>
+          </li>
+
+          <!-- Описания работ -->
+          <li class="nav-subitem">
+            <a routerLink="/job-description" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faFileAlt" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.jobDescription">Описания работ</span>
+            </a>
+          </li>
+
+          <!-- Средства защиты -->
+          <li class="nav-subitem">
+            <a routerLink="/protective-equipment" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faShield" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.protectiveEquipment">Средства защиты</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Администрирование -->
+      <li class="nav-item" *ngIf="account() as account">
+        <button class="nav-link nav-toggle" (click)="toggleMenu('admin')" [class.expanded]="isMenuExpanded('admin')">
+          <fa-icon [icon]="faCog" class="nav-icon"></fa-icon>
+          <span class="nav-text" jhiTranslate="global.menu.admin.main">Администрирование</span>
+          <fa-icon [icon]="isMenuExpanded('admin') ? faChevronDown : faChevronRight" class="nav-chevron"> </fa-icon>
+        </button>
+
+        <ul class="nav-submenu" [class.expanded]="isMenuExpanded('admin')">
+          <!-- Управление пользователями -->
+          <li class="nav-subitem" jhiHasAnyAuthority="ROLE_ADMIN">
+            <a routerLink="/admin/user-management" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faUsersCog" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.admin.userManagement">Управление пользователями</span>
+            </a>
+          </li>
+
+          <!-- Метрики -->
+          <li class="nav-subitem" jhiHasAnyAuthority="ROLE_ADMIN">
+            <a routerLink="/admin/metrics" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faTachometerAlt" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.admin.metrics">Метрики</span>
+            </a>
+          </li>
+
+          <!-- Состояние системы -->
+          <li class="nav-subitem" jhiHasAnyAuthority="ROLE_ADMIN">
+            <a routerLink="/admin/health" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faHeart" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.admin.health">Состояние системы</span>
+            </a>
+          </li>
+
+          <!-- Конфигурация -->
+          <li class="nav-subitem" jhiHasAnyAuthority="ROLE_ADMIN">
+            <a routerLink="/admin/configuration" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faCogs" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.admin.configuration">Конфигурация</span>
+            </a>
+          </li>
+
+          <!-- Логи -->
+          <li class="nav-subitem" jhiHasAnyAuthority="ROLE_ADMIN">
+            <a routerLink="/admin/logs" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faFileAlt" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.admin.logs">Логи</span>
+            </a>
+          </li>
+
+          <!-- API документация -->
+          <li class="nav-subitem" *ngIf="openAPIEnabled" jhiHasAnyAuthority="ROLE_ADMIN">
+            <a routerLink="/admin/docs" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faBook" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.admin.apidocs">API документация</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>

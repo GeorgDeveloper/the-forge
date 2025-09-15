@@ -1,0 +1,82 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
+}
+
+.top-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.content-area {
+  flex: 1;
+  padding: var(--spacing-xl) calc(var(--spacing-lg) * 2) var(--spacing-lg) calc(var(--spacing-lg) * 2);
+  color: var(--secondary-color);
+  font-size: var(--font-size-base);
+
+  @media (max-width: 768px) {
+    padding: var(--spacing-md) calc(var(--spacing-md) * 2);
+  }
+}
+
+.content-wrapper {
+  max-width: none;
+  margin: 0;
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  p,
+  small,
+  label,
+  .form-text {
+    color: var(--secondary-color);
+  }
+
+  /* Обновленные стили для карточек контента */
+  .card,
+  .jh-card {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .app-layout {
+    position: relative;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .content-area {
+    padding: var(--spacing-md);
+  }
+}

@@ -1,0 +1,12 @@
+.footer {
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.footer-note {
+  margin: 0;
+  font-size: var(--font-size-small);
+  color: var(--secondary-color);
+}

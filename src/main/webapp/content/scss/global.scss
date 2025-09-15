@@ -1,23 +1,90 @@
 @import './bootstrap-variables';
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
+/* External Google Fonts import removed to comply with CSP */
 
 /* ==============================================================
-Bootstrap tweaks
+The Forge Design System - Профессиональный минимализм
 ===============================================================*/
 
-body,
+:root {
+  /* Цветовая палитра */
+  --primary-color: #2563eb;
+  --secondary-color: #475569;
+  --accent-color: #10b981;
+  --background-color: #f8fafc;
+  --text-color: #1e293b;
+  --white: #ffffff;
+  --border-color: #e2e8f0;
+  --hover-color: #f1f5f9;
+
+  /* Типографика */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-base: 14px;
+  --font-size-small: 12px;
+  --font-size-h3: 18px;
+  --font-size-h2: 24px;
+  --font-size-h1: 32px;
+
+  /* Отступы и размеры */
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Тени */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Базовые стили */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  line-height: 1.5;
+}
+
 h1,
 h2,
 h3,
-h4 {
-  font-weight: 300;
+h4,
+h5,
+h6 {
+  font-family: var(--font-family);
+  color: var(--text-color);
+  margin-bottom: var(--spacing-md);
 }
 
-/* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: 600;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: 600;
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  font-weight: 500;
+}
+
 a {
-  color: #533f03;
-  font-weight: bold;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
 }
 
 /* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
@@ -64,7 +131,245 @@ Generic styles
   border-left: 5px solid red;
 }
 
-/* other generic styles */
+/* ==========================================================================
+The Forge UI Components
+========================================================================== */
+
+/* Карточки */
+.forge-card {
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.2s ease;
+}
+
+.forge-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.forge-card-header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.forge-card-title {
+  font-size: var(--font-size-h3);
+  font-weight: 500;
+  color: var(--text-color);
+  margin: 0;
+}
+
+/* Кнопки */
+.btn-forge-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--white);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-forge-primary:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-forge-secondary {
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-forge-secondary:hover {
+  background-color: var(--hover-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-forge-success {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--white);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-forge-success:hover {
+  background-color: #059669;
+  border-color: #059669;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Плавающая кнопка */
+.btn-floating {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+/* Unified button design across the app (based on login button) */
+.btn {
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: rgba(79, 111, 173, 0.9);
+  border-color: rgba(79, 111, 173, 0.9);
+  color: var(--white);
+
+  &:hover {
+    background-color: rgba(67, 95, 149, 0.95);
+    border-color: rgba(67, 95, 149, 0.95);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:active {
+    box-shadow: none;
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: rgba(148, 163, 184, 0.7);
+    border-color: rgba(148, 163, 184, 0.7);
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  color: #334155;
+
+  &:hover {
+    background-color: rgba(241, 245, 249, 0.9);
+    border-color: rgba(148, 163, 184, 0.9);
+    color: #0f172a;
+  }
+}
+
+.btn-success {
+  background-color: rgba(47, 133, 90, 0.9);
+  border-color: rgba(47, 133, 90, 0.9);
+  color: var(--white);
+
+  &:hover {
+    background-color: rgba(39, 103, 73, 0.95);
+    border-color: rgba(39, 103, 73, 0.95);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.btn-floating:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.1);
+}
+
+/* Формы */
+.form-control {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-base);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  background-color: var(--white);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+/* Таблицы */
+.table-forge {
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.table-forge thead th {
+  background-color: var(--hover-color);
+  color: var(--text-color);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-md);
+}
+
+.table-forge tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table-forge tbody tr:hover {
+  background-color: var(--hover-color);
+}
+
+.table-forge tbody td {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Статусы */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-small);
+  font-weight: 500;
+}
+
+.status-badge.success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--accent-color);
+}
+
+.status-badge.warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.status-badge.danger {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.status-badge.info {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--primary-color);
+}
 
 .jh-card {
   padding: 1.5%;
@@ -199,6 +504,31 @@ ui bootstrap tweaks
 .carousel,
 .panel-title a {
   cursor: pointer;
+}
+
+/* Softer pagination colors using transparent primary */
+.pagination {
+  .page-link {
+    color: rgba(37, 99, 235, 0.85);
+    border-color: rgba(37, 99, 235, 0.15);
+    background-color: transparent;
+
+    &:hover {
+      color: rgba(37, 99, 235, 0.9);
+      background-color: rgba(37, 99, 235, 0.08);
+      border-color: rgba(37, 99, 235, 0.2);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+  }
+
+  .page-item.active .page-link {
+    color: var(--text-color);
+    background-color: rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.25);
+  }
 }
 
 .thread-dump-modal-lock {
