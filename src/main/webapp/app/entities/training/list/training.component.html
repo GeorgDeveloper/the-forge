@@ -68,6 +68,12 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span jhiTranslate="theForgeApp.training.description">Description</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="employee.id">
               <div class="d-flex">
                 <span jhiTranslate="theForgeApp.training.employee">Employee</span>
@@ -87,6 +93,7 @@
               <td>{{ training.lastTrainingDate | formatMediumDate }}</td>
               <td>{{ training.validityPeriod }}</td>
               <td>{{ training.nextTrainingDate | formatMediumDate }}</td>
+              <td>{{ training.description }}</td>
               <td>
                 @if (training.employee) {
                   <div>

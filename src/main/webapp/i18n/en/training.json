@@ -22,6 +22,7 @@
       "lastTrainingDate": "Last Training Date",
       "validityPeriod": "Validity Period",
       "nextTrainingDate": "Next Training Date",
+      "description": "Description",
       "employee": "Employee"
     }
   }

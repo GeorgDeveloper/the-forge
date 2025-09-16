@@ -39,6 +39,9 @@ public class Training implements Serializable {
     @Column(name = "next_training_date")
     private LocalDate nextTrainingDate; // Планируемая дата следующего инструктажа
 
+    @Column(name = "description")
+    private String description; // Описание инструктажа
+
     // Связь многие-к-одному с Employee (сотрудник)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -121,6 +124,19 @@ public class Training implements Serializable {
         this.nextTrainingDate = nextTrainingDate;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
+    public Training description(String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Employee getEmployee() {
         return this.employee;
     }
@@ -163,6 +179,9 @@ public class Training implements Serializable {
             getValidityPeriod() +
             ", дата следующего инструктажа='" +
             getNextTrainingDate() +
+            "'" +
+            ", описание='" +
+            getDescription() +
             "'" +
             "}"
         );

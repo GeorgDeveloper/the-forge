@@ -22,6 +22,7 @@
       "lastTrainingDate": "Дата последнего инструктажа",
       "validityPeriod": "Периодичность в месяцах",
       "nextTrainingDate": "Дата следующего инструктажа",
+      "description": "Описание",
       "employee": "Сотрудники"
     }
   }

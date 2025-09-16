@@ -99,12 +99,14 @@ export class TaskService {
   }
 
   protected convertDateFromClient<T extends ITask | NewTask | PartialUpdateTask>(task: T): RestOf<T> {
+    const employeeRef = (task as any).employee ? { id: (task as any).employee.id } : undefined;
     return {
-      ...task,
-      creationDate: task.creationDate?.format(DATE_FORMAT) ?? null,
-      plannedCompletionDate: task.plannedCompletionDate?.format(DATE_FORMAT) ?? null,
-      actualCompletionDate: task.actualCompletionDate?.format(DATE_FORMAT) ?? null,
-    };
+      ...(task as any),
+      creationDate: task.creationDate ? task.creationDate.format(DATE_FORMAT) : null,
+      plannedCompletionDate: task.plannedCompletionDate ? task.plannedCompletionDate.format(DATE_FORMAT) : null,
+      actualCompletionDate: task.actualCompletionDate ? task.actualCompletionDate.format(DATE_FORMAT) : null,
+      employee: employeeRef as any,
+    } as RestOf<T>;
   }
 
   protected convertDateFromServer(restTask: RestTask): ITask {

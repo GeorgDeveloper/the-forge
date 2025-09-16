@@ -100,11 +100,16 @@ export class TrainingService {
   }
 
   protected convertDateFromClient<T extends ITraining | NewTraining | PartialUpdateTraining>(training: T): RestOf<T> {
+    // Ensure LocalDate fields are formatted as 'YYYY-MM-DD' and relationships are reduced to identifiers
+    const employeeRef = training.employee ? { id: training.employee.id } : undefined;
+
     return {
-      ...training,
-      lastTrainingDate: training.lastTrainingDate?.format(DATE_FORMAT) ?? null,
-      nextTrainingDate: training.nextTrainingDate?.format(DATE_FORMAT) ?? null,
-    };
+      ...(training as any),
+      lastTrainingDate: training.lastTrainingDate ? training.lastTrainingDate.format(DATE_FORMAT) : null,
+      nextTrainingDate: training.nextTrainingDate ? training.nextTrainingDate.format(DATE_FORMAT) : null,
+      // Replace possible nested object with id-only reference to avoid sending nested dates
+      employee: employeeRef as any,
+    } as RestOf<T>;
   }
 
   protected convertDateFromServer(restTraining: RestTraining): ITraining {

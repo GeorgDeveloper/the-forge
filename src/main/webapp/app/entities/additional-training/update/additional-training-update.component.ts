@@ -12,6 +12,7 @@ import { ProfessionService } from 'app/entities/profession/service/profession.se
 import { IAdditionalTraining } from '../additional-training.model';
 import { AdditionalTrainingService } from '../service/additional-training.service';
 import { AdditionalTrainingFormGroup, AdditionalTrainingFormService } from './additional-training-form.service';
+import dayjs from 'dayjs/esm';
 
 @Component({
   selector: 'jhi-additional-training-update',
@@ -39,6 +40,21 @@ export class AdditionalTrainingUpdateComponent implements OnInit {
       this.additionalTraining = additionalTraining;
       if (additionalTraining) {
         this.updateForm(additionalTraining);
+      } else {
+        const prefill = (history.state?.prefill ?? {}) as {
+          trainingName?: string;
+          trainingDate?: string;
+          validityPeriod?: number | null;
+          description?: string | null;
+        };
+        if (prefill) {
+          this.editForm.patchValue({
+            trainingName: prefill.trainingName ?? null,
+            trainingDate: prefill.trainingDate ? dayjs(prefill.trainingDate) : null,
+            validityPeriod: prefill.validityPeriod ?? null,
+            description: prefill.description ?? null,
+          } as any);
+        }
       }
 
       this.loadRelationshipsOptions();

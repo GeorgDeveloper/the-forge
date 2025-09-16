@@ -33,13 +33,15 @@
     "eventsOn": "События на",
     "noEvents": "Нет событий на эту дату",
     "badge": {
-      "instruction": "Инструктаж"
+      "instruction": "Инструктаж",
+      "additionalTraining": "Доп. обучение"
     },
     "fields": {
       "employee": "Сотрудники",
       "profession": "Профессия",
       "position": "Должность",
       "validityDays": "Период действия: {{days}} месяцев",
+      "validityMonths": "Период действия: {{months}} месяцев",
       "status": "Статус"
     },
     "status": {
@@ -55,9 +57,12 @@
     },
     "eventTypes": {
       "TASK": "Задача",
-      "INSTRUCTION": "Инструктажи",
+      "INSTRUCTION": "Инструктаж",
+      "ADDITIONAL_TRAINING": "Доп. обучение",
       "TRAINING": "Обучение",
-      "EVENT": "Событие"
+      "MEETING": "Встреча",
+      "EVENT": "Событие",
+      "OTHER": "Другое"
     },
     "unknownEmployee": "Неизвестный сотрудник",
     "noTitle": "Без названия",

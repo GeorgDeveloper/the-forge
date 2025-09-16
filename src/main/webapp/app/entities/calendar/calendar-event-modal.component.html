@@ -34,7 +34,7 @@
       <label class="form-label">{{ 'calendar.modal.labels.type' | translate }}</label>
       <select class="form-select" [(ngModel)]="newEvent.type" name="type">
         @for (type of eventTypes; track type) {
-          <option [value]="type">{{ type }}</option>
+          <option [value]="type">{{ 'calendar.eventTypes.' + type | translate }}</option>
         }
       </select>
     </div>
@@ -48,10 +48,10 @@
       <input type="checkbox" class="form-check-input" [(ngModel)]="newEvent.reminder" name="reminder" />
       <label class="form-check-label">{{ 'calendar.modal.labels.reminder' | translate }}</label>
     </div>
-  </form>
-</div>
 
-<div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="cancel()">{{ 'calendar.modal.buttons.cancel' | translate }}</button>
-  <button type="button" class="btn btn-primary" (click)="save()">{{ 'calendar.modal.buttons.save' | translate }}</button>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-secondary me-2" type="button" (click)="cancel()">{{ 'calendar.modal.buttons.cancel' | translate }}</button>
+      <button class="btn btn-primary" type="submit">{{ 'calendar.modal.buttons.save' | translate }}</button>
+    </div>
+  </form>
 </div>

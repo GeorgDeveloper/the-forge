@@ -29,14 +29,14 @@ export class CalendarEventListComponent {
       return;
     }
 
-    // Navigate to Training detail for instruction events when possible
-    if (event.type === EventType.INSTRUCTION) {
-      // If event has employeeId, it likely came from Training → navigate to training detail
-      if (event.id) {
-        // Training routes are '/training/:id/view'
-        this.router.navigate(['/training', event.id, 'view']);
-        return;
-      }
+    if (event.type === EventType.INSTRUCTION && event.id) {
+      this.router.navigate(['/training', event.id, 'view']);
+      return;
+    }
+
+    if (event.type === EventType.ADDITIONAL_TRAINING && event.id) {
+      this.router.navigate(['/additional-training', event.id, 'view']);
+      return;
     }
 
     const modalRef = this.modalService.open(CalendarEventModalComponent, {
@@ -71,52 +71,43 @@ export class CalendarEventListComponent {
     if (!event.title) return '';
 
     const knownTypePrefixes = [
-      'Task',
-      'Tasks',
+      // ru
       'Задача',
-      'Задачи',
-      'Instruction',
-      'Instructions',
       'Инструктаж',
       'Инструктажи',
-      'Training',
-      'Trainings',
+      'Доп. обучение',
       'Обучение',
-      'Event',
-      'Events',
       'Событие',
       'События',
+      // en
+      'Task',
+      'Tasks',
+      'Instruction',
+      'Instructions',
+      'Additional training',
+      'Training',
+      'Event',
+      'Events',
     ];
 
-    // Normalize invisible NBSP and bidi marks
     let title = event.title.replace(/[\u00A0\u200E\u200F\uFEFF]/g, ' ').trim();
     const pattern = new RegExp(`^(?:[\u00A0\u200E\u200F\uFEFF]|\s)*(${knownTypePrefixes.join('|')})\s*[:\-–—]?\s*`, 'i');
 
-    // Remove repeated leading prefixes like "Task: Task: Title"
     for (let i = 0; i < 3 && pattern.test(title); i++) {
       title = title.replace(pattern, '').trim();
-    }
-    // Fallback: if there is still a simple word prefix followed by colon (e.g., unknown prefix), drop it once
-    // Matches leading letters (latin/cyrillic) optionally with spaces, then a colon
-    const genericPrefix = /^([A-Za-zА-Яа-яЁё]+)\s*[:\-–—]\s*/;
-    if (genericPrefix.test(title)) {
-      title = title.replace(genericPrefix, '').trim();
     }
     return title;
   }
 
   // Получение переведенного описания события
   getTranslatedDescription(event: CalendarEvent): string {
-    if (event.type === 'INSTRUCTION') {
-      if (event.employeeName) {
-        return `${this.translateService.instant('calendar.fields.employee')}: ${event.employeeName}`;
-      } else if (event.professionName && event.positionName) {
-        return `${this.translateService.instant('calendar.fields.profession')}: ${event.professionName}, ${this.translateService.instant('calendar.fields.position')}: ${event.positionName}`;
-      }
+    // Для специализированных типов детали выводятся отдельными блоками ниже,
+    // чтобы избежать дублирования текста в описании
+    if (event.type === 'INSTRUCTION' || event.type === 'ADDITIONAL_TRAINING') {
+      return '';
     }
 
-    // Переводим статичные английские тексты из сервиса
-    let translatedDescription = event.description;
+    let translatedDescription = event.description || '';
     translatedDescription = translatedDescription.replace('Employee:', this.translateService.instant('calendar.fields.employee') + ':');
     translatedDescription = translatedDescription.replace('Profession:', this.translateService.instant('calendar.fields.profession') + ':');
     translatedDescription = translatedDescription.replace('Position:', this.translateService.instant('calendar.fields.position') + ':');
@@ -128,12 +119,6 @@ export class CalendarEventListComponent {
     translatedDescription = translatedDescription.replace('Unknown position', this.translateService.instant('calendar.unknownPosition'));
     translatedDescription = translatedDescription.replace('No title', this.translateService.instant('calendar.noTitle'));
     translatedDescription = translatedDescription.replace('Data loading error', this.translateService.instant('calendar.loadError'));
-
-    // Переводим названия инструктажей
-    translatedDescription = translatedDescription.replace(
-      'Инструктаж:',
-      this.translateService.instant('calendar.eventTypes.INSTRUCTION') + ':',
-    );
 
     return translatedDescription;
   }

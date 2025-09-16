@@ -12,6 +12,7 @@ import { EmployeeService } from 'app/entities/employee/service/employee.service'
 import { ITraining } from '../training.model';
 import { TrainingService } from '../service/training.service';
 import { TrainingFormGroup, TrainingFormService } from './training-form.service';
+import dayjs from 'dayjs/esm';
 
 @Component({
   selector: 'jhi-training-update',
@@ -39,6 +40,22 @@ export class TrainingUpdateComponent implements OnInit {
       this.training = training;
       if (training) {
         this.updateForm(training);
+      } else {
+        // Prefill from navigation state for create flow
+        const prefill = (history.state?.prefill ?? {}) as {
+          trainingName?: string;
+          lastTrainingDate?: string;
+          validityPeriod?: number | null;
+          description?: string | null;
+        };
+        if (prefill) {
+          this.editForm.patchValue({
+            trainingName: prefill.trainingName ?? null,
+            lastTrainingDate: prefill.lastTrainingDate ? dayjs(prefill.lastTrainingDate) : null,
+            validityPeriod: prefill.validityPeriod ?? null,
+            description: prefill.description ?? null,
+          });
+        }
       }
 
       this.loadRelationshipsOptions();

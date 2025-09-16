@@ -7,6 +7,7 @@ export interface ITraining {
   lastTrainingDate?: dayjs.Dayjs | null;
   validityPeriod?: number | null;
   nextTrainingDate?: dayjs.Dayjs | null;
+  description?: string | null;
   employee?: IEmployee | null;
 }
 

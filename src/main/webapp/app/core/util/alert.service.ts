@@ -52,7 +52,8 @@ export class AlertService {
   addAlert(alertToAdd: Omit<Alert, 'id'>, extAlerts?: Alert[]): Alert {
     const alert: Alert = { ...alertToAdd, id: this.alertId++ };
 
-    if (alert.translationKey) {
+    // Ensure we only pass string keys to the translation service
+    if (typeof alert.translationKey === 'string' && alert.translationKey.length > 0) {
       const translatedMessage = this.translateService.instant(alert.translationKey, alert.translationParams);
       // if translation key exists
       if (translatedMessage !== `${translationNotFoundMessage}[${alert.translationKey}]`) {
@@ -60,6 +61,10 @@ export class AlertService {
       } else if (!alert.message) {
         alert.message = alert.translationKey;
       }
+    } else if (alert.translationKey && !alert.message) {
+      // Fallback: if a non-string was provided as key, show it as message
+      alert.message = String(alert.translationKey);
+      alert.translationKey = undefined;
     }
 
     alert.message = this.sanitizer.sanitize(SecurityContext.HTML, alert.message ?? '') ?? '';

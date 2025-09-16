@@ -25,6 +25,7 @@ export interface CalendarEvent {
 export enum EventType {
   TASK = 'TASK', // Задача
   INSTRUCTION = 'INSTRUCTION', // Инструктаж
+  ADDITIONAL_TRAINING = 'ADDITIONAL_TRAINING', // Дополнительное обучение
   MEETING = 'MEETING', // Встреча
   TRAINING = 'TRAINING', // Тренировка
   OTHER = 'OTHER', // Другое

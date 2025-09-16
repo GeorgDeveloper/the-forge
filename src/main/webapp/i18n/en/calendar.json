@@ -33,14 +33,16 @@
     "eventsOn": "Events on",
     "noEvents": "No events for this date",
     "badge": {
-      "instruction": "Instruction"
+      "instruction": "Instruction",
+      "additionalTraining": "Additional training"
     },
     "fields": {
       "employee": "Employees",
       "profession": "Profession",
       "position": "Position",
       "validityDays": "Validity: {{days}} months",
-      "status": "Status"
+      "status": "Status",
+      "validityMonths": "Validity: {{months}} months"
     },
     "status": {
       "TODO": "TODO",
@@ -55,9 +57,12 @@
     },
     "eventTypes": {
       "TASK": "Task",
-      "INSTRUCTION": "Trainings",
+      "INSTRUCTION": "Training",
+      "ADDITIONAL_TRAINING": "Additional training",
       "TRAINING": "Training",
-      "EVENT": "Event"
+      "MEETING": "Meeting",
+      "EVENT": "Event",
+      "OTHER": "Other"
     },
     "unknownEmployee": "Unknown employee",
     "noTitle": "No title",

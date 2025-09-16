@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { combineLatest, Observable, of } from 'rxjs';
@@ -28,6 +28,7 @@ export class CalendarComponent implements OnInit {
   isLoading = signal<boolean>(false); // Флаг загрузки
 
   private translateService = inject(TranslateService);
+  private router = inject(Router);
 
   constructor(
     private calendarService: CalendarService,
@@ -148,19 +149,107 @@ export class CalendarComponent implements OnInit {
     return this.events().filter(event => new Date(event.date).toDateString() === date.toDateString());
   }
 
-  // Открытие модального окна для добавления события
   openAddEventModal(): void {
     const modalRef = this.modalService.open(CalendarEventModalComponent, {
-      size: 'lg',
-      backdrop: 'static',
+      backdrop: true,
+      backdropClass: 'modal-backdrop',
+      keyboard: true,
+      centered: true,
+      // Prevent accessibility issue by not hiding app root; ng-bootstrap manages focus within modal
+      // and does not require manually adding aria-hidden on ancestors
     });
-
+    modalRef.componentInstance.isEditMode = false;
     modalRef.componentInstance.date = this.selectedDate();
 
-    modalRef.closed.subscribe((result: CalendarEvent) => {
-      if (result) {
-      }
+    modalRef.result
+      .then(newEvent => {
+        if (!newEvent) return;
+        // Router logic: create through respective entities when type is instruction/task/additional, else as calendar event
+        this.createFromCalendar(newEvent as CalendarEvent);
+      })
+      .catch(() => void 0);
+  }
+
+  private createFromCalendar(event: CalendarEvent): void {
+    // Instruction → Training entity, Additional training → AdditionalTraining entity, Task → Task entity, else Calendar event
+    switch (event.type) {
+      case EventType.INSTRUCTION:
+        this.redirectToTrainingCreate(event);
+        break;
+      case EventType.ADDITIONAL_TRAINING:
+        this.redirectToAdditionalTrainingCreate(event);
+        break;
+      case EventType.TASK:
+        this.redirectToTaskCreate(event);
+        break;
+      default:
+        this.createCalendarEvent(event);
+        break;
+    }
+  }
+
+  private redirectToTrainingCreate(event: CalendarEvent): void {
+    // Navigate with prefill state via router to training/new
+    // Title → trainingName, date → lastTrainingDate, validityPeriod if provided, description
+    this.router.navigate(['/training/new'], {
+      state: {
+        prefill: {
+          trainingName: event.title,
+          lastTrainingDate: event.date,
+          validityPeriod: event.validityPeriod ?? null,
+          description: event.description ?? null,
+        },
+      },
     });
+  }
+
+  private redirectToAdditionalTrainingCreate(event: CalendarEvent): void {
+    this.router.navigate(['/additional-training/new'], {
+      state: {
+        prefill: {
+          trainingName: event.title,
+          trainingDate: event.date,
+          validityPeriod: event.validityPeriod ?? null,
+          description: event.description ?? null,
+        },
+      },
+    });
+  }
+
+  private redirectToTaskCreate(event: CalendarEvent): void {
+    this.router.navigate(['/task/new'], {
+      state: {
+        prefill: {
+          taskName: event.title,
+          plannedCompletionDate: event.date,
+          body: event.description ?? null,
+          priority: event.priority ?? 'MEDIUM',
+          status: 'TODO',
+          creationDate: new Date().toISOString().split('T')[0],
+        },
+      },
+    });
+  }
+
+  private createCalendarEvent(event: CalendarEvent): void {
+    this.isLoading.set(true);
+    this.calendarService
+      .createEvent({
+        title: event.title,
+        description: event.description,
+        date: event.date,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        type: event.type,
+        location: event.location,
+        participants: event.participants,
+        reminder: event.reminder,
+        priority: event.priority,
+      })
+      .subscribe({
+        next: () => this.loadAllEvents(),
+        error: () => this.isLoading.set(false),
+      });
   }
 
   // Получение переведенного названия месяца

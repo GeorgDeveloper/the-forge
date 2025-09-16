@@ -14,6 +14,7 @@ import { TaskPriority } from 'app/entities/enumerations/task-priority.model';
 import { TaskService } from '../service/task.service';
 import { ITask } from '../task.model';
 import { TaskFormGroup, TaskFormService } from './task-form.service';
+import dayjs from 'dayjs/esm';
 
 @Component({
   selector: 'jhi-task-update',
@@ -43,6 +44,25 @@ export class TaskUpdateComponent implements OnInit {
       this.task = task;
       if (task) {
         this.updateForm(task);
+      } else {
+        const prefill = (history.state?.prefill ?? {}) as {
+          taskName?: string;
+          plannedCompletionDate?: string;
+          body?: string | null;
+          priority?: string | null;
+          status?: string | null;
+          creationDate?: string | null;
+        };
+        if (prefill) {
+          this.editForm.patchValue({
+            taskName: prefill.taskName ?? null,
+            plannedCompletionDate: prefill.plannedCompletionDate ? dayjs(prefill.plannedCompletionDate) : null,
+            body: prefill.body ?? null,
+            priority: prefill.priority ?? null,
+            status: prefill.status ?? 'TODO',
+            creationDate: prefill.creationDate ? dayjs(prefill.creationDate) : dayjs(),
+          } as any);
+        }
       }
 
       this.loadRelationshipsOptions();

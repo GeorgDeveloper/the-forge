@@ -12,11 +12,13 @@ import { TrainingService } from '../../entities/training/service/training.servic
 import { AdditionalTrainingService } from '../../entities/additional-training/service/additional-training.service';
 import { SafetyInstructionService } from '../../entities/safety-instruction/service/safety-instruction.service';
 import dayjs from 'dayjs/esm';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class CalendarService {
-  private resourceUrl = 'api/calendar-tasks/events';
-  private tasksUrl = 'api/calendar-tasks';
+  private readonly applicationConfigService = inject(ApplicationConfigService);
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/calendar-tasks/events');
+  private tasksUrl = this.applicationConfigService.getEndpointFor('api/calendar-tasks');
   private translateService = inject(TranslateService);
 
   constructor(
@@ -32,6 +34,15 @@ export class CalendarService {
       catchError(error => {
         console.error('Error loading events:', error);
         return of([]);
+      }),
+    );
+  }
+
+  createEvent(event: Partial<CalendarEvent>): Observable<unknown> {
+    return this.http.post(this.tasksUrl, event).pipe(
+      catchError(error => {
+        console.error('Error creating calendar event:', error);
+        throw error;
       }),
     );
   }
@@ -181,10 +192,10 @@ export class CalendarService {
 
       return {
         id: training.id,
-        title: `Доп. инструктаж: ${training.trainingName || 'Без названия'}`,
-        description: `Профессия: ${professionName}`,
+        title: `Доп. обучение: ${training.trainingName || 'Без названия'}`,
+        description: '',
         date: dateStr,
-        type: EventType.INSTRUCTION,
+        type: EventType.ADDITIONAL_TRAINING,
         startTime: '09:00',
         endTime: '10:00',
         participants: [professionName],
@@ -196,10 +207,10 @@ export class CalendarService {
       console.error('Error converting additional training to event:', e);
       return {
         id: training.id,
-        title: `Доп. инструктаж: ${training.trainingName || 'Без названия'}`,
+        title: `Доп. обучение: ${training.trainingName || 'Без названия'}`,
         description: 'Ошибка загрузки данных',
         date: '',
-        type: EventType.INSTRUCTION,
+        type: EventType.ADDITIONAL_TRAINING,
       };
     }
   }

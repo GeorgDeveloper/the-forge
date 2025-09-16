@@ -22,6 +22,7 @@ type TrainingFormGroupContent = {
   lastTrainingDate: FormControl<ITraining['lastTrainingDate']>;
   validityPeriod: FormControl<ITraining['validityPeriod']>;
   nextTrainingDate: FormControl<ITraining['nextTrainingDate']>;
+  description: FormControl<ITraining['description']>;
   employee: FormControl<ITraining['employee']>;
 };
 
@@ -52,6 +53,7 @@ export class TrainingFormService {
         validators: [Validators.required],
       }),
       nextTrainingDate: new FormControl(trainingRawValue.nextTrainingDate),
+      description: new FormControl(trainingRawValue.description),
       employee: new FormControl(trainingRawValue.employee),
     });
   }

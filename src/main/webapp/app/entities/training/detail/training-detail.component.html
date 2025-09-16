@@ -31,6 +31,10 @@
           <dd>
             <span>{{ trainingRef.nextTrainingDate | formatMediumDate }}</span>
           </dd>
+          <dt><span jhiTranslate="theForgeApp.training.description">Description</span></dt>
+          <dd>
+            <span>{{ trainingRef.description }}</span>
+          </dd>
           <dt><span jhiTranslate="theForgeApp.training.employee">Employee</span></dt>
           <dd>
             @if (employeeFullName) {
