@@ -16,17 +16,73 @@
       "satShort": "Сб",
       "sunShort": "Вс"
     },
+    "months": {
+      "january": "Январь",
+      "february": "Февраль",
+      "march": "Март",
+      "april": "Апрель",
+      "may": "Май",
+      "june": "Июнь",
+      "july": "Июль",
+      "august": "Август",
+      "september": "Сентябрь",
+      "october": "Октябрь",
+      "november": "Ноябрь",
+      "december": "Декабрь"
+    },
     "eventsOn": "События на",
     "noEvents": "Нет событий на эту дату",
     "badge": {
       "instruction": "Инструктаж"
     },
     "fields": {
-      "employee": "Сотрудник",
+      "employee": "Сотрудники",
       "profession": "Профессия",
       "position": "Должность",
-      "validityDays": "Период действия: {{days}} дней",
+      "validityDays": "Период действия: {{days}} месяцев",
       "status": "Статус"
+    },
+    "status": {
+      "TODO": "К ВЫПОЛНЕНИЮ",
+      "IN_PROGRESS": "В ПРОЦЕССЕ",
+      "DONE": "ВЫПОЛНЕНО"
+    },
+    "priority": {
+      "LOW": "НИЗКИЙ",
+      "MEDIUM": "СРЕДНИЙ",
+      "HIGH": "ВЫСОКИЙ",
+      "CRITICAL": "КРИТИЧЕСКИЙ"
+    },
+    "eventTypes": {
+      "TASK": "Задача",
+      "INSTRUCTION": "Инструктажи",
+      "TRAINING": "Обучение",
+      "EVENT": "Событие"
+    },
+    "unknownEmployee": "Неизвестный сотрудник",
+    "noTitle": "Без названия",
+    "loadError": "Ошибка загрузки данных",
+    "unknownProfession": "Неизвестная профессия",
+    "unknownPosition": "Неизвестная должность",
+    "modal": {
+      "title": {
+        "new": "Новое событие",
+        "edit": "Редактирование события"
+      },
+      "labels": {
+        "title": "Название",
+        "description": "Описание",
+        "date": "Дата",
+        "startTime": "Время начала",
+        "endTime": "Время окончания",
+        "type": "Тип события",
+        "location": "Место проведения",
+        "reminder": "Напомнить"
+      },
+      "buttons": {
+        "cancel": "Отмена",
+        "save": "Сохранить"
+      }
     }
   }
 }

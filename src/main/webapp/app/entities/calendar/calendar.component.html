@@ -1,13 +1,15 @@
 <div class="calendar-container">
   <!-- Шапка календаря с навигацией -->
   <div class="calendar-header">
-    <button class="btn btn-outline-primary" (click)="previousMonth()">
-      <i class="fas fa-chevron-left"></i>
-    </button>
-    <h2>{{ currentDate() | date: 'MMMM yyyy' }}</h2>
-    <button class="btn btn-outline-primary" (click)="nextMonth()">
-      <i class="fas fa-chevron-right"></i>
-    </button>
+    <div class="month-title">
+      <button class="nav-arrow nav-arrow-left" (click)="previousMonth()" aria-label="Previous month">
+        <span class="arrow">‹</span>
+      </button>
+      <h2 class="month-label">{{ getTranslatedMonthYear() }}</h2>
+      <button class="nav-arrow nav-arrow-right" (click)="nextMonth()" aria-label="Next month">
+        <span class="arrow">›</span>
+      </button>
+    </div>
     <button class="btn btn-primary ms-auto" (click)="openAddEventModal()">
       <i class="fas fa-plus"></i> {{ 'calendar.addEvent' | translate }}
     </button>
@@ -70,7 +72,7 @@
 
     <!-- Список событий -->
     <div class="calendar-events">
-      <h3>{{ 'calendar.eventsOn' | translate }} {{ selectedDate() | date: 'dd MMMM yyyy' }}</h3>
+      <h3>{{ 'calendar.eventsOn' | translate }} {{ getTranslatedDate() }}</h3>
       <jhi-calendar-event-list [date]="selectedDate()" [events]="getEventsForDate(selectedDate())"></jhi-calendar-event-list>
     </div>
   </div>

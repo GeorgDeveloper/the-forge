@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 import { CalendarEvent, EventType } from './calendar-event.model';
 import { ITask } from '../../entities/task/task.model';
 import { ITraining } from '../../entities/training/training.model';
@@ -16,6 +17,7 @@ import dayjs from 'dayjs/esm';
 export class CalendarService {
   private resourceUrl = 'api/calendar-tasks/events';
   private tasksUrl = 'api/calendar-tasks';
+  private translateService = inject(TranslateService);
 
   constructor(
     private http: HttpClient,
@@ -140,12 +142,12 @@ export class CalendarService {
 
       const employeeName = training.employee
         ? `${training.employee.firstName || ''} ${training.employee.lastName || ''}`.trim()
-        : 'Неизвестный сотрудник';
+        : 'Unknown employee';
 
       return {
         id: training.id,
-        title: `Инструктаж: ${training.trainingName || 'Без названия'}`,
-        description: `Сотрудник: ${employeeName}`,
+        title: `${training.trainingName || 'No title'}`,
+        description: `Employee: ${employeeName}`,
         date: dateStr,
         type: EventType.INSTRUCTION,
         startTime: '09:00',
@@ -159,8 +161,8 @@ export class CalendarService {
       console.error('Error converting training to event:', e);
       return {
         id: training.id,
-        title: `Инструктаж: ${training.trainingName || 'Без названия'}`,
-        description: 'Ошибка загрузки данных',
+        title: `${training.trainingName || 'No title'}`,
+        description: 'Data loading error',
         date: '',
         type: EventType.INSTRUCTION,
       };
@@ -211,13 +213,13 @@ export class CalendarService {
         dateStr = dateObj.isValid() ? dateObj.format('YYYY-MM-DD') : '';
       }
 
-      const professionName = instruction.profession?.professionName || 'Неизвестная профессия';
-      const positionName = instruction.position?.positionName || 'Неизвестная должность';
+      const professionName = instruction.profession?.professionName || 'Unknown profession';
+      const positionName = instruction.position?.positionName || 'Unknown position';
 
       return {
         id: instruction.id,
-        title: `Инструктаж по ТБ: ${instruction.instructionName || 'Без названия'}`,
-        description: `Профессия: ${professionName}, Должность: ${positionName}`,
+        title: `${instruction.instructionName || 'No title'}`,
+        description: `Profession: ${professionName}, Position: ${positionName}`,
         date: dateStr,
         type: EventType.INSTRUCTION,
         startTime: '09:00',
@@ -232,8 +234,8 @@ export class CalendarService {
       console.error('Error converting safety instruction to event:', e);
       return {
         id: instruction.id,
-        title: `Инструктаж по ТБ: ${instruction.instructionName || 'Без названия'}`,
-        description: 'Ошибка загрузки данных',
+        title: `${instruction.instructionName || 'No title'}`,
+        description: 'Data loading error',
         date: '',
         type: EventType.INSTRUCTION,
       };

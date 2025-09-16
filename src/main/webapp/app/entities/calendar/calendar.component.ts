@@ -1,10 +1,10 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { combineLatest, Observable, of } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { CalendarEvent, EventType } from './calendar-event.model';
 import { CalendarService } from './calendar.service';
@@ -26,6 +26,8 @@ export class CalendarComponent implements OnInit {
   selectedDate = signal<Date>(new Date()); // Выбранная дата
   events = signal<CalendarEvent[]>([]); // Все события
   isLoading = signal<boolean>(false); // Флаг загрузки
+
+  private translateService = inject(TranslateService);
 
   constructor(
     private calendarService: CalendarService,
@@ -159,5 +161,56 @@ export class CalendarComponent implements OnInit {
       if (result) {
       }
     });
+  }
+
+  // Получение переведенного названия месяца
+  getTranslatedMonthYear(): string {
+    const date = this.currentDate();
+    const monthNames = [
+      'january',
+      'february',
+      'march',
+      'april',
+      'may',
+      'june',
+      'july',
+      'august',
+      'september',
+      'october',
+      'november',
+      'december',
+    ];
+
+    const monthKey = monthNames[date.getMonth()];
+    const monthName = this.translateService.instant(`calendar.months.${monthKey}`);
+    const year = date.getFullYear();
+
+    return `${monthName} ${year}`;
+  }
+
+  // Получение переведенной даты
+  getTranslatedDate(): string {
+    const date = this.selectedDate();
+    const monthNames = [
+      'january',
+      'february',
+      'march',
+      'april',
+      'may',
+      'june',
+      'july',
+      'august',
+      'september',
+      'october',
+      'november',
+      'december',
+    ];
+
+    const day = date.getDate();
+    const monthKey = monthNames[date.getMonth()];
+    const monthName = this.translateService.instant(`calendar.months.${monthKey}`);
+    const year = date.getFullYear();
+
+    return `${day} ${monthName} ${year}`;
   }
 }

@@ -2,12 +2,13 @@ import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { CalendarEvent, EventType } from './calendar-event.model';
 
 @Component({
   selector: 'jhi-calendar-event-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './calendar-event-modal.component.html',
   styleUrls: ['./calendar-event-modal.component.scss'],
 })

@@ -1,37 +1,37 @@
 <div class="modal-header">
-  <h4 class="modal-title">{{ isEditMode ? 'Редактирование события' : 'Новое событие' }}</h4>
+  <h4 class="modal-title">{{ isEditMode ? ('calendar.modal.title.edit' | translate) : ('calendar.modal.title.new' | translate) }}</h4>
   <button type="button" class="btn-close" (click)="cancel()"></button>
 </div>
 
 <div class="modal-body">
   <form (ngSubmit)="save()">
     <div class="mb-3">
-      <label class="form-label">Название</label>
+      <label class="form-label">{{ 'calendar.modal.labels.title' | translate }}</label>
       <input type="text" class="form-control" [(ngModel)]="newEvent.title" name="title" required />
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Описание</label>
+      <label class="form-label">{{ 'calendar.modal.labels.description' | translate }}</label>
       <textarea class="form-control" [(ngModel)]="newEvent.description" name="description" rows="3"></textarea>
     </div>
 
     <div class="row mb-3">
       <div class="col-md-6">
-        <label class="form-label">Дата</label>
+        <label class="form-label">{{ 'calendar.modal.labels.date' | translate }}</label>
         <input type="date" class="form-control" [(ngModel)]="newEvent.date" name="date" required />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Время начала</label>
+        <label class="form-label">{{ 'calendar.modal.labels.startTime' | translate }}</label>
         <input type="time" class="form-control" [(ngModel)]="newEvent.startTime" name="startTime" />
       </div>
       <div class="col-md-3">
-        <label class="form-label">Время окончания</label>
+        <label class="form-label">{{ 'calendar.modal.labels.endTime' | translate }}</label>
         <input type="time" class="form-control" [(ngModel)]="newEvent.endTime" name="endTime" />
       </div>
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Тип события</label>
+      <label class="form-label">{{ 'calendar.modal.labels.type' | translate }}</label>
       <select class="form-select" [(ngModel)]="newEvent.type" name="type">
         @for (type of eventTypes; track type) {
           <option [value]="type">{{ type }}</option>
@@ -40,18 +40,18 @@
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Место проведения</label>
+      <label class="form-label">{{ 'calendar.modal.labels.location' | translate }}</label>
       <input type="text" class="form-control" [(ngModel)]="newEvent.location" name="location" />
     </div>
 
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" [(ngModel)]="newEvent.reminder" name="reminder" />
-      <label class="form-check-label">Напомнить</label>
+      <label class="form-check-label">{{ 'calendar.modal.labels.reminder' | translate }}</label>
     </div>
   </form>
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="cancel()">Отмена</button>
-  <button type="button" class="btn btn-primary" (click)="save()">Сохранить</button>
+  <button type="button" class="btn btn-secondary" (click)="cancel()">{{ 'calendar.modal.buttons.cancel' | translate }}</button>
+  <button type="button" class="btn btn-primary" (click)="save()">{{ 'calendar.modal.buttons.save' | translate }}</button>
 </div>

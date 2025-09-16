@@ -6,20 +6,20 @@
       "home": "Home",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "Entities",
+        "main": "Menu",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "calendar": "Calendar",
-        "team": "Team",
-        "employee": "Employee",
-        "training": "Training",
-        "task": "Task",
-        "profession": "Profession",
-        "protectiveEquipment": "Protective Equipment",
-        "additionalTraining": "Additional Training",
-        "safetyInstruction": "Safety Instruction",
-        "position": "Position",
-        "jobDescription": "Job Description",
-        "organization": "Organization"
+        "team": "Teams",
+        "employee": "Employees",
+        "training": "Trainings",
+        "task": "Tasks",
+        "profession": "Professions",
+        "protectiveEquipment": "Protective Equipments",
+        "additionalTraining": "Additional Trainings",
+        "safetyInstruction": "Safety Instructions",
+        "position": "Positions",
+        "jobDescription": "Job Descriptions",
+        "organization": "Organizations"
       },
       "account": {
         "main": "Account",
@@ -96,6 +96,9 @@
     },
     "ribbon": {
       "dev": "Development"
+    },
+    "search": {
+      "placeholder": "Search in system..."
     },
     "item-count": "Showing {{first}} - {{second}} of {{total}} items.",
     "TaskStatus": {

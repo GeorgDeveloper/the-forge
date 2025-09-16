@@ -4,10 +4,10 @@
     @for (event of events; track event.id) {
       <div class="event-item" [class]="getEventTypeClass(event.type)" (click)="openEventModal(event)">
         <div class="event-header">
-          <span class="event-title">{{ event.title }}</span>
+          <span class="event-title">{{ getTranslatedEventType(event.type) }}: {{ getStrippedTitle(event) }}</span>
           @if (event.priority) {
             <span class="event-priority" [class]="event.priority">
-              {{ event.priority }}
+              {{ getTranslatedPriority(event.priority) }}
             </span>
           }
           @if (event.type === 'INSTRUCTION') {
@@ -26,7 +26,7 @@
           }
         </div>
 
-        <div class="event-description">{{ event.description }}</div>
+        <div class="event-description">{{ getTranslatedDescription(event) }}</div>
 
         <!-- Дополнительная информация для инструктажей -->
         @if (event.type === 'INSTRUCTION') {
@@ -55,7 +55,7 @@
         }
 
         @if (event.status) {
-          <div class="event-status">{{ 'calendar.fields.status' | translate }}: {{ event.status }}</div>
+          <div class="event-status">{{ 'calendar.fields.status' | translate }}: {{ getTranslatedStatus(event.status) }}</div>
         }
       </div>
     }

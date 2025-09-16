@@ -83,7 +83,7 @@ const routes: Routes = [
   // Маршрут для календаря
   {
     path: 'calendar',
-    data: { pageTitle: 'Календарь событий' },
+    data: { pageTitle: 'global.menu.entities.calendar' },
     loadChildren: () => import('./calendar/calendar.routes'),
   },
 

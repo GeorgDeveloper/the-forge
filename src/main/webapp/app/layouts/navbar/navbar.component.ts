@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import SharedModule from 'app/shared/shared.module';
@@ -17,7 +17,7 @@ import NavbarItem from './navbar-item.model';
   selector: 'jhi-navbar',
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
-  imports: [RouterModule, SharedModule, FormsModule],
+  imports: [RouterModule, SharedModule, FormsModule, TranslateModule],
 })
 export default class NavbarComponent implements OnInit {
   inProduction?: boolean;

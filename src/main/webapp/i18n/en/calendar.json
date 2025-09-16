@@ -16,17 +16,73 @@
       "satShort": "Sat",
       "sunShort": "Sun"
     },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
     "eventsOn": "Events on",
     "noEvents": "No events for this date",
     "badge": {
       "instruction": "Instruction"
     },
     "fields": {
-      "employee": "Employee",
+      "employee": "Employees",
       "profession": "Profession",
       "position": "Position",
-      "validityDays": "Validity: {{days}} days",
+      "validityDays": "Validity: {{days}} months",
       "status": "Status"
+    },
+    "status": {
+      "TODO": "TODO",
+      "IN_PROGRESS": "IN PROGRESS",
+      "DONE": "DONE"
+    },
+    "priority": {
+      "LOW": "LOW",
+      "MEDIUM": "MEDIUM",
+      "HIGH": "HIGH",
+      "CRITICAL": "CRITICAL"
+    },
+    "eventTypes": {
+      "TASK": "Task",
+      "INSTRUCTION": "Trainings",
+      "TRAINING": "Training",
+      "EVENT": "Event"
+    },
+    "unknownEmployee": "Unknown employee",
+    "noTitle": "No title",
+    "loadError": "Data loading error",
+    "unknownProfession": "Unknown profession",
+    "unknownPosition": "Unknown position",
+    "modal": {
+      "title": {
+        "new": "New Event",
+        "edit": "Edit Event"
+      },
+      "labels": {
+        "title": "Title",
+        "description": "Description",
+        "date": "Date",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "type": "Event Type",
+        "location": "Location",
+        "reminder": "Reminder"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      }
     }
   }
 }

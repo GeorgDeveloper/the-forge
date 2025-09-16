@@ -87,11 +87,6 @@
   &.event-type-task {
     border-left-color: #4e73df;
     background-color: #f8f9fc;
-
-    .event-title::before {
-      content: 'Задача: ';
-      font-weight: bold;
-    }
   }
 
   &.event-type-instruction {

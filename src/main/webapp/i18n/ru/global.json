@@ -9,14 +9,14 @@
         "main": "Меню",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "calendar": "Календарь",
-        "team": "Команда",
+        "team": "Команды",
         "employee": "Сотрудники",
         "training": "Инструктажи",
         "task": "Задачи",
         "organization": "Организации",
         "profession": "Профессии",
         "protectiveEquipment": "Нормы выдачи СИЗ",
-        "additionalTraining": "Дополнительное обучение",
+        "additionalTraining": "Дополнительные обучения",
         "safetyInstruction": "Инструкции по ОТ",
         "position": "Должности",
         "jobDescription": "Должностные инструкции",
@@ -97,6 +97,9 @@
     },
     "ribbon": {
       "dev": "Разработка"
+    },
+    "search": {
+      "placeholder": "Поиск по системе..."
     },
     "item-count": "Показываем {{first}} - {{second}} из {{total}}.",
     "TaskStatus": {
