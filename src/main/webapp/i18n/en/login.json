@@ -2,10 +2,12 @@
   "login": {
     "title": "Sign in",
     "form": {
+      "username": "Login",
+      "username.placeholder": "Your login",
       "password": "Password",
       "password.placeholder": "Your password",
       "rememberme": "Remember me",
-      "button": "Sign in"
+      "button": "Log in to the system"
     },
     "messages": {
       "error": {
@@ -13,7 +15,11 @@
       }
     },
     "password": {
-      "forgot": "Did you forget your password?"
+      "forgot": "Forgot password?"
+    },
+    "register": {
+      "noaccount": "No account?",
+      "link": "Create account"
     }
   }
 }

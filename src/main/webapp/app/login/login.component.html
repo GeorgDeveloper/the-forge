@@ -6,7 +6,7 @@
         <img src="content/images/logo-forge.png" alt="The Forge" class="logo-image" />
         <h1 class="login-title">The Forge</h1>
       </div>
-      <p class="login-subtitle">Система управления персоналом</p>
+      <p class="login-subtitle">{{ 'home.welcome.subtitle' | translate }}</p>
     </div>
 
     <!-- Ошибка авторизации -->
@@ -23,13 +23,13 @@
     <!-- Форма входа -->
     <form class="login-form" (ngSubmit)="login()" [formGroup]="loginForm">
       <div class="form-group">
-        <label class="form-label" for="username">Логин</label>
+        <label class="form-label" for="username">{{ 'login.form.username' | translate }}</label>
         <input
           type="text"
           class="form-input"
           name="username"
           id="username"
-          placeholder="Введите логин"
+          [placeholder]="'login.form.username.placeholder' | translate"
           formControlName="username"
           data-cy="username"
           autocomplete="username"
@@ -37,13 +37,13 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="password">Пароль</label>
+        <label class="form-label" for="password">{{ 'login.form.password' | translate }}</label>
         <input
           type="password"
           class="form-input"
           name="password"
           id="password"
-          placeholder="Введите пароль"
+          [placeholder]="'login.form.password.placeholder' | translate"
           formControlName="password"
           data-cy="password"
           autocomplete="current-password"
@@ -54,20 +54,22 @@
         <label class="checkbox-label">
           <input type="checkbox" class="checkbox-input" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
           <span class="checkbox-custom"></span>
-          <span class="checkbox-text">Запомнить меня</span>
+          <span class="checkbox-text">{{ 'login.form.rememberme' | translate }}</span>
         </label>
       </div>
 
-      <button type="submit" class="btn-login" data-cy="submit">Войти в систему</button>
+      <button type="submit" class="btn-login" data-cy="submit">{{ 'login.form.button' | translate }}</button>
     </form>
 
     <!-- Дополнительные ссылки -->
     <div class="login-links">
-      <a routerLink="/account/reset/request" class="forgot-password-link" data-cy="forgetYourPasswordSelector"> Забыли пароль? </a>
+      <a routerLink="/account/reset/request" class="forgot-password-link" data-cy="forgetYourPasswordSelector">
+        {{ 'login.password.forgot' | translate }}
+      </a>
 
       <div class="register-section">
-        <span class="register-text">Нет аккаунта?</span>
-        <a routerLink="/account/register" class="register-link"> Создать аккаунт </a>
+        <span class="register-text">{{ 'login.register.noaccount' | translate }}</span>
+        <a routerLink="/account/register" class="register-link"> {{ 'login.register.link' | translate }} </a>
       </div>
     </div>
   </div>

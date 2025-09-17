@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (meeting(); as meetingRef) {
+      <div>
+        <h2 data-cy="meetingDetailsHeading"><span jhiTranslate="theForgeApp.meeting.detail.title">Встреча</span></h2>
+        <hr />
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ meetingRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.meeting.title">Название</span></dt>
+          <dd>
+            <span>{{ meetingRef.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.meeting.eventDate">Дата</span></dt>
+          <dd>
+            <span>{{ meetingRef.eventDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.meeting.time">Время</span></dt>
+          <dd>
+            <span
+              >{{ meetingRef.startTime }}<ng-container *ngIf="meetingRef.endTime"> - {{ meetingRef.endTime }}</ng-container></span
+            >
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.meeting.location">Место</span></dt>
+          <dd>
+            <span>{{ meetingRef.location }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.meeting.description">Описание</span></dt>
+          <dd>
+            <span>{{ meetingRef.description }}</span>
+          </dd>
+        </dl>
+
+        <button type="button" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+        <button type="button" [routerLink]="['/meeting', meetingRef.id, 'edit']" class="btn btn-primary ms-2">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+        <button type="button" [routerLink]="['/meeting', meetingRef.id, 'delete']" class="btn btn-danger ms-2">
+          <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Удалить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -26,6 +26,8 @@
     <include file="config/liquibase/changelog/20250121000000_added_entity_organization.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250122000000_add_pdf_fields_to_safety_instruction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250122000001_added_entity_ProcedureDocument.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250916130000_added_entity_Meeting.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250916130100_added_entity_OtherEvent.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250916123500_add_description_to_training.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250320113036_added_entity_constraints_Employee.xml" relativeToChangelogFile="false"/>

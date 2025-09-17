@@ -1,19 +1,68 @@
 {
   "home": {
-    "title": "Welcome, Java Hipster!",
-    "subtitle": "This is your homepage",
+    "title": "Welcome to The Forge",
+    "subtitle": "Personnel and task management system",
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."
     },
-    "question": "If you have any question on JHipster:",
-    "link": {
-      "homepage": "JHipster homepage",
-      "stackoverflow": "JHipster on Stack Overflow",
-      "bugtracker": "JHipster bug tracker",
-      "chat": "JHipster public chat room",
-      "follow": "follow @jhipster on Twitter"
+    "welcome": {
+      "title": "Welcome to The Forge",
+      "subtitle": "Personnel and task management system",
+      "description": "To access the personnel management system, you need to log in.",
+      "loginButton": "Log in to the system",
+      "registerButton": "Create account",
+      "demoAccounts": "Demo accounts:",
+      "adminAccount": "Administrator: admin / admin",
+      "userAccount": "User: user / user"
     },
-    "like": "If you like JHipster, don't forget to give us a star on",
+    "stats": {
+      "activeEmployees": "Active employees",
+      "activeTasks": "Active tasks",
+      "upcomingTrainings": "Upcoming trainings",
+      "requiresAttention": "Requires attention"
+    },
+    "widgets": {
+      "upcomingTrainings": "Upcoming Trainings",
+      "allTrainings": "All Trainings",
+      "training1": {
+        "title": "Workplace Safety Training",
+        "date": "Tomorrow, 10:00"
+      },
+      "training2": {
+        "title": "Electrical Equipment Training",
+        "date": "January 15, 14:00"
+      },
+      "priorityTasks": "Priority Tasks",
+      "allTasks": "All Tasks",
+      "task1": {
+        "title": "Safety Documentation Update",
+        "assignee": "Assigned to: Ivanov I.I.",
+        "priority": "High"
+      },
+      "task2": {
+        "title": "Protective Equipment Check",
+        "assignee": "Assigned to: Petrov P.P.",
+        "priority": "Medium"
+      },
+      "calendarEvents": "Calendar Events",
+      "openCalendar": "Open Calendar",
+      "calendarMonth": "January 2024",
+      "event1": {
+        "title": "Safety Training"
+      },
+      "event2": {
+        "title": "Equipment Check"
+      }
+    },
+    "question": "If you have any question on The Forge:",
+    "link": {
+      "homepage": "The Forge homepage",
+      "stackoverflow": "The Forge on Stack Overflow",
+      "bugtracker": "The Forge bug tracker",
+      "chat": "The Forge public chat room",
+      "follow": "follow @theforge on Twitter"
+    },
+    "like": "If you like The Forge, don't forget to give us a star on",
     "github": "GitHub"
   }
 }

@@ -1,0 +1,27 @@
+{
+  "theForgeApp": {
+    "otherEvent": {
+      "home": {
+        "title": "Other Events",
+        "createLabel": "Create a new Other Event",
+        "createOrEditLabel": "Create or edit Other Event",
+        "notFound": "No Other Events found",
+        "refreshListLabel": "Refresh list"
+      },
+      "detail": {
+        "title": "Other Event"
+      },
+      "id": "ID",
+      "title": "Title",
+      "eventDate": "Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "time": "Time",
+      "location": "Location",
+      "description": "Description",
+      "delete": {
+        "question": "Are you sure you want to delete Other Event {{ id }}?"
+      }
+    }
+  }
+}

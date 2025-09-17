@@ -182,6 +182,12 @@ export class CalendarComponent implements OnInit {
       case EventType.TASK:
         this.redirectToTaskCreate(event);
         break;
+      case EventType.MEETING:
+        this.redirectToMeetingCreate(event);
+        break;
+      case EventType.OTHER:
+        this.redirectToOtherEventCreate(event);
+        break;
       default:
         this.createCalendarEvent(event);
         break;
@@ -250,6 +256,37 @@ export class CalendarComponent implements OnInit {
         next: () => this.loadAllEvents(),
         error: () => this.isLoading.set(false),
       });
+  }
+
+  private redirectToMeetingCreate(event: CalendarEvent): void {
+    this.router.navigate(['/meeting/new'], {
+      state: {
+        prefill: {
+          title: event.title,
+          date: event.date,
+          startTime: event.startTime ?? null,
+          endTime: event.endTime ?? null,
+          location: event.location ?? null,
+          description: event.description ?? null,
+        },
+      },
+    });
+  }
+
+  private redirectToOtherEventCreate(event: CalendarEvent): void {
+    this.router.navigate(['/other-event/new'], {
+      state: {
+        prefill: {
+          title: event.title,
+          date: event.date,
+          startTime: event.startTime ?? null,
+          endTime: event.endTime ?? null,
+          location: event.location ?? null,
+          description: event.description ?? null,
+          completed: false,
+        },
+      },
+    });
   }
 
   // Получение переведенного названия месяца

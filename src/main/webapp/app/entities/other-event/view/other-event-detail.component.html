@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (otherEvent(); as otherRef) {
+      <div>
+        <h2 data-cy="otherEventDetailsHeading"><span jhiTranslate="theForgeApp.otherEvent.detail.title">Событие</span></h2>
+        <hr />
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ otherRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.otherEvent.title">Название</span></dt>
+          <dd>
+            <span>{{ otherRef.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.otherEvent.eventDate">Дата</span></dt>
+          <dd>
+            <span>{{ otherRef.eventDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.otherEvent.time">Время</span></dt>
+          <dd>
+            <span
+              >{{ otherRef.startTime }}<ng-container *ngIf="otherRef.endTime"> - {{ otherRef.endTime }}</ng-container></span
+            >
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.otherEvent.location">Место</span></dt>
+          <dd>
+            <span>{{ otherRef.location }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.otherEvent.description">Описание</span></dt>
+          <dd>
+            <span>{{ otherRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="theForgeApp.otherEvent.completed">Выполнено</span></dt>
+          <dd>
+            <span>{{ otherRef.completed ? ('entity.yes' | translate) : ('entity.no' | translate) }}</span>
+          </dd>
+        </dl>
+
+        <button type="button" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+        <button type="button" [routerLink]="['/other-event', otherRef.id, 'edit']" class="btn btn-primary ms-2">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+        <button type="button" [routerLink]="['/other-event', otherRef.id, 'delete']" class="btn btn-danger ms-2">
+          <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Удалить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

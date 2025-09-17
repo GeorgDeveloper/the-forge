@@ -1,19 +1,68 @@
 {
   "home": {
-    "title": "Добро пожаловать!",
-    "subtitle": "Это ваша домашняя страница",
+    "title": "Добро пожаловать в The Forge",
+    "subtitle": "Система управления персоналом и задачами",
     "logged": {
       "message": "Вы вошли как пользователь \"{{username}}\"."
     },
-    "question": "Если у Вас возникли вопросы:",
-    "link": {
-      "homepage": "JHipster домашняя страница",
-      "stackoverflow": "JHipster на Stack Overflow",
-      "bugtracker": "JHipster баг трекер",
-      "chat": "JHipster public chat room",
-      "follow": "пользователь @jhipster в Twitter"
+    "welcome": {
+      "title": "Добро пожаловать в The Forge",
+      "subtitle": "Система управления персоналом и задачами",
+      "description": "Для доступа к системе управления персоналом необходимо авторизоваться.",
+      "loginButton": "Войти в систему",
+      "registerButton": "Создать аккаунт",
+      "demoAccounts": "Демо-аккаунты:",
+      "adminAccount": "Администратор: admin / admin",
+      "userAccount": "Пользователь: user / user"
     },
-    "like": "Если вам нравится JHipster, не забудьте дать нам звёздочку на",
+    "stats": {
+      "activeEmployees": "Активных сотрудников",
+      "activeTasks": "Активных задач",
+      "upcomingTrainings": "Предстоящих инструктажей",
+      "requiresAttention": "Требуют внимания"
+    },
+    "widgets": {
+      "upcomingTrainings": "Ближайшие инструктажи",
+      "allTrainings": "Все инструктажи",
+      "training1": {
+        "title": "Техника безопасности на производстве",
+        "date": "Завтра, 10:00"
+      },
+      "training2": {
+        "title": "Работа с электрооборудованием",
+        "date": "15 января, 14:00"
+      },
+      "priorityTasks": "Приоритетные задачи",
+      "allTasks": "Все задачи",
+      "task1": {
+        "title": "Обновление документации по безопасности",
+        "assignee": "Назначено: Иванов И.И.",
+        "priority": "Высокий"
+      },
+      "task2": {
+        "title": "Проверка средств защиты",
+        "assignee": "Назначено: Петров П.П.",
+        "priority": "Средний"
+      },
+      "calendarEvents": "Календарь событий",
+      "openCalendar": "Открыть календарь",
+      "calendarMonth": "Январь 2024",
+      "event1": {
+        "title": "Инструктаж по ТБ"
+      },
+      "event2": {
+        "title": "Проверка оборудования"
+      }
+    },
+    "question": "Если у Вас возникли вопросы по The Forge:",
+    "link": {
+      "homepage": "The Forge домашняя страница",
+      "stackoverflow": "The Forge на Stack Overflow",
+      "bugtracker": "The Forge баг трекер",
+      "chat": "The Forge public chat room",
+      "follow": "пользователь @theforge в Twitter"
+    },
+    "like": "Если вам нравится The Forge, не забудьте дать нам звёздочку на",
     "github": "GitHub"
   }
 }

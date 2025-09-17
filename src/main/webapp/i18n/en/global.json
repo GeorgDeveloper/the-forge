@@ -19,7 +19,9 @@
         "safetyInstruction": "Safety Instructions",
         "position": "Positions",
         "jobDescription": "Job Descriptions",
-        "organization": "Organizations"
+        "organization": "Organizations",
+        "procedureDocument": "Procedures and Documents",
+        "meeting": "Meetings"
       },
       "account": {
         "main": "Account",

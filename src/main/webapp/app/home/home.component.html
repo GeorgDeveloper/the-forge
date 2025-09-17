@@ -3,11 +3,11 @@
   <!-- Приветствие -->
   <div class="welcome-section">
     @if (account(); as accountRef) {
-      <h1 class="welcome-title">Добро пожаловать, {{ accountRef.firstName || accountRef.login }}!</h1>
-      <p class="welcome-subtitle">Система управления персоналом и задачами</p>
+      <h1 class="welcome-title">{{ 'home.welcome.title' | translate }}, {{ accountRef.firstName || accountRef.login }}!</h1>
+      <p class="welcome-subtitle">{{ 'home.welcome.subtitle' | translate }}</p>
     } @else {
-      <h1 class="welcome-title">The Forge</h1>
-      <p class="welcome-subtitle">Система управления персоналом и задачами</p>
+      <h1 class="welcome-title">{{ 'home.welcome.title' | translate }}</h1>
+      <p class="welcome-subtitle">{{ 'home.welcome.subtitle' | translate }}</p>
     }
   </div>
 
@@ -20,8 +20,8 @@
             <fa-icon icon="users"></fa-icon>
           </div>
           <div class="stat-content">
-            <div class="stat-number">24</div>
-            <div class="stat-label">Активных сотрудников</div>
+            <div class="stat-number">{{ activeEmployeesCount() }}</div>
+            <div class="stat-label">{{ 'home.stats.activeEmployees' | translate }}</div>
           </div>
         </div>
 
@@ -30,8 +30,8 @@
             <fa-icon icon="tasks"></fa-icon>
           </div>
           <div class="stat-content">
-            <div class="stat-number">8</div>
-            <div class="stat-label">Активных задач</div>
+            <div class="stat-number">{{ activeTasksCount() }}</div>
+            <div class="stat-label">{{ 'home.stats.activeTasks' | translate }}</div>
           </div>
         </div>
 
@@ -40,8 +40,8 @@
             <fa-icon icon="graduation-cap"></fa-icon>
           </div>
           <div class="stat-content">
-            <div class="stat-number">3</div>
-            <div class="stat-label">Предстоящих инструктажей</div>
+            <div class="stat-number">{{ upcomingInstructions().length }}</div>
+            <div class="stat-label">{{ 'home.stats.upcomingTrainings' | translate }}</div>
           </div>
         </div>
 
@@ -50,8 +50,8 @@
             <fa-icon icon="exclamation-triangle"></fa-icon>
           </div>
           <div class="stat-content">
-            <div class="stat-number">2</div>
-            <div class="stat-label">Требуют внимания</div>
+            <div class="stat-number">{{ requiresAttentionCount() }}</div>
+            <div class="stat-label">{{ 'home.stats.requiresAttention' | translate }}</div>
           </div>
         </div>
       </div>
@@ -63,77 +63,59 @@
         <!-- Ближайшие инструктажи -->
         <div class="widget-card">
           <div class="widget-header">
-            <h3 class="widget-title">Ближайшие инструктажи</h3>
-            <a routerLink="/safety-instruction" class="widget-link">Все инструктажи</a>
+            <h3 class="widget-title">{{ 'home.widgets.upcomingTrainings' | translate }}</h3>
+            <a routerLink="/safety-instruction" class="widget-link">{{ 'home.widgets.allTrainings' | translate }}</a>
           </div>
           <div class="widget-content">
-            <div class="instruction-item">
-              <div class="instruction-info">
-                <div class="instruction-title">Техника безопасности на производстве</div>
-                <div class="instruction-date">Завтра, 10:00</div>
+            @for (it of upcomingInstructions() | slice: 0 : maxTrainings(); track $index) {
+              <div class="instruction-item">
+                <div class="instruction-info">
+                  <div class="instruction-title">{{ it.title }}</div>
+                  <div class="instruction-date">{{ it.dateLabel }}</div>
+                </div>
+                <div class="instruction-progress">
+                  <div class="progress-bar" style="width: 60%"></div>
+                </div>
               </div>
-              <div class="instruction-progress">
-                <div class="progress-bar" style="width: 75%"></div>
-              </div>
-            </div>
-
-            <div class="instruction-item">
-              <div class="instruction-info">
-                <div class="instruction-title">Работа с электрооборудованием</div>
-                <div class="instruction-date">15 января, 14:00</div>
-              </div>
-              <div class="instruction-progress">
-                <div class="progress-bar" style="width: 30%"></div>
-              </div>
-            </div>
+            }
           </div>
         </div>
 
         <!-- Активные задачи -->
         <div class="widget-card">
           <div class="widget-header">
-            <h3 class="widget-title">Приоритетные задачи</h3>
-            <a routerLink="/task" class="widget-link">Все задачи</a>
+            <h3 class="widget-title">{{ 'home.widgets.priorityTasks' | translate }}</h3>
+            <a routerLink="/task" class="widget-link">{{ 'home.widgets.allTasks' | translate }}</a>
           </div>
           <div class="widget-content">
-            <div class="task-item high">
-              <div class="task-priority"></div>
-              <div class="task-info">
-                <div class="task-title">Обновление документации по безопасности</div>
-                <div class="task-assignee">Назначено: Иванов И.И.</div>
+            @for (t of priorityTasks() | slice: 0 : maxTasks(); track $index) {
+              <div class="task-item {{ t.cssClass }}">
+                <div class="task-priority"></div>
+                <div class="task-info">
+                  <div class="task-title">{{ t.title }}</div>
+                  <div class="task-assignee">{{ t.assigneeLabel }}</div>
+                </div>
+                <div class="task-status {{ t.cssClass }}">{{ 'global.TaskPriority.' + t.priorityKey | translate }}</div>
               </div>
-              <div class="task-status high">Высокий</div>
-            </div>
-
-            <div class="task-item medium">
-              <div class="task-priority"></div>
-              <div class="task-info">
-                <div class="task-title">Проверка средств защиты</div>
-                <div class="task-assignee">Назначено: Петров П.П.</div>
-              </div>
-              <div class="task-status medium">Средний</div>
-            </div>
+            }
           </div>
         </div>
 
         <!-- Календарь -->
         <div class="widget-card">
           <div class="widget-header">
-            <h3 class="widget-title">Календарь событий</h3>
-            <a routerLink="/calendar" class="widget-link">Открыть календарь</a>
+            <h3 class="widget-title">{{ 'home.widgets.calendarEvents' | translate }}</h3>
+            <a routerLink="/calendar" class="widget-link">{{ 'home.widgets.openCalendar' | translate }}</a>
           </div>
           <div class="widget-content">
             <div class="mini-calendar">
-              <div class="calendar-header">Январь 2024</div>
               <div class="calendar-events">
-                <div class="event-item training">
-                  <div class="event-date">15</div>
-                  <div class="event-title">Инструктаж по ТБ</div>
-                </div>
-                <div class="event-item task">
-                  <div class="event-date">18</div>
-                  <div class="event-title">Проверка оборудования</div>
-                </div>
+                @for (e of calendarEvents() | slice: 0 : maxMeetings(); track $index) {
+                  <div class="event-item">
+                    <div class="event-date">{{ e.day }}</div>
+                    <div class="event-title">{{ e.title }}</div>
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -144,19 +126,21 @@
     <!-- Страница для неавторизованных пользователей -->
     <div class="auth-section">
       <div class="auth-card">
-        <h2>Добро пожаловать в The Forge</h2>
-        <p>Для доступа к системе управления персоналом необходимо авторизоваться.</p>
+        <h2>{{ 'home.welcome.title' | translate }}</h2>
+        <p>{{ 'home.welcome.description' | translate }}</p>
 
         <div class="auth-actions">
-          <button class="btn-forge-primary" (click)="login()">Войти в систему</button>
-          <a routerLink="/account/register" class="btn-forge-secondary">Создать аккаунт</a>
+          <button class="btn-forge-primary" (click)="login()">{{ 'home.welcome.loginButton' | translate }}</button>
+          <a routerLink="/account/register" class="btn-forge-secondary">{{ 'home.welcome.registerButton' | translate }}</a>
         </div>
 
         <div class="demo-accounts">
-          <p><strong>Демо-аккаунты:</strong></p>
+          <p>
+            <strong>{{ 'home.welcome.demoAccounts' | translate }}</strong>
+          </p>
           <ul>
-            <li>Администратор: admin / admin</li>
-            <li>Пользователь: user / user</li>
+            <li>{{ 'home.welcome.adminAccount' | translate }}</li>
+            <li>{{ 'home.welcome.userAccount' | translate }}</li>
           </ul>
         </div>
       </div>

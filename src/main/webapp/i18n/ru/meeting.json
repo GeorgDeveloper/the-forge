@@ -1,0 +1,27 @@
+{
+  "theForgeApp": {
+    "meeting": {
+      "home": {
+        "title": "Встречи",
+        "createLabel": "Создать новую Встречу",
+        "createOrEditLabel": "Создать или отредактировать Встречу",
+        "notFound": "Встречи не найдены",
+        "refreshListLabel": "Обновить список"
+      },
+      "detail": {
+        "title": "Встреча"
+      },
+      "id": "ID",
+      "title": "Название",
+      "eventDate": "Дата",
+      "startTime": "Время начала",
+      "endTime": "Время окончания",
+      "time": "Время",
+      "location": "Место",
+      "description": "Описание",
+      "delete": {
+        "question": "Вы уверены, что хотите удалить Встречу {{ id }}?"
+      }
+    }
+  }
+}

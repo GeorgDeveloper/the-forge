@@ -22,6 +22,8 @@ import {
   faFileAlt,
   faTachometerAlt,
   faHeart,
+  faFileContract,
+  faBuilding,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -57,6 +59,8 @@ export class SidebarComponent implements OnInit {
   faTachometerAlt = faTachometerAlt;
   faHeart = faHeart;
   faCogs = faCogs;
+  faFileContract = faFileContract;
+  faBuilding = faBuilding;
 
   inProduction?: boolean;
   isNavbarCollapsed = true;

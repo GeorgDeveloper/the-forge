@@ -1,0 +1,25 @@
+{
+  "theForgeApp": {
+    "procedureDocument": {
+      "home": {
+        "title": "Procedures and Documents",
+        "createLabel": "Create a new Procedure and Document",
+        "createOrEditLabel": "Create or edit a Procedure and Document",
+        "notFound": "No Procedures and Documents found",
+        "refreshListLabel": "Refresh list"
+      },
+      "detail": {
+        "title": "Procedure and Document"
+      },
+      "id": "ID",
+      "documentName": "Document Name",
+      "introductionDate": "Introduction Date",
+      "description": "Description",
+      "profession": "Profession",
+      "position": "Position",
+      "delete": {
+        "question": "Are you sure you want to delete Procedure and Document {{ id }}?"
+      }
+    }
+  }
+}

@@ -20,7 +20,8 @@
         "safetyInstruction": "Инструкции по ОТ",
         "position": "Должности",
         "jobDescription": "Должностные инструкции",
-        "procedureDocument": "Процедуры и Документации"
+        "procedureDocument": "Процедуры и Документации",
+        "meeting": "Встречи"
       },
       "account": {
         "main": "Профиль",
@@ -127,7 +128,7 @@
       "open": "Открыть",
       "save": "Сохранить",
       "view": "Просмотр",
-      "show": "Show {{otherEntity}}"
+      "show": "Показать {{otherEntity}}"
     },
     "detail": {
       "field": "Поле",
@@ -149,9 +150,9 @@
       "datetimelocal": "Это поле должно быть дата и время."
     },
     "filters": {
-      "set": "Following filters are set",
-      "clear": "Clear filter",
-      "clearAll": "Clear all filters"
+      "set": "Установлены следующие фильтры",
+      "clear": "Очистить фильтр",
+      "clearAll": "Очистить все фильтры"
     }
   },
   "error": {
@@ -164,8 +165,8 @@
     "emailexists": "Эл. почта уже используется!!",
     "idexists": "Новый {{entityName}} не может иметь данный ID",
     "idnull": "Неверный ID",
-    "idinvalid": "Invalid Id",
-    "idnotfound": "ID cannot be found",
+    "idinvalid": "Неверный ID",
+    "idnotfound": "ID не найден",
     "jobDescriptionInUse": "Данная должностная инструкция уже закреплена за другой должностью",
     "file": {
       "could.not.extract": "Не удалось извлечь файл",

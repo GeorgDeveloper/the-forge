@@ -1,0 +1,72 @@
+<div>
+  <h2 id="page-heading" data-cy="MeetingHeading">
+    <span jhiTranslate="theForgeApp.meeting.home.title">Встречи</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="theForgeApp.training.home.refreshListLabel">Обновить список</span>
+      </button>
+
+      <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary" [routerLink]="['/meeting/new']">
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="theForgeApp.meeting.home.createLabel">Создать новую встречу</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+  <jhi-alert></jhi-alert>
+
+  @if (meetings().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="theForgeApp.meeting.home.notFound">Встреч не найдено</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr>
+            <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+            <th scope="col"><span jhiTranslate="theForgeApp.meeting.title">Название</span></th>
+            <th scope="col"><span jhiTranslate="theForgeApp.meeting.eventDate">Дата</span></th>
+            <th scope="col"><span jhiTranslate="theForgeApp.meeting.time">Время</span></th>
+            <th scope="col"><span jhiTranslate="theForgeApp.meeting.location">Место</span></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (meeting of meetings(); track meeting.id) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/meeting', meeting.id, 'view']">{{ meeting.id }}</a>
+              </td>
+              <td>{{ meeting.title }}</td>
+              <td>{{ meeting.eventDate | formatMediumDate }}</td>
+              <td>
+                {{ meeting.startTime }}<ng-container *ngIf="meeting.endTime"> - {{ meeting.endTime }}</ng-container>
+              </td>
+              <td>{{ meeting.location }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/meeting', meeting.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Просмотр</span>
+                  </a>
+                  <a [routerLink]="['/meeting', meeting.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Изменить</span>
+                  </a>
+                  <button type="button" (click)="delete(meeting)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Удалить</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

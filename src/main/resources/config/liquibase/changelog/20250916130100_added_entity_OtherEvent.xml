@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <changeSet id="20250916130100-added-entity-OtherEvent" author="ai-assistant">
+    <preConditions onFail="MARK_RAN" onError="MARK_RAN">
+      <not>
+        <tableExists tableName="other_event"/>
+      </not>
+    </preConditions>
+    <createTable tableName="other_event">
+      <column name="id" type="bigint">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="title" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="event_date" type="date">
+        <constraints nullable="false"/>
+      </column>
+      <column name="start_time" type="varchar(10)"/>
+      <column name="end_time" type="varchar(10)"/>
+      <column name="location" type="varchar(255)"/>
+      <column name="description" type="varchar(2000)"/>
+      <column name="completed" type="boolean"/>
+    </createTable>
+    <createSequence sequenceName="other_event_sequence" startValue="1"/>
+  </changeSet>
+
+</databaseChangeLog>
+
+

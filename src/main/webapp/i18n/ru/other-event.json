@@ -1,0 +1,27 @@
+{
+  "theForgeApp": {
+    "otherEvent": {
+      "home": {
+        "title": "Другие события",
+        "createLabel": "Создать новое Другое событие",
+        "createOrEditLabel": "Создать или отредактировать Другое событие",
+        "notFound": "Другие события не найдены",
+        "refreshListLabel": "Обновить список"
+      },
+      "detail": {
+        "title": "Другое событие"
+      },
+      "id": "ID",
+      "title": "Название",
+      "eventDate": "Дата",
+      "startTime": "Время начала",
+      "endTime": "Время окончания",
+      "time": "Время",
+      "location": "Место",
+      "description": "Описание",
+      "delete": {
+        "question": "Вы уверены, что хотите удалить Другое событие {{ id }}?"
+      }
+    }
+  }
+}

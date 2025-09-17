@@ -2,10 +2,12 @@
   "login": {
     "title": "Авторизация",
     "form": {
+      "username": "Логин",
+      "username.placeholder": "Ваш логин",
       "password": "Пароль",
       "password.placeholder": "Ваш пароль",
-      "rememberme": "Входить автоматически",
-      "button": "Войти"
+      "rememberme": "Запомнить меня",
+      "button": "Войти в систему"
     },
     "messages": {
       "error": {
@@ -13,7 +15,11 @@
       }
     },
     "password": {
-      "forgot": "Вы забыли ваш пароль?"
+      "forgot": "Забыли пароль?"
+    },
+    "register": {
+      "noaccount": "Нет аккаунта?",
+      "link": "Создать аккаунт"
     }
   }
 }

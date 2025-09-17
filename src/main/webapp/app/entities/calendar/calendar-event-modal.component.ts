@@ -17,7 +17,7 @@ export class CalendarEventModalComponent {
   @Input() date?: Date; // Дата для нового события
   @Input() event?: CalendarEvent; // Событие для редактирования
 
-  eventTypes = Object.values(EventType); // Доступные типы событий
+  eventTypes = Object.values(EventType).filter(t => t !== 'TRAINING'); // Доступные типы событий без "Обучение"
   newEvent: CalendarEvent; // Новое/редактируемое событие
 
   constructor(public activeModal: NgbActiveModal) {

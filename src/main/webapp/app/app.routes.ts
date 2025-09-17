@@ -20,6 +20,13 @@ const routes: Routes = [
     outlet: 'navbar', // Именованный outlet для рендеринга
   },
 
+  // Календарь
+  {
+    path: 'calendar',
+    loadChildren: () => import('./entities/calendar/calendar.routes'),
+    canActivate: [UserRouteAccessService],
+  },
+
   // Админ-панель (только для пользователей с ролью ADMIN)
   {
     path: 'admin', // URL для админки

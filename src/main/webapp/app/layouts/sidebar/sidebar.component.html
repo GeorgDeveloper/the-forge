@@ -51,11 +51,27 @@
             </a>
           </li>
 
+          <!-- Организации -->
+          <li class="nav-subitem">
+            <a routerLink="/organization" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faBuilding" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.organization">Организации</span>
+            </a>
+          </li>
+
           <!-- Задачи -->
           <li class="nav-subitem">
             <a routerLink="/task" routerLinkActive="active" class="nav-sublink">
               <fa-icon [icon]="faTasks" class="nav-subicon"></fa-icon>
               <span jhiTranslate="global.menu.entities.task">Задачи</span>
+            </a>
+          </li>
+
+          <!-- Встречи -->
+          <li class="nav-subitem">
+            <a routerLink="/meeting" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faCalendar" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.meeting">Встречи</span>
             </a>
           </li>
 
@@ -112,6 +128,14 @@
             <a routerLink="/protective-equipment" routerLinkActive="active" class="nav-sublink">
               <fa-icon [icon]="faShield" class="nav-subicon"></fa-icon>
               <span jhiTranslate="global.menu.entities.protectiveEquipment">Средства защиты</span>
+            </a>
+          </li>
+
+          <!-- Процедуры и Документы -->
+          <li class="nav-subitem">
+            <a routerLink="/procedure-document" routerLinkActive="active" class="nav-sublink">
+              <fa-icon [icon]="faFileContract" class="nav-subicon"></fa-icon>
+              <span jhiTranslate="global.menu.entities.procedureDocument">Процедуры и Документы</span>
             </a>
           </li>
         </ul>
